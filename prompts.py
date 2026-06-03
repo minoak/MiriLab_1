@@ -167,8 +167,15 @@ def build_react_messages(persona: dict, policy: str, grounded: bool = True) -> l
     """
     system = (
         "당신은 대한민국의 한 시민입니다. 인물 정보에 완전히 몰입해 그 사람의 "
-        "말투·지식수준·관심사로 정책에 반응하세요. 점수는 그 사람 입장에서 "
-        "0~100으로. 반드시 지정된 구조화 형식으로만 답하세요."
+        "말투·지식수준·관심사로 정책에 반응하세요.\n\n"
+        "■ 가장 중요한 원칙 — 현실적으로 판단할 것:\n"
+        "실제 시민은 정책을 들으면 '나한테 이득인가'만 보지 않고, 본능적으로 현실성을 "
+        "함께 따집니다. 이 정책이 실현 가능한가, 재원은 어디서 나오는가, 물가·증세·재정·"
+        "형평성 같은 부작용이 결국 내 삶에 어떻게 돌아오는가, 지나치게 좋게 들리는 공약은 "
+        "아닌가(의심). 본인의 처지에서 이 현실 감각을 가지고 반응하세요. 단, 합리적이고 "
+        "실현 가능한 정책까지 무조건 냉소하지는 말고, 무리하거나 비현실적인 정책일수록 "
+        "우려·불신이 커지도록 균형 있게 판단하세요.\n\n"
+        "점수는 그 사람 입장에서 0~100으로. 반드시 지정된 구조화 형식으로만 답하세요."
     )
 
     policy_text = (policy or "").strip()
@@ -194,7 +201,8 @@ def build_react_messages(persona: dict, policy: str, grounded: bool = True) -> l
             "이해도(understanding, 정책을 얼마나 이해했는가), "
             "수혜 가능성(benefit, 본인이 혜택을 받을 가능성), "
             "신청 의향(intent, 실제로 신청·참여할 의향), "
-            "불만도(dissatisfaction, 정책에 대한 불만 정도), "
+            "불만도(dissatisfaction, 정책에 대한 불만·우려·불안 — 본인 손해뿐 아니라 "
+            "실현 가능성·부작용에 대한 걱정 포함), "
             "공유 가능성(shareability, 주변에 알리고 공유할 가능성).\n"
             "4) 예상 행동(actions): 이 사람이 실제로 취할 법한 구체적 행동을 목록으로."
         )
@@ -210,7 +218,8 @@ def build_react_messages(persona: dict, policy: str, grounded: bool = True) -> l
             "2) 반응: 솔직한 반응을 한두 문단으로 쓰세요.\n"
             "3) 점수(각 0~100): "
             "이해도(understanding), 수혜 가능성(benefit), 신청 의향(intent), "
-            "불만도(dissatisfaction), 공유 가능성(shareability).\n"
+            "불만도(dissatisfaction, 불만·우려·불안 — 실현 가능성·부작용 걱정 포함), "
+            "공유 가능성(shareability).\n"
             "4) 예상 행동(actions): 실제로 취할 법한 구체적 행동을 목록으로."
         )
 
@@ -296,6 +305,99 @@ def build_aggregate_messages(policy: str, metrics: dict, digest: str) -> list:
         "1) 요약: 시민들 사이의 갈등 지점과 합의 지점을 균형 있게 정리하세요.\n"
         "2) 쉬운 글: 정책 원문을 어려운 용어 없이 누구나 이해할 수 있는 쉬운 글로 바꾸세요.\n"
         "3) 개선안: 시민 반응에 근거한 구체적이고 실행 가능한 정책 개선안을 목록으로 제시하세요."
+    )
+
+    return [
+        {"role": "system", "content": system},
+        {"role": "user", "content": user},
+    ]
+
+
+# ---------------------------------------------------------------------------
+# 4단계: 미리 마을 — 정책 시행 후 시간 경과별 주민의 삶
+# ---------------------------------------------------------------------------
+
+def build_village_messages(
+    persona: dict,
+    policy: str,
+    history: str,
+    step_label: str,
+    grounded: bool = True,
+    space_menu: str = "",
+) -> list:
+    """가상 마을 주민 1명이 '이 시점'에 어떻게 살아가는지 묘사하도록 요청.
+
+    history  : 지금까지 시점들의 한 줄 요약 누적(연속성 유지용).
+    step_label: 이번 시점 라벨(예: "시행 3개월 후").
+    grounded : True 면 인물 정보를 주입(실험군), False 면 익명 주민(ablation 대조군).
+    space_menu: 마을 장소(정책 접근 채널) 메뉴 문자열(graph/spaces.space_menu_text()).
+                비면 장소 선택 안내를 생략한다.
+    """
+    system = (
+        "당신은 사회 시뮬레이션 작가입니다. 가상 마을 '미리 마을'의 한 주민이 특정 "
+        "정책 시행 뒤 시간이 흐르며 실제로 어떻게 살아가는지를, 그 사람의 처지에 충실하게 "
+        "구체적으로 묘사합니다. 과장 없이 현실적으로, 그 사람의 특징(나이·직업·지역·디지털 "
+        "능력·소득·정부 신뢰)이 정책 체감에 그대로 반영되게 하세요. 정책 정보는 '어느 장소에 "
+        "닿느냐'에 따라 전해집니다. 그 사람이 현실적으로 닿을 수 있는 장소를 골라야 하며, "
+        "어디에도 닿지 못하면 정책을 모른 채(unaware) 집에 머뭅니다. 정책을 모르거나 신청에 "
+        "실패할 수도 있습니다. 반드시 지정된 구조화 형식으로만 답하세요."
+    )
+
+    policy_text = (policy or "").strip()
+    hist_text = (history or "").strip() or "(아직 이전 기록 없음 — 정책 시행 직후입니다.)"
+
+    if grounded:
+        brief = _persona_brief(persona)
+        demo = _demographics_text(persona)
+        sig = _signals_text(persona)
+        person_block = (
+            "■ 주민 정보\n"
+            f"{brief}\n\n"
+            "■ 인구통계\n"
+            f"{demo}\n\n"
+            "■ 상황 신호\n"
+            f"{sig}\n\n"
+        )
+    else:
+        person_block = (
+            "■ 주민 정보\n"
+            "(배경 정보가 주어지지 않은 평범한 마을 주민입니다.)\n\n"
+        )
+
+    # 장소 메뉴 블록(주어졌을 때만). 각 장소는 정책 접근 채널을 뜻한다.
+    if (space_menu or "").strip():
+        places_block = (
+            "■ 마을 장소(정책 접근 채널) — 이 주민이 닿을 만한 곳을 하나 고르세요\n"
+            f"{space_menu.strip()}\n\n"
+        )
+        place_item = (
+            "1) 장소(place): 이번 시점에 이 주민이 정책과 관련해 실제로 닿은 장소를 "
+            "위 목록의 key 중 하나로 고르세요. 그 사람의 디지털 능력·나이·거동·연결망에 "
+            "비춰 현실적인 곳이어야 합니다. 어디에도 닿지 못하면 home 을 고르고 unaware 로 두세요.\n"
+        )
+    else:
+        places_block = ""
+        place_item = ""
+
+    user = (
+        f"{person_block}"
+        "■ 정책\n"
+        f"{policy_text}\n\n"
+        f"{places_block}"
+        "■ 지금까지의 삶 (이전 시점 요약)\n"
+        f"{hist_text}\n\n"
+        f"■ 이번 시점: {step_label}\n\n"
+        "■ 요청\n"
+        "이 시점에서 이 주민의 삶을 다음으로 묘사하세요.\n"
+        f"{place_item}"
+        "2) 행동·사건(action): 이 기간 동안 이 사람이 이 정책과 관련해(또는 무관하게) "
+        "실제로 한 행동과 겪은 일을, 고른 장소와 자연스럽게 이어지게 2~4문장으로 쓰세요.\n"
+        "3) 정책 관여 상태(policy_status): unaware(모름) / aware(알게 됨) / "
+        "applied(신청함) / received(수령·혜택 받음) / blocked(시도했으나 막힘) 중 "
+        "이번 시점의 단계. (이전 단계에서, 그리고 닿은 장소에서 자연스럽게 이어지게)\n"
+        "4) 경제적 여유(economic, 0~100)와 심리적 안정·만족(wellbeing, 0~100)을 "
+        "이번 시점 기준으로.\n"
+        "5) 한 줄 요약(note): 이번 시점을 한 문장으로."
     )
 
     return [

@@ -105,3 +105,99 @@ def run_simulation(
             f"실제 시뮬레이션 실행에 실패하여 데모(샘플) 결과로 대체합니다. (원인: {exc})"
         )
         return sample_simstate(policy)
+
+
+def run_village(
+    policy: str,
+    personas: list,
+    grounded: bool = True,
+    mock: bool = False,
+    step_labels: list | None = None,
+) -> dict:
+    """미리 마을(시간 경과 영향) 시뮬을 on-demand 로 실행한다.
+
+    마을 시뮬은 주민×스텝 만큼 LLM 을 호출해 무거우므로(DESIGN §8),
+    react/interact/aggregate 와 분리해 사용자가 원할 때만 호출한다.
+
+    분기:
+    - mock=True / 키 없음 / personas 비었음 → sample_village(외부 호출 0).
+    - 그 외 → simulate_village 실제 실행. 실패 시 sample_village 폴백.
+
+    반환: {steps, residents, aggregate} (state.village 형태).
+    """
+    from ui.mock import sample_village  # 지연 import(순환 방지)
+
+    if mock or not has_real_key() or not personas:
+        return sample_village(personas, policy, step_labels=step_labels)
+
+    try:
+        from graph.village import simulate_village
+        with st.status("미리 마을 시뮬레이션 중...", expanded=False) as status:
+            status.update(label=f"{len(personas)}명의 시간 경과 궤적 생성 중...")
+            result = simulate_village(
+                personas, policy, step_labels=step_labels, grounded=grounded
+            )
+            status.update(label="마을 시뮬 완료", state="complete")
+        return result
+    except Exception as exc:  # noqa: BLE001 - 데모 안정성 폴백.
+        st.warning(
+            f"마을 시뮬 실행에 실패하여 데모(샘플) 궤적으로 대체합니다. (원인: {exc})"
+        )
+        return sample_village(personas, policy, step_labels=step_labels)
+
+
+def run_contrast_sim(
+    policies: list,
+    personas: list,
+    grounded: bool = True,
+    mock: bool = False,
+    step_labels: list | None = None,
+    specs: list | None = None,
+) -> dict:
+    """정책 인생극장(DESIGN v3): 패키지로 대조 3명 선별 + 그 3명만 인생 시뮬.
+
+    contrast.run_contrast 를 mock/real 분기와 함께 감싼다.
+
+    분기:
+    - mock=True / 키 없음 / personas 비었음 → sample_village 주입(외부 호출 0).
+    - 그 외 → 실제 simulate_village. 실패 시 sample_village 폴백.
+
+    specs 가 주어지면(사이드바 policy_spec) 명세 재추출을 건너뛴다 = 슬라이스 2
+    '프롬프트 통일'. 그 spec 의 태그가 package_text 를 통해 모델에 함께 전달된다.
+
+    반환: {specs, selection, package_text, village, trio_ids} (contrast.run_contrast).
+    """
+    from contrast import run_contrast
+    from ui.mock import sample_village  # 지연 import(순환 방지)
+
+    def _mock_sim(ps, pol, sl):
+        return sample_village(ps, pol, step_labels=sl)
+
+    # mock 경로: 명세 추출도 키워드 폴백(use_llm_spec=False)로 외부 호출 0.
+    if mock or not has_real_key() or not personas:
+        return run_contrast(
+            personas, policies, simulate=_mock_sim,
+            grounded=grounded, step_labels=step_labels, use_llm_spec=False,
+            specs=specs,
+        )
+
+    # 실제 경로: simulate=None → 진짜 simulate_village, 명세는 LLM 추출 허용.
+    try:
+        with st.status("정책 인생극장 시뮬레이션 중...", expanded=False) as status:
+            status.update(label="대상 인물 선별 + 3인 인생 궤적 생성 중...")
+            result = run_contrast(
+                personas, policies, simulate=None,
+                grounded=grounded, step_labels=step_labels, use_llm_spec=True,
+                specs=specs,
+            )
+            status.update(label="인생극장 시뮬 완료", state="complete")
+        return result
+    except Exception as exc:  # noqa: BLE001 - 데모 안정성 폴백.
+        st.warning(
+            f"실모드 인생극장 실행에 실패하여 데모(샘플) 궤적으로 대체합니다. (원인: {exc})"
+        )
+        return run_contrast(
+            personas, policies, simulate=_mock_sim,
+            grounded=grounded, step_labels=step_labels, use_llm_spec=False,
+            specs=specs,
+        )

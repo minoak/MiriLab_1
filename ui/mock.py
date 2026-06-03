@@ -11,7 +11,7 @@
 - Reaction: persona_id,stance('support'|'oppose'|'mixed'),text,evidence,scores(5축),actions,grounded
 - Interaction: round,from_id,to_id,text,stance_shift
 - edges: {'from','to','round'}
-- metrics: 정책수용도/사회혼란도/신청의향지수/axis_means/세그먼트 등
+- metrics: 정책수용도/신청의향지수/사회혼란도/axis_means/세그먼트 등
 - improvements: {'easy_text': str, 'policy_fixes': [str,...]}
 
 결정론적: 난수를 쓰는 부분은 seed 고정. (사실상 손으로 다 적어서 난수 거의 불필요)
@@ -20,6 +20,8 @@ from __future__ import annotations
 
 import random
 from sample_policies import DEFAULT_POLICY
+from graph.spaces import place_label, status_label
+from graph.village import _aggregate_village
 
 
 # ---------------------------------------------------------------------------
@@ -404,13 +406,11 @@ def _metrics(reactions: list, personas: list) -> dict:
         + axis_means["understanding"] * 0.10
         - axis_means["dissatisfaction"] * 0.15
     )
-    # - 사회혼란도: 불만 + 공유(전파력) + 입장 양극화
-    polarization = (stance_dist["oppose"] + stance_dist["support"]) / n  # mixed 적을수록↑
-    confusion = (
-        axis_means["dissatisfaction"] * 0.5
-        + axis_means["shareability"] * 0.2
-        + polarization * 30
-    )
+    # - 사회혼란도: 반발 강도 = 시민 불만 평균. 공통 공식.
+    from metrics_common import social_unrest as _social_unrest
+    unrest_val = _social_unrest(reactions)
+    # polarization 은 아래 반환 dict(분포 표시)에서 쓰이므로 유지.
+    polarization = (stance_dist["oppose"] + stance_dist["support"]) / n
     # - 신청의향지수: 의향 평균을 그대로(대표 지표)
     apply_index = axis_means["intent"]
 
@@ -449,7 +449,7 @@ def _metrics(reactions: list, personas: list) -> dict:
     return {
         # 한글 대표 지표 3종(개요 요구 키)
         "정책수용도": clamp100(accept),
-        "사회혼란도": clamp100(confusion),
+        "사회혼란도": clamp100(unrest_val),
         "신청의향지수": clamp100(apply_index),
         # 축별 평균(영문 키)
         "axis_means": axis_means,
@@ -514,6 +514,158 @@ def _summary() -> str:
 
 
 # ---------------------------------------------------------------------------
+# 미리 마을(village) 목 데이터 — 페르소나 특징으로 결정론적 궤적 생성.
+# graph.village.simulate_village 와 동일한 dict 형태({steps,residents,aggregate}).
+# 키 없이도 '공간 트리 + 장소별 뷰 + 차등영향 + 사각지대'를 시연한다.
+# ---------------------------------------------------------------------------
+_VILLAGE_STEPS = ["시행 1개월 후", "시행 3개월 후", "시행 6개월 후"]
+
+# 소득 수준 라벨 → 시작 경제 점수 (mock '저/중간/고소득', Nemotron 'low/mid/high' 모두 대응)
+_BASE_ECON = {
+    "고소득": 72, "high": 72,
+    "중간소득": 50, "mid": 50,
+    "저소득": 32, "low": 32,
+}
+
+
+def _employed(occupation: str) -> bool:
+    """경제활동 인구 여부(직장·시장 구전 채널 닿음 판정용)."""
+    occ = occupation or ""
+    return not any(kw in occ for kw in ("무직", "학생", "은퇴", "취준", "실업"))
+
+
+def _eligibility_category(age: int, income, family_type: str, housing: str) -> str:
+    """기본 정책(청년 월세) 기준 대상 카테고리(손 작성 반응과 일관).
+
+    - ineligible  : 나이 초과/미달 또는 소득 초과 → 알아도 혜택 없음
+    - parent_block: 청년이지만 '부모와 동거' → 별거 요건에 막힘(임수빈 같은 사각지대)
+    - pending     : 청년이지만 아직 자취 전(기숙사 등, 임대차계약 없음) → 신청 보류
+    - eligible    : 실질 대상 → 수혜 가능
+    """
+    if not (19 <= age <= 34):
+        return "ineligible"
+    if str(income).strip() in ("고소득", "high"):
+        return "ineligible"
+    ft = family_type or ""
+    if "부모" in ft and "동거" in ft:
+        return "parent_block"
+    if "기숙사" in (housing or "") or "기숙사" in ft:
+        return "pending"
+    return "eligible"
+
+
+def _pick_channel(age: int, dl: float, net_size: int, employed: bool,
+                  category: str, family_type: str):
+    """페르소나 특징으로 주 채널과 도달 여부를 결정한다(결정론적).
+
+    Returns: (channel_key, reach: bool)
+    """
+    ft = family_type or ""
+    # 기혼 청년 대상자는 가구 요건 확인차 직접 창구(주민센터)를 찾는다.
+    if category == "eligible" and ("부부" in ft or "신혼" in ft):
+        return "community_center", True
+    if dl >= 0.7:
+        return "online_portal", True            # 디지털 강자 → 온라인
+    if dl < 0.3 and age >= 60:
+        # 고령·저디지털: 연결망 있으면 복지관, 없으면 집(사각지대)
+        return ("welfare_center", True) if net_size >= 2 else ("home", False)
+    if net_size <= 1 and dl < 0.45:
+        return "home", False                    # 고립 → 사각지대
+    if 0.55 <= dl < 0.7:
+        return ("work_market", True) if employed else ("community_center", True)
+    return "community_center", True             # 0.3~0.55: 오프라인 창구
+
+
+def _trajectory(category: str, reach: bool, dl: float):
+    """3스텝 (상태, 경제델타, 심리델타) 궤적을 만든다."""
+    if not reach:
+        # 끝내 못 닿음 = 사각지대
+        return (["unaware", "unaware", "unaware"], [-2, -2, -1], [-3, -3, -2])
+    if category == "eligible":
+        if dl < 0.4:
+            # 닿긴 했지만 디지털·서류 장벽에 막힘
+            return (["aware", "applied", "blocked"], [0, 2, -4], [3, 2, -7])
+        # 수혜자(winner)
+        return (["aware", "applied", "received"], [3, 7, 13], [5, 7, 11])
+    if category == "parent_block":
+        # 신청까지 갔으나 가구 요건(부모 동거)에 막힘 = 사각지대
+        return (["aware", "applied", "blocked"], [0, 1, -3], [2, 0, -9])
+    if category == "pending":
+        # 대상이나 아직 신청 불가(자취 전) → 의향만 품은 채 관망
+        return (["aware", "aware", "aware"], [0, 0, 0], [3, 1, 1])
+    # ineligible — 알지만 혜택 없음
+    return (["aware", "aware", "aware"], [0, 0, 0], [-1, -2, -2])
+
+
+def _action_for(name: str, place: str, status: str) -> str:
+    """장소·상태에 맞는 한 문장 서사(action)."""
+    pl = place_label(place)
+    templates = {
+        "unaware": f"{name} 씨는 이 정책 소식을 어디서도 듣지 못한 채 평소처럼 지냈다.",
+        "aware": f"{name} 씨는 {pl}에서 이 정책을 처음 접하고 대상이 되는지 살펴봤다.",
+        "applied": f"{name} 씨는 {pl}을(를) 통해 필요한 서류를 챙겨 신청을 진행했다.",
+        "received": f"{name} 씨는 {pl} 신청이 받아들여져 실제 지원을 받기 시작했다.",
+        "blocked": f"{name} 씨는 {pl}에서 신청을 시도했지만 요건·절차에 막혀 결국 포기했다.",
+    }
+    return templates.get(status, f"{name} 씨는 {pl}에서 시간을 보냈다.")
+
+
+def sample_village(personas: list, policy: str | None = None,
+                   step_labels: list | None = None) -> dict:
+    """페르소나 리스트로 결정론적 마을 시뮬 결과를 생성한다(LLM 호출 0).
+
+    graph.village.simulate_village 와 동일한 {steps, residents, aggregate} 형태.
+    실제 모드에서 마을 시뮬 실패 시의 폴백으로도 재사용된다.
+    """
+    personas = personas or []
+    labels = step_labels or _VILLAGE_STEPS
+
+    residents = []
+    for p in personas:
+        demo = p.get("demographics") or {}
+        sig = p.get("signals") or {}
+        name = p.get("name") or p.get("id") or "주민"
+        age = int(demo.get("age") or 0)
+        dl = float(sig.get("digital_literacy") or 0.5)
+        income = sig.get("income_level")
+        occ = demo.get("occupation") or ""
+        family_type = demo.get("family_type") or ""
+        housing = demo.get("housing_type") or ""
+        net_size = len(sig.get("social_network") or [])
+
+        category = _eligibility_category(age, income, family_type, housing)
+        channel, reach = _pick_channel(
+            age, dl, net_size, _employed(occ), category, family_type
+        )
+        statuses, econ_d, wb_d = _trajectory(category, reach, dl)
+
+        econ = _BASE_ECON.get(str(income).strip(), 50)
+        wb = 55
+        timeline = []
+        for i, label in enumerate(labels):
+            place = channel if statuses[i] != "unaware" else "home"
+            econ = max(0, min(100, econ + (econ_d[i] if i < len(econ_d) else 0)))
+            wb = max(0, min(100, wb + (wb_d[i] if i < len(wb_d) else 0)))
+            timeline.append({
+                "step": i + 1, "label": label, "place": place,
+                "action": _action_for(name, place, statuses[i]),
+                "policy_status": statuses[i],
+                "economic": int(econ), "wellbeing": int(wb),
+                "note": f"{place_label(place)} · {status_label(statuses[i])}",
+            })
+
+        last = timeline[-1]
+        residents.append({
+            "id": p.get("id"), "name": name, "timeline": timeline,
+            "policy_status": last["policy_status"],
+            "economic": last["economic"], "wellbeing": last["wellbeing"],
+        })
+
+    aggregate = _aggregate_village(residents, labels)
+    return {"steps": labels, "residents": residents, "aggregate": aggregate}
+
+
+# ---------------------------------------------------------------------------
 # 공개 API: sample_simstate
 # ---------------------------------------------------------------------------
 def sample_simstate(policy: str | None = None, n: int = 12) -> dict:
@@ -557,6 +709,7 @@ def sample_simstate(policy: str | None = None, n: int = 12) -> dict:
     metrics = _metrics(reactions, personas)
     improvements = _improvements()
     summary = _summary()
+    village = sample_village(personas, policy)  # 미리 마을(공간 트리) 데모 데이터
 
     return {
         "policy": policy,
@@ -569,4 +722,5 @@ def sample_simstate(policy: str | None = None, n: int = 12) -> dict:
         "metrics": metrics,
         "improvements": improvements,
         "edges": edges,
+        "village": village,
     }

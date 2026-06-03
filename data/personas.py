@@ -464,3 +464,273 @@ def _derive_signals(row, pid: str) -> dict:
         "government_trust": _government_trust(pid),
         "social_network": _social_network(family_type, occupation),
     }
+
+
+# ============================================================================
+# 정책 대조 3명 선별 (DESIGN v3: "같은 정책, 다른 인생") — additive, 순수(LLM 없음)
+# ----------------------------------------------------------------------------
+# 정책 패키지(여러 정책)에 대해 각 페르소나의 (적합도 × 접근도)를 결정론적으로
+# 점수화하고, '실제로 받는 정책 수'(커버리지) 기준으로 대조적인 3명을 고른다.
+#
+#   - 수혜자  : 여러 정책을 실제로 받는 사람 (커버 최대)
+#   - 경계    : 일부만 받는 사람 (정책 사이로 일부 샘)
+#   - 사각지대: 한 개도 못 받는 사람 (특히 자격은 되나 접근이 막힌 사람 = 강한 사각)
+#
+# 정책 타깃 명세(spec)는 policy_spec.resolve_specs() 가 만든다. 여기선 받기만 한다.
+#   spec dict: {name, age:(min,max), income:(레벨...), family_kw:str|None, channel}
+#
+# 공개 API:
+#     policy_access(persona) -> float          # 접근도 0~1
+#     policy_fit(persona, spec) -> float        # 적합도 0~1
+#     score_persona(persona, specs) -> dict     # 1명 × 정책패키지 점수
+#     select_contrast_trio(personas, specs) -> dict  # 대조 3명 + 전체 매트릭스
+# ============================================================================
+
+# 선별 임계값 (튜닝 대상 — "수정작업"에서 데이터 보고 조정).
+_BENEFIT_TAU = 0.45   # benefit(fit*access) 이 값 이상이면 '실제 수혜'로 본다.
+_FIT_HI = 0.60        # fit 이 값 이상이면 '정책 대상 자격이 된다'.
+_ACCESS_LO = 0.50     # access 이 값 미만이면 '접근이 막힌다'.
+
+
+def _age_fit(age: int, lo: int, hi: int, slope: float = 15.0) -> float:
+    """나이가 타깃 [lo,hi] 안이면 1.0, 밖이면 거리(slope세당)로 선형 감쇠."""
+    if not age or age <= 0:
+        return 0.3  # 나이 정보 없음: 약한 기본값
+    if lo <= age <= hi:
+        return 1.0
+    d = min(abs(age - lo), abs(age - hi))
+    return round(max(0.0, 1.0 - d / slope), 3)
+
+
+def policy_access(persona: dict) -> float:
+    """이 사람이 정책 채널에 닿을 수 있는 접근도(0~1).
+
+    digital_literacy 는 이미 나이를 반영해 파생돼 있어(나이 많으면↓) 접근도의
+    주축이 된다. 정부 신뢰(신청 의향)를 약하게 결합한다. 정책 무관(persona 고정).
+    """
+    s = persona.get("signals") or {}
+    dl = s.get("digital_literacy")
+    dl = dl if isinstance(dl, (int, float)) else 0.5
+    tr = s.get("government_trust")
+    tr = tr if isinstance(tr, (int, float)) else 0.5
+    return round(0.75 * dl + 0.25 * tr, 3)
+
+
+def policy_fit(persona: dict, spec: dict) -> float:
+    """이 사람이 정책 타깃에 얼마나 맞는지 적합도(0~1).
+
+    나이(주축 0.55) + 소득(0.20) + 가구/나이(0.25)로 가중 합산.
+    spec.family_kw 가 있으면 가구형태 키워드 일치를, 없으면 나이를 한 번 더 반영.
+    """
+    d = persona.get("demographics") or {}
+    s = persona.get("signals") or {}
+
+    # 정책 대상 = 선언된 모든 조건(나이·소득·가구)을 만족하는 사람.
+    # 각 조건의 일치도를 곱(AND)으로 결합한다. 한 조건이라도 어긋나면 적합도가
+    # 떨어져, 나이·소득이 높아도 '대상 아닌 사람'이 수혜자로 잡히지 않는다.
+
+    # 나이: 타깃 범위 안=1.0, 밖이면 거리로 소프트 감쇠(경계 근처는 부분 인정).
+    age = d.get("age") or 0
+    lo, hi = (spec.get("age") or (0, 120))
+    age_match = _age_fit(age, lo, hi)
+
+    # 소득: 타깃 소득 레벨이면 1.0, 아니면 0.35(완전 0은 아니지만 임계 아래로).
+    inc_targets = spec.get("income")
+    inc = s.get("income_level")
+    income_match = 1.0 if (not inc_targets or inc in inc_targets) else 0.35
+
+    # 가구: family_kw 가 있으면 가구형태에 포함돼야 함(예: 출산 정책엔 '자녀').
+    #       불일치 시 0.25 로 강하게 누른다(하드 게이트). 조건 없으면 1.0.
+    fam_kw = spec.get("family_kw")
+    if fam_kw:
+        fam = d.get("family_type") or ""
+        family_match = 1.0 if fam_kw in fam else 0.25
+    else:
+        family_match = 1.0
+
+    return round(age_match * income_match * family_match, 3)
+
+
+def score_persona(
+    persona: dict, specs: list,
+    tau: float = _BENEFIT_TAU, fit_hi: float = _FIT_HI, access_lo: float = _ACCESS_LO,
+) -> dict:
+    """페르소나 1명 × 정책 패키지 점수.
+
+    Returns:
+        {id, name, age, access, cover, blocked, eligible, benefit_total, cells}
+        cells: 정책별 [{policy, fit, access, benefit, eligible, received, blocked, state}]
+        state: received(수혜) / blocked(자격되나접근막힘) / eligible(자격되나미수혜) / out(대상아님)
+    """
+    acc = policy_access(persona)
+    cells = []
+    cover = blocked = eligible = 0
+    benefit_total = 0.0
+
+    for spec in (specs or []):
+        fit = policy_fit(persona, spec)
+        benefit = round(fit * acc, 3)
+        is_elig = fit >= fit_hi
+        received = benefit >= tau
+        blk = is_elig and acc < access_lo and not received
+
+        cover += int(received)
+        blocked += int(blk)
+        eligible += int(is_elig)
+        benefit_total += benefit
+
+        if received:
+            state = "received"
+        elif blk:
+            state = "blocked"
+        elif is_elig:
+            state = "eligible"
+        else:
+            state = "out"
+        cells.append({
+            "policy": spec.get("name", ""),
+            "fit": fit, "access": acc, "benefit": benefit,
+            "eligible": is_elig, "received": received, "blocked": blk,
+            "state": state,
+        })
+
+    return {
+        "id": persona["id"],
+        "name": persona.get("name", persona["id"]),
+        "age": (persona.get("demographics") or {}).get("age", 0),
+        "access": acc,
+        "cover": cover,
+        "blocked": blocked,
+        "eligible": eligible,
+        "benefit_total": round(benefit_total, 3),
+        "cells": cells,
+    }
+
+
+def select_contrast_trio(
+    personas: list, specs: list,
+    tau: float = _BENEFIT_TAU, fit_hi: float = _FIT_HI, access_lo: float = _ACCESS_LO,
+) -> dict:
+    """정책 패키지에 대해 대조적인 3명(수혜/경계/사각지대)을 고른다.
+
+    Args:
+        personas: list[Persona dict] (load_personas 결과).
+        specs:    list[spec dict] (policy_spec.resolve_specs 결과).
+
+    Returns:
+        {specs, tau, matrix:[score_persona...], trio:[entry...], notes:[str...]}
+        trio entry: {role_key, role, persona(Persona dict), score, headline}
+                    persona 는 그대로 simulate_village 에 투입할 수 있다.
+    """
+    personas = personas or []
+    specs = specs or []
+    if not personas or not specs:
+        return {"specs": specs, "tau": tau, "matrix": [], "trio": [],
+                "notes": ["입력(페르소나/정책)이 비어 선별할 수 없습니다."]}
+
+    by_id = {p["id"]: p for p in personas}
+    rows = [score_persona(p, specs, tau, fit_hi, access_lo) for p in personas]
+    n_pol = len(specs)
+
+    # 수혜자: 커버 최대 → 동률이면 총수혜 큰 사람.
+    benef = max(rows, key=lambda r: (r["cover"], r["benefit_total"]))
+    chosen = {benef["id"]}
+
+    # 사각지대: 커버 최소 → 자격되나막힘 많은(강한 사각) → 총수혜 적은.
+    blind_pool = [r for r in rows if r["id"] not in chosen] or rows
+    blind = min(blind_pool, key=lambda r: (r["cover"], -r["blocked"], r["benefit_total"]))
+    chosen.add(blind["id"])
+
+    # 경계: ① '부분 수혜'(커버가 수혜와 사각 사이)가 있으면 그 사람을(자연스러운 중간).
+    #       ② 없으면(정책 대상이 안 겹쳐 커버가 이분되면) 폴백 = '한계 인물':
+    #          어떤 정책의 수혜 임계(tau)에 가장 가까운(간신히 받거나 놓친) 사람.
+    edge = None
+    edge_kind = None
+    rest = [r for r in rows if r["id"] not in chosen]
+    if rest:
+        lo_cov, hi_cov = blind["cover"], benef["cover"]
+        partial = [r for r in rest if lo_cov < r["cover"] < hi_cov]
+        if partial:
+            target = (hi_cov + lo_cov) / 2.0
+            edge = min(partial, key=lambda r: (abs(r["cover"] - target),
+                                               -r["eligible"], -r["benefit_total"]))
+            edge_kind = "partial"
+        else:
+            cands = [r for r in rest if r["eligible"] > 0] or rest
+            edge = min(cands, key=lambda r: (_benefit_gap(r, tau), -r["eligible"]))
+            edge_kind = "marginal"
+        chosen.add(edge["id"])
+
+    trio = [_trio_entry("beneficiary", "수혜", by_id, benef, n_pol)]
+    if edge is not None:
+        trio.append(_trio_entry("borderline", "경계", by_id, edge, n_pol, edge_kind))
+    trio.append(_trio_entry("blindspot", "사각지대", by_id, blind, n_pol))
+
+    return {"specs": specs, "tau": tau, "matrix": rows, "trio": trio,
+            "notes": _selection_notes(benef, blind, n_pol, edge, edge_kind)}
+
+
+def _benefit_gap(row: dict, tau: float) -> float:
+    """이 사람의 정책 중 수혜 임계(tau)에 가장 가까운 benefit 까지의 거리.
+
+    작을수록 '받기/놓치기 경계'에 가깝다(한계 인물 폴백 선별용).
+    """
+    gaps = [abs(c["benefit"] - tau) for c in row.get("cells", [])]
+    return min(gaps) if gaps else 1.0
+
+
+def _trio_entry(role_key: str, role: str, by_id: dict, score: dict,
+                n_pol: int, kind: str = None) -> dict:
+    """선별된 1명을 trio 항목 dict 로 포장(persona 원본 + 한 줄 헤드라인)."""
+    return {
+        "role_key": role_key,
+        "role": role,
+        "kind": kind,   # borderline 의 종류: 'partial'(부분수혜) / 'marginal'(한계인물)
+        "persona": by_id.get(score["id"], {"id": score["id"], "name": score["name"]}),
+        "score": score,
+        "headline": _headline(role_key, score, n_pol, kind),
+    }
+
+
+def _headline(role_key: str, s: dict, n_pol: int, kind: str = None) -> str:
+    """trio 항목의 한 줄 요약(왜 이 역할인지)."""
+    if role_key == "beneficiary":
+        return f"{n_pol}개 중 {s['cover']}개 정책 수혜"
+    if role_key == "borderline":
+        if kind == "marginal":
+            return f"한계 인물 — {s['cover']}/{n_pol} 수혜, 받기/놓치기 경계"
+        return f"{n_pol}개 중 {s['cover']}개만 수혜 · 일부 사각"
+    # blindspot
+    if s["blocked"] > 0:
+        return f"자격 되는 {s['eligible']}개를 접근 못 해 못 받음 · 수혜 0"
+    if s["eligible"] == 0:
+        return "대상 정책 없음(무관) · 수혜 0"
+    return f"수혜 0/{n_pol}"
+
+
+def _selection_notes(benef: dict, blind: dict, n_pol: int,
+                     edge: dict = None, edge_kind: str = None) -> list:
+    """선별 결과의 정직한 경고/메모. 검증 공격을 정면으로 받는 산출물."""
+    notes = []
+    if benef["cover"] == 0:
+        notes.append(
+            "⚠ 분명한 수혜자가 없습니다 — 이 정책 패키지는 누구에게도 쉽게 닿지 않습니다."
+        )
+    if benef["cover"] == blind["cover"]:
+        notes.append(
+            "⚠ 대조가 약합니다 — 이 패키지에서는 세 사람의 처지가 크게 갈리지 않습니다."
+        )
+    elif edge_kind == "marginal":
+        # 부분 수혜가 없어(정책 대상이 안 겹침) 한계 인물을 경계로 골랐음을 밝힌다.
+        notes.append(
+            "ⓘ 부분 수혜자가 없어(정책 대상이 겹치지 않음) '간신히 걸친 한계 인물'을 경계로 골랐습니다."
+        )
+    if blind["blocked"] > 0:
+        notes.append(
+            f"사각지대 유형 = 접근 차단: 자격은 되는데 접근 채널에서 막힌 사람({blind['name']})."
+        )
+    elif blind["eligible"] == 0:
+        notes.append(
+            f"사각지대 유형 = 대상 제외(무관): 이 패키지의 어떤 정책 대상도 아닌 사람({blind['name']})."
+        )
+    return notes

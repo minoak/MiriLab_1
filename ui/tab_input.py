@@ -16,6 +16,8 @@ import re
 
 import streamlit as st
 
+from policy_spec import describe_spec, tag_line
+
 
 # ── 추출용 라벨 사전 ────────────────────────────────────────────────
 # 각 핵심 항목마다 "정책 원문에 나올 법한 라벨 후보"들을 나열한다.
@@ -122,6 +124,8 @@ def render_input_tab(view) -> None:
         return
 
     policy = _get_policy_text(view)
+    spec = view.get("policy_spec") if isinstance(view, dict) else None
+    spec = spec if isinstance(spec, dict) else {}
 
     st.subheader("📄 시뮬레이션 대상 정책")
 
@@ -148,31 +152,39 @@ def render_input_tab(view) -> None:
 
     st.divider()
 
-    # ── 핵심 정보 4칸 ────────────────────────────────────────────
-    st.markdown("#### 🔑 핵심 정보 요약")
-    st.caption("정책 원문에서 자동 추출했습니다. 일부 항목은 원문에 라벨이 없으면 비어 있을 수 있습니다.")
+    # ── 정책 태그 (사이드바에서 지정한 구조화 명세) ───────────────
+    st.markdown("#### 🏷️ 정책 태그")
+    rows = describe_spec(spec) if spec else {}
+    line = tag_line(spec) if spec else ""
 
-    core = _extract_core(policy)
-    fields = ["대상", "혜택", "신청 방법", "기간"]
-    cols = st.columns(4)
-    for col, field in zip(cols, fields):
-        with col:
-            icon = _ICONS.get(field, "•")
-            st.markdown(f"**{icon} {field}**")
-            value = core.get(field, "")
-            if value:
-                # 너무 길면 보기 좋게 잘라서 표시(전체는 아래 원문/expander에서 확인)
-                shown = value if len(value) <= 160 else value[:158] + "…"
-                st.write(shown)
-            else:
-                st.caption("원문에서 자동 추출 실패 — 위 정책 원문을 직접 확인하세요.")
-
-    # ── 추출 실패 항목 안내 ──────────────────────────────────────
-    missing = [f for f in fields if not core.get(f)]
-    if missing:
-        st.info(
-            "다음 항목은 정책 원문에서 자동으로 찾지 못했습니다: "
-            + ", ".join(missing)
-            + ". 정책 원문에 '신청 대상:', '지원 내용:', '신청 방법:', '신청 기간:' 같은 "
-            "라벨 줄을 추가하면 더 정확히 추출됩니다."
+    if rows:
+        st.caption(
+            "사이드바 '정책 태그'에서 지정한 값입니다. 아래 한 줄이 정책 원문과 "
+            "함께 모델에 전달됩니다."
         )
+        if line:
+            st.code(line, language=None)
+        items = list(rows.items())
+        ncol = min(3, len(items)) or 1
+        cols = st.columns(ncol)
+        for i, (label, value) in enumerate(items):
+            with cols[i % ncol]:
+                st.markdown(f"**{label}**")
+                st.write(value)
+    else:
+        st.info(
+            "지정된 정책 태그가 없습니다. 좌측 사이드바의 '🏷️ 정책 태그'에서 "
+            "대상(연령·소득·가구·채널)과 분류(분야·지원 형태)를 지정하면, 그 태그가 "
+            "모델에 함께 전달되고 인생극장 대상 선별이 또렷해집니다."
+        )
+
+    # ── 원문에서 추출한 세부(보조: 혜택/신청/기간의 구체 수치) ──────
+    # 태그는 '대상/분류'를, 원문 추출은 '혜택 금액/기간' 같은 구체 디테일을 보완한다.
+    core = _extract_core(policy)
+    extra = [(f, core.get(f, "")) for f in ("혜택", "신청 방법", "기간") if core.get(f)]
+    if extra:
+        with st.expander("📋 원문에서 추출한 세부 (혜택 · 신청 · 기간)", expanded=False):
+            for field, value in extra:
+                icon = _ICONS.get(field, "•")
+                shown = value if len(value) <= 200 else value[:198] + "…"
+                st.markdown(f"**{icon} {field}**  \n{shown}")

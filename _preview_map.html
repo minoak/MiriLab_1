@@ -1,0 +1,127 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><style>
+*{box-sizing:border-box;}
+body{margin:0;font-family:'Malgun Gothic','Apple SD Gothic Neo','Segoe UI Emoji',sans-serif;
+  background:#F7FBF9;color:#2C3E50;}
+#wrap{width:780px;margin:0 auto;padding:6px;}
+#map{position:relative;width:760px;height:460px;border-radius:14px;overflow:hidden;
+  background:#8ed06a;
+  background-image:
+    linear-gradient(rgba(255,255,255,.10) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.10) 1px,transparent 1px),
+    radial-gradient(circle at 28% 18%,rgba(255,255,255,.14),transparent 42%);
+  background-size:38px 38px,38px 38px,100% 100%;
+  border:4px solid #5b8c3e;box-shadow:inset 0 0 0 3px #a6dd86;}
+.path{position:absolute;background:#e8d8a8;opacity:.75;border-radius:8px;}
+.bldg{position:absolute;width:140px;height:78px;border-radius:10px;
+  background:#fff7e8;border:3px solid #8a6d3b;box-shadow:0 4px 0 #6f5630;
+  text-align:center;padding-top:4px;z-index:2;}
+.bldg .roof{font-size:1.7rem;line-height:1.15;}
+.bldg .bname{font-size:.72rem;font-weight:700;color:#5b4326;}
+.bldg .bcnt{font-size:.64rem;color:#8a6d3b;}
+.cit{position:absolute;width:34px;text-align:center;z-index:6;
+  transition:left .85s ease,top .85s ease;}
+.cit .face{font-size:1.4rem;line-height:28px;display:inline-block;width:30px;height:30px;
+  border:3px solid #9E9E9E;border-radius:50%;background:rgba(255,255,255,.7);}
+.cit .nm{font-size:.6rem;color:#22313f;white-space:nowrap;
+  text-shadow:0 1px 0 #fff,0 -1px 0 #fff,1px 0 0 #fff,-1px 0 0 #fff;}
+.cit.blind .face{animation:pulse 1.2s infinite;}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(110,110,110,0);}
+  50%{box-shadow:0 0 0 6px rgba(110,110,110,.45);}}
+#bar{display:flex;align-items:center;gap:10px;margin:10px 2px 4px;}
+#play{cursor:pointer;border:none;border-radius:8px;padding:6px 14px;
+  background:#2c3e50;color:#fff;font-size:.85rem;font-weight:700;}
+#play:hover{background:#1b2733;}
+#slider{flex:1;}
+#lbl{font-weight:700;font-size:.9rem;min-width:104px;text-align:right;}
+#legend{font-size:.72rem;margin:4px 2px;display:flex;gap:12px;flex-wrap:wrap;}
+#legend span b{display:inline-block;width:10px;height:10px;border-radius:50%;
+  border:2px solid #fff;margin-right:3px;vertical-align:middle;}
+</style></head><body><div id="wrap">
+<div id="map"></div>
+<div id="bar">
+  <button id="play">▶ 재생</button>
+  <input id="slider" type="range" min="0" value="0" step="1">
+  <span id="lbl"></span>
+</div>
+<div id="legend"></div>
+</div>
+<script>
+const D = {"stepLabels": ["시행 1개월 후", "시행 3개월 후", "시행 6개월 후"], "placeKeys": ["online_portal", "community_center", "welfare_center", "work_market", "home"], "placeLabels": {"online_portal": "복지로(온라인)", "community_center": "주민센터(행정복지센터)", "welfare_center": "복지관", "work_market": "직장·시장", "home": "집"}, "statusColors": {"received": "#27AE60", "applied": "#2980B9", "aware": "#F39C12", "blocked": "#E74C3C", "unaware": "#9E9E9E"}, "statusLabels": {"unaware": "모름", "aware": "알게 됨", "applied": "신청함", "received": "수령·혜택", "blocked": "시도했으나 막힘"}, "people": [{"id": "p01", "name": "김복순", "sprite": "👵", "home_bound": false, "frames": [{"place": "welfare_center", "status": "aware", "econ": 32, "wb": 54}, {"place": "welfare_center", "status": "aware", "econ": 32, "wb": 52}, {"place": "welfare_center", "status": "aware", "econ": 32, "wb": 50}]}, {"id": "p02", "name": "이준호", "sprite": "👨", "home_bound": false, "frames": [{"place": "online_portal", "status": "aware", "econ": 53, "wb": 60}, {"place": "online_portal", "status": "applied", "econ": 60, "wb": 67}, {"place": "online_portal", "status": "received", "econ": 73, "wb": 78}]}, {"id": "p03", "name": "박상철", "sprite": "👨", "home_bound": false, "frames": [{"place": "work_market", "status": "aware", "econ": 50, "wb": 54}, {"place": "work_market", "status": "aware", "econ": 50, "wb": 52}, {"place": "work_market", "status": "aware", "econ": 50, "wb": 50}]}, {"id": "p04", "name": "정미영", "sprite": "👩", "home_bound": false, "frames": [{"place": "online_portal", "status": "aware", "econ": 50, "wb": 54}, {"place": "online_portal", "status": "aware", "econ": 50, "wb": 52}, {"place": "online_portal", "status": "aware", "econ": 50, "wb": 50}]}, {"id": "p05", "name": "최유진", "sprite": "👧", "home_bound": false, "frames": [{"place": "online_portal", "status": "aware", "econ": 32, "wb": 58}, {"place": "online_portal", "status": "aware", "econ": 32, "wb": 59}, {"place": "online_portal", "status": "aware", "econ": 32, "wb": 60}]}, {"id": "p06", "name": "한영수", "sprite": "👨", "home_bound": false, "frames": [{"place": "welfare_center", "status": "aware", "econ": 32, "wb": 54}, {"place": "welfare_center", "status": "aware", "econ": 32, "wb": 52}, {"place": "welfare_center", "status": "aware", "econ": 32, "wb": 50}]}, {"id": "p07", "name": "송경자", "sprite": "👩", "home_bound": false, "frames": [{"place": "work_market", "status": "aware", "econ": 50, "wb": 54}, {"place": "work_market", "status": "aware", "econ": 50, "wb": 52}, {"place": "work_market", "status": "aware", "econ": 50, "wb": 50}]}, {"id": "p08", "name": "오태경", "sprite": "👨", "home_bound": false, "frames": [{"place": "online_portal", "status": "aware", "econ": 72, "wb": 54}, {"place": "online_portal", "status": "aware", "econ": 72, "wb": 52}, {"place": "online_portal", "status": "aware", "econ": 72, "wb": 50}]}, {"id": "p09", "name": "윤말순", "sprite": "👵", "home_bound": false, "frames": [{"place": "welfare_center", "status": "aware", "econ": 32, "wb": 54}, {"place": "welfare_center", "status": "aware", "econ": 32, "wb": 52}, {"place": "welfare_center", "status": "aware", "econ": 32, "wb": 50}]}, {"id": "p10", "name": "강도현", "sprite": "👨", "home_bound": false, "frames": [{"place": "community_center", "status": "aware", "econ": 53, "wb": 60}, {"place": "community_center", "status": "applied", "econ": 60, "wb": 67}, {"place": "community_center", "status": "received", "econ": 73, "wb": 78}]}, {"id": "p11", "name": "임수빈", "sprite": "👩", "home_bound": false, "frames": [{"place": "online_portal", "status": "aware", "econ": 32, "wb": 57}, {"place": "online_portal", "status": "applied", "econ": 33, "wb": 57}, {"place": "online_portal", "status": "blocked", "econ": 30, "wb": 48}]}, {"id": "p12", "name": "조병국", "sprite": "👨", "home_bound": true, "frames": [{"place": "home", "status": "unaware", "econ": 30, "wb": 52}, {"place": "home", "status": "unaware", "econ": 28, "wb": 49}, {"place": "home", "status": "unaware", "econ": 27, "wb": 47}]}], "autoplay": true};
+const POS = {online_portal:[36,28],community_center:[310,18],welfare_center:[584,28],
+  work_market:[120,300],home:[560,300]};
+const ICON = {online_portal:"💻",community_center:"🏛️",welfare_center:"🏥",
+  work_market:"🏪",home:"🏠"};
+const BLD_H = 78;
+const map = document.getElementById('map');
+function addPath(x,y,w,h){const d=document.createElement('div');d.className='path';
+  d.style.left=x+'px';d.style.top=y+'px';d.style.width=w+'px';d.style.height=h+'px';
+  map.appendChild(d);}
+addPath(150,150,470,24); addPath(360,158,24,158);
+for(const k of D.placeKeys){
+  const p=POS[k]||POS.home;
+  const b=document.createElement('div');b.className='bldg';
+  b.style.left=p[0]+'px';b.style.top=p[1]+'px';
+  b.innerHTML="<div class='roof'>"+(ICON[k]||"🏠")+"</div>"+
+    "<div class='bname'>"+(D.placeLabels[k]||k)+"</div>"+
+    "<div class='bcnt' id='cnt_"+k+"'></div>";
+  map.appendChild(b);
+}
+const nodes={};
+D.people.forEach(p=>{
+  const el=document.createElement('div');
+  el.className='cit'+(p.home_bound?' blind':'');
+  el.innerHTML="<div class='face'>"+p.sprite+"</div><div class='nm'></div>";
+  el.querySelector('.nm').textContent=p.name;   // 이름은 신뢰불가 → HTML 파싱 안 함(XSS 방지)
+  map.appendChild(el); nodes[p.id]=el;
+});
+const slider=document.getElementById('slider');
+const lbl=document.getElementById('lbl');
+const playBtn=document.getElementById('play');
+slider.max=Math.max(0,(D.stepLabels.length-1));
+let curStep=0, timer=null;
+function applyStep(s){
+  const counts={};
+  D.people.forEach(p=>{
+    const fi=Math.min(s,Math.max(0,p.frames.length-1));
+    const f=p.frames[fi]||{place:'home',status:'unaware'};
+    const base=POS[f.place]||POS.home;
+    const i=(counts[f.place]||0); counts[f.place]=i+1;
+    const col=i%4, row=Math.floor(i/4);            // 4열(상단 2행=8명까지 안전)
+    let x=base[0]+2+col*34, y=base[1]+BLD_H+4+row*32;
+    if(x>760-32) x=760-32;                          // 우측 경계 클램프
+    if(y>460-34) y=460-34;                          // 하단 경계 클램프(다수 군집해도 잘림 방지)
+    const el=nodes[p.id];
+    el.style.left=x+'px'; el.style.top=y+'px';
+    const face=el.querySelector('.face');
+    face.style.borderColor=D.statusColors[f.status]||'#9E9E9E';
+    el.title=p.name+" · "+(D.statusLabels[f.status]||f.status)+
+      " · 경제 "+(f.econ==null?'-':f.econ)+" / 심리 "+(f.wb==null?'-':f.wb);
+  });
+  for(const k of D.placeKeys){
+    const c=document.getElementById('cnt_'+k);
+    if(c) c.textContent=(counts[k]||0)+"명";
+  }
+  lbl.textContent=D.stepLabels[s]||('시점 '+(s+1));
+  slider.value=s; curStep=s;
+}
+function stop(){if(timer){clearInterval(timer);timer=null;}playBtn.textContent='▶ 재생';}
+function play(){
+  if(timer){stop();return;}
+  playBtn.textContent='⏸ 정지';
+  if(curStep>=D.stepLabels.length-1) curStep=-1;
+  timer=setInterval(()=>{
+    const s=curStep+1;
+    if(s>D.stepLabels.length-1){stop();return;}
+    applyStep(s);
+  },1150);
+}
+slider.oninput=e=>{stop();applyStep(+e.target.value);};
+playBtn.onclick=play;
+const leg=document.getElementById('legend');
+const order=[["unaware","모름"],["aware","알게됨"],["applied","신청"],["received","수령"],["blocked","막힘"]];
+leg.innerHTML=order.map(o=>"<span><b style='background:"+(D.statusColors[o[0]]||'#9E9E9E')+
+  "'></b>"+o[1]+"</span>").join("")+
+  "<span>🔒 회색 점멸 = 집에만 머무는 사각지대</span>";
+applyStep(0);
+if(D.autoplay) setTimeout(play,700);
+</script></body></html>

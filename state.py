@@ -43,12 +43,47 @@ class Reaction(TypedDict):
 
 
 class Interaction(TypedDict):
-    """전파(채팅) 1건. SNS 채팅방 + 네트워크 그래프의 원천."""
+    """전파(채팅) 1건. SNS 채팅방(게시판 댓글)의 원천."""
     round: int
     from_id: str
     to_id: Optional[str]        # None = 채팅방 전체 broadcast
     text: str
     stance_shift: Optional[str] # 다른 의견을 보고 입장이 바뀌었는지 (옵션)
+
+
+class VillageStep(TypedDict):
+    """한 주민의 한 시점(스텝) 삶. 미리 마을 시뮬의 최소 단위."""
+    step: int
+    label: str          # 시간 라벨 (예: "시행 3개월 후")
+    place: str          # 이 시점 주민이 닿은 장소(정책 채널) — graph/spaces.PLACE_KEYS
+    action: str         # 그 기간 이 주민의 행동·사건 (디테일 서사)
+    policy_status: str  # unaware | aware | applied | received | blocked
+    economic: int       # 경제적 여유 0~100
+    wellbeing: int      # 심리적 안정·만족 0~100
+    note: str           # 타임라인 한 줄 요약
+
+
+class Resident(TypedDict):
+    """미리 마을 주민 1명의 누적 궤적(Persona 에서 파생)."""
+    id: str
+    name: str
+    timeline: list      # list[VillageStep]
+    policy_status: str  # 최종 정책 관여 상태
+    economic: int       # 최종 경제 지표
+    wellbeing: int      # 최종 심리 지표
+
+
+class SpaceNode(TypedDict):
+    """미리 마을 공간 트리의 노드 1개 (World→장소→오브젝트).
+
+    각 장소는 '정책 접근 채널'의 의미를 갖는다(graph/spaces.py).
+    어느 장소에 닿느냐가 곧 정책 접근 격차다.
+    """
+    name: str       # 장소명 (예: "복지로(온라인)")
+    role: str       # 정책 채널로서의 의미 한 줄
+    children: list  # list[SpaceNode] - 하위 장소(현재 1depth, 확장 여지)
+    objects: list   # 장소 안 오브젝트/상태 자연어 (예: "복지로 앱: 로그인 복잡")
+    state: dict     # 메타 (key/favored/barrier 등)
 
 
 class SimState(TypedDict):
@@ -61,6 +96,13 @@ class SimState(TypedDict):
     # --- 확장 ---
     grounded: bool                       # ablation 전역 토글 (기본 True)
     rounds: int                          # 전파 라운드 수 (기본 1, 최대 2)
-    metrics: dict                        # 집계: 사회혼란도/정책수용도/신청의향지수 + 축별 평균
+    metrics: dict                        # 집계: 정책수용도/신청의향지수/사회혼란도 + 축별 평균
     improvements: dict                   # {'easy_text': str, 'policy_fixes': [str, ...]}
-    edges: Annotated[list, add]          # 전파 엣지: {'from':id,'to':id,'round':int}
+    edges: Annotated[list, add]          # (SNS 답글 참조) 전파 엣지: {'from':id,'to':id,'round':int}
+    # --- 미리 마을: 정책 시행 후 시간 경과(스텝)별 각 주민의 삶 변화 시뮬 (전파 그래프 대체) ---
+    village: dict                        # {steps, residents:[Resident...], aggregate} (graph/village.py)
+    # --- 정책 인생극장(DESIGN v3): 멀티 정책 + 대조 3명 선별 ---
+    policies: list                       # 동시 시행 정책 패키지(정책명/원문/{name,text} 리스트). 단일은 [policy].
+    selection: dict                      # data/personas.select_contrast_trio 결과 {specs, tau, matrix, trio, notes}
+    # --- 정책 태그(사이드바 직접 지정): 결정론 명세 + 분류 라벨 ---
+    policy_spec: dict                    # policy_spec.spec_from_tags 결과 {name,text,age,income,family_kw,channel,category,support_type}. 매칭/프롬프트/미래 RAG 라벨용.

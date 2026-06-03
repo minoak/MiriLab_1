@@ -21,19 +21,44 @@ st.set_page_config(page_title="미리랩 - 정책 반응 시뮬레이터", layou
 st.title("미리랩 — 정책 반응 시뮬레이터")
 
 # --- 나머지 import (계약상 정해진 공개 API만 사용) ---
-from sample_policies import SAMPLES, DEFAULT_POLICY
+from sample_policies import SAMPLES, DEFAULT_POLICY, SPECS
 from ui.state_helpers import run_simulation
 from ui.model import build_view
 from graph.llm import has_real_key
+from graph.spaces import PLACES
+from policy_spec import spec_from_tags, prompt_with_tags
 from ui import (
     tab_input,
     tab_dashboard,
+    tab_village,
     tab_chat,
     tab_network,
     tab_improve,
     tab_abtest,
     tab_board,
 )
+
+
+# =====================================================================
+# 정책 태그 옵션 (UI 라벨 ↔ 엔진 코드) — 사이드바 셀렉터용
+# =====================================================================
+# 소득 수준: 표시 라벨 → signals.income_level 코드
+_INCOME_OPTIONS = {"저소득": "low", "중간소득": "mid", "고소득": "high"}
+# 가구 조건: 표시 라벨 → family_type 에 포함돼야 할 키워드(None=무관)
+_FAMILY_OPTIONS = {
+    "무관": None, "자녀 있음": "자녀", "배우자 있음": "배우자",
+    "1인 가구": "1인", "부모 부양": "부모",
+}
+# 주 신청 채널: 한글 장소명 → spaces.PLACE_KEYS (PLACES 순서 유지)
+_CHANNEL_OPTIONS = {p["name"]: p["key"] for p in PLACES}
+# 분류 태그(매칭엔 미사용, 프롬프트 힌트 + 미래 RAG 라벨). "미지정"=빈 값.
+_CATEGORY_OPTIONS = [
+    "미지정", "주거", "고용", "돌봄·보육", "노후", "생계·긴급",
+    "교육", "금융·자산", "건강",
+]
+_SUPPORT_OPTIONS = ["미지정", "현금", "바우처", "현물·기기", "서비스·교육", "감면"]
+# 콤보박스 '직접 입력' 옵션 라벨 — 분야/지원형태/채널에서 목록 밖 값을 받기 위함.
+_OTHER_OPTION = "기타 (직접 입력)"
 
 
 # =====================================================================
@@ -100,6 +125,94 @@ def _render_sidebar() -> None:
                 "실제 LLM 반응을 보려면 .env 에 OPENAI_API_KEY 를 설정하세요."
             )
 
+        # 4.5) 정책 태그(선택) ------------------------------------------
+        # 정책의 대상·분류를 직접 지정한다. 지정한 태그는 (1) 정책 원문과 함께
+        # 모델에 전달되고(더 정확한 반응), (2) 결정론 spec 으로 저장돼 인생극장
+        # 대상 선별을 또렷하게 하며, (3) 미래 RAG 의 라벨이 된다.
+        # 샘플 정책을 고르면 검증된 명세(SPECS)로 자동 프리필되고, 위젯 key 에
+        # 선택값을 포함시켜 정책을 바꾸면 태그도 그 정책에 맞게 갱신된다.
+        sp = SPECS.get(choice)  # 샘플이면 명세, '직접 입력'/미등록이면 None
+        with st.expander("🏷️ 정책 태그 (선택 — 대상·분류 직접 지정)", expanded=False):
+            st.caption(
+                "비워두면 자동 추정합니다. 지정하면 모델에 함께 전달되고 인생극장 "
+                "대상 선별이 또렷해집니다."
+            )
+            # 대상 연령
+            def_age = tuple(sp["age"]) if sp else (0, 120)
+            age_sel = st.slider(
+                "대상 연령", 0, 120, def_age, key=f"tag_age::{choice}"
+            )
+            # 소득 수준(다중) — 전부 선택 = 소득무관
+            inc_labels = list(_INCOME_OPTIONS)
+            if sp:
+                def_inc = [l for l, c in _INCOME_OPTIONS.items()
+                           if c in (sp.get("income") or ())]
+                def_inc = def_inc or inc_labels
+            else:
+                def_inc = inc_labels
+            inc_sel = st.multiselect(
+                "소득 수준", inc_labels, default=def_inc, key=f"tag_income::{choice}"
+            )
+            # 가구 조건
+            fam_labels = list(_FAMILY_OPTIONS)
+            if sp and sp.get("family_kw"):
+                def_fam = next((l for l, c in _FAMILY_OPTIONS.items()
+                                if c == sp["family_kw"]), "무관")
+            else:
+                def_fam = "무관"
+            fam_sel = st.selectbox(
+                "가구 조건", fam_labels, index=fam_labels.index(def_fam),
+                key=f"tag_family::{choice}",
+            )
+            # 주 신청 채널
+            ch_labels = list(_CHANNEL_OPTIONS)
+            if sp:
+                def_ch = next((l for l, c in _CHANNEL_OPTIONS.items()
+                               if c == sp.get("channel")), ch_labels[0])
+            else:
+                def_ch = next((l for l, c in _CHANNEL_OPTIONS.items()
+                               if c == "community_center"), ch_labels[0])
+            ch_pick = st.selectbox(
+                "주 신청 채널", ch_labels + [_OTHER_OPTION],
+                index=ch_labels.index(def_ch), key=f"tag_channel::{choice}",
+            )
+            if ch_pick == _OTHER_OPTION:
+                ch_value = st.text_input(
+                    "주 신청 채널 직접 입력", key=f"tag_channel_custom::{choice}",
+                    placeholder="예: 전화 상담(129)",
+                ).strip()
+                st.caption(
+                    "※ 직접 입력한 채널은 태그·모델 힌트로만 쓰이고, 인생극장 지도의 "
+                    "5개 공간에는 추가되지 않습니다."
+                )
+            else:
+                ch_value = _CHANNEL_OPTIONS.get(ch_pick)
+
+            # 분류 태그(매칭엔 미사용 — RAG 라벨/프롬프트 힌트). 목록 밖 값은 직접 입력.
+            cat_pick = st.selectbox(
+                "정책 분야", _CATEGORY_OPTIONS + [_OTHER_OPTION], index=0,
+                key=f"tag_cat::{choice}",
+            )
+            if cat_pick == _OTHER_OPTION:
+                cat_sel = st.text_input(
+                    "정책 분야 직접 입력", key=f"tag_cat_custom::{choice}",
+                    placeholder="예: 교통·이동",
+                ).strip()
+            else:
+                cat_sel = cat_pick
+
+            sup_pick = st.selectbox(
+                "지원 형태", _SUPPORT_OPTIONS + [_OTHER_OPTION], index=0,
+                key=f"tag_sup::{choice}",
+            )
+            if sup_pick == _OTHER_OPTION:
+                sup_sel = st.text_input(
+                    "지원 형태 직접 입력", key=f"tag_sup_custom::{choice}",
+                    placeholder="예: 대출·융자",
+                ).strip()
+            else:
+                sup_sel = sup_pick
+
         # 5) 실행 버튼 ---------------------------------------------------
         run_clicked = st.button(
             "시뮬레이션 실행", type="primary", use_container_width=True
@@ -112,6 +225,20 @@ def _render_sidebar() -> None:
             st.warning("정책 원문이 비어 있습니다. 샘플을 선택하거나 직접 입력해 주세요.")
             return
 
+        # 사용자 태그 → 결정론 spec(LLM/네트워크 0). 모델엔 '태그 + 원문'을 보낸다.
+        income_codes = [_INCOME_OPTIONS[l] for l in inc_sel if l in _INCOME_OPTIONS]
+        spec = spec_from_tags(
+            age=tuple(age_sel),
+            income=income_codes,
+            family_kw=_FAMILY_OPTIONS.get(fam_sel),
+            channel=ch_value,
+            category="" if cat_sel == "미지정" else cat_sel,
+            support_type="" if sup_sel == "미지정" else sup_sel,
+            name=("" if choice == "직접 입력" else choice),
+            text=policy,
+        )
+        model_policy = prompt_with_tags(policy, spec)  # 모델 입력(태그 접두 + 원문)
+
         spinner_msg = (
             "모의 데이터를 생성하는 중입니다..."
             if demo
@@ -119,7 +246,11 @@ def _render_sidebar() -> None:
         )
         with st.spinner(spinner_msg):
             try:
-                sim = run_simulation(policy, mock=demo, n=int(n))
+                sim = run_simulation(model_policy, mock=demo, n=int(n))
+                # 표시는 깨끗하게: state.policy 를 원문으로 복원(태그 접두 제거),
+                # spec 은 additive 로 저장(정책 입력 탭 표시 + 슬라이스 2 인생극장이 사용).
+                sim["policy"] = policy
+                sim["policy_spec"] = spec
                 st.session_state["sim"] = sim
                 st.session_state["view"] = build_view(sim)
             except Exception as e:  # 실행 실패 시 화면을 깨뜨리지 않고 예외 표시.
@@ -136,13 +267,14 @@ def _render_sidebar() -> None:
 
 
 # =====================================================================
-# 본문: 7개 탭
+# 본문: 8개 탭
 # =====================================================================
 def _render_body() -> None:
     """본문 탭들을 그린다. view 가 없으면 각 탭이 알아서 안내(st.info)한다."""
     tab_labels = [
         "정책 입력",
         "시민 반응",
+        "정책 인생극장",
         "SNS 채팅방",
         "전파 그래프",
         "개선 제안",
@@ -156,6 +288,7 @@ def _render_body() -> None:
     renderers = [
         tab_input.render_input_tab,
         tab_dashboard.render_dashboard_tab,
+        tab_village.render_village_tab,
         tab_chat.render_chat_tab,
         tab_network.render_network_tab,
         tab_improve.render_improve_tab,

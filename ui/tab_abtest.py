@@ -18,7 +18,7 @@ from viz import gauge
 _METRICS = [
     ("정책수용도", ["acceptance", "정책수용도", "policy_acceptance"]),
     ("신청의향지수", ["intent", "신청의향지수", "apply_intent", "intent_index"]),
-    ("사회혼란도", ["unrest", "사회혼란도", "social_unrest"]),
+    ("사회혼란도", ["social_unrest", "사회혼란도"]),
 ]
 
 

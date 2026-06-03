@@ -204,10 +204,34 @@ def _resolve_target(out_refs: list, persona: dict, by_id: dict, by_name: dict):
     return None
 
 
-def interact_node(state: SimState) -> dict:
-    """페르소나들이 서로의 반응(digest)을 보고 한 마디씩 응답한다.
+def _feed_digest(feed: list, k: int = 6) -> str:
+    """누적 대화 피드에서 '가장 최근 k개 발언'을 1줄씩 모은 digest.
 
-    rounds(최대 2) 만큼 반복하며, 각 라운드 후 digest 를 갱신한다.
+    _build_digest 가 shareability 상위(고정)만 보여줬던 것과 달리,
+    피드 끝(=가장 최근 발언)을 보여줘 라운드가 진행될수록 대화가 실제로
+    '쌓이고 이어지게' 한다(게시판/채팅방 타임라인처럼).
+    """
+    recent = feed[-k:] if (k and len(feed) > k) else feed
+    lines = []
+    for item in recent:
+        stance_kr = {"support": "찬성", "oppose": "반대", "mixed": "혼합"}.get(
+            item.get("stance"), "혼합"
+        )
+        text = (item.get("text") or "").strip().replace("\n", " ")
+        first = text.split(".")[0].strip()
+        snippet = (first[:80] + "…") if len(first) > 80 else first
+        name = item.get("name") or "익명"
+        lines.append(f"- {name}({stance_kr}): {snippet}")
+    return "\n".join(lines)
+
+
+def interact_node(state: SimState) -> dict:
+    """페르소나들이 '누적되는 게시판 피드'를 보고 라운드마다 한 마디씩 단다.
+
+    핵심: 각 라운드의 댓글(reply)을 피드에 누적해, 다음 라운드 시민들이
+    '이전 턴에 새로 올라온 댓글'까지 보게 한다. (이전 버전은 1차 react
+    반응만 반복해 보여줘, 라운드가 진행돼도 대화가 제자리였다.)
+
     interactions(채팅 레코드)와 edges(전파 그래프 엣지)를 함께 반환한다.
     """
     policy = state.get("policy", "")
@@ -221,12 +245,24 @@ def interact_node(state: SimState) -> dict:
         r.get("persona_id"): r.get("stance", "mixed") for r in reactions
     }
 
+    # 누적 대화 피드: 1차 react 반응을 시드로 시작. 라운드마다 reply 가 쌓인다.
+    feed: list = []
+    for r in reactions:
+        persona = by_id.get(r.get("persona_id"))
+        feed.append(
+            {
+                "name": (persona or {}).get("name") or r.get("persona_id") or "익명",
+                "stance": r.get("stance", "mixed"),
+                "text": r.get("text", ""),
+            }
+        )
+
     interactions: list = []
     edges: list = []
-    digest = _build_digest(reactions, by_id, k=6)
 
     for rnd in range(1, rounds + 1):
-        cur_digest = digest  # 클로저 캡처용 고정.
+        # 이번 라운드 모든 시민은 '라운드 시작 시점의 최근 피드'를 본다(턴 배치).
+        cur_digest = _feed_digest(feed, k=6)
 
         def _one(persona: dict) -> dict:
             # 페르소나 1명의 이번 라운드 상호작용 생성.
@@ -253,36 +289,37 @@ def interact_node(state: SimState) -> dict:
 
         results = run_threaded(personas, _one, max_workers=8)
 
-        # 레코드/엣지 생성 + 입장 갱신 + 다음 라운드용 digest 재계산.
+        # 레코드/엣지 생성 + 입장 갱신 + 이번 턴 댓글을 피드에 누적.
         for res in results:
             pid = res["persona_id"]
             target = res["target"]
             shift = res["new_stance"]
+            # 입장은 '실제로 바뀐 경우만' 반영(이전과 같으면 무시 → herding 완화).
+            prev = stance_now.get(pid)
+            changed = shift in ("support", "oppose", "mixed") and shift != prev
+            if changed:
+                stance_now[pid] = shift
             interactions.append(
                 {
                     "round": rnd,
                     "from_id": pid,
-                    "to_id": target,           # None = 채팅방 전체 broadcast
+                    "to_id": target,           # None = 게시판 전체(원글)에 댓글
                     "text": res["reply"],
-                    "stance_shift": shift,
+                    "stance_shift": shift if changed else None,
                 }
             )
             # 엣지는 참조 대상이 있을 때만(broadcast 는 그래프 노이즈라 제외).
             if target:
                 edges.append({"from": pid, "to": target, "round": rnd})
-            # 입장 변화가 유효하면 반영(다음 라운드 digest 에 영향).
-            if shift in ("support", "oppose", "mixed"):
-                stance_now[pid] = shift
-
-        # 다음 라운드를 위한 digest 갱신: 갱신된 입장을 반영한 가상 반응 리스트.
-        if rnd < rounds:
-            refreshed = []
-            for r in reactions:
-                pid = r.get("persona_id")
-                rr = dict(r)
-                rr["stance"] = stance_now.get(pid, r.get("stance", "mixed"))
-                refreshed.append(rr)
-            digest = _build_digest(refreshed, by_id, k=6)
+            # 이번 턴 댓글을 피드 끝에 누적 → 다음 라운드가 본다.
+            persona = by_id.get(pid)
+            feed.append(
+                {
+                    "name": (persona or {}).get("name") or pid or "익명",
+                    "stance": stance_now.get(pid, "mixed"),
+                    "text": res["reply"],
+                }
+            )
 
     return {"interactions": interactions, "edges": edges}
 
@@ -334,12 +371,10 @@ def _compute_metrics(reactions: list, personas: list) -> dict:
         + 0.25 * (100.0 - m_dissat)
     )
 
-    # 사회혼란도(0~100): 불만 가중 + 입장 불일치 + 저이해 비율.
-    social_unrest = (
-        0.50 * m_dissat
-        + 0.30 * (stance_conflict * 100.0)
-        + 0.20 * (low_understand_ratio * 100.0)
-    )
+    # 사회혼란도(0~100): 반발 강도 = 시민 불만 평균.
+    # metrics_common 으로 통일(real/demo/fallback 동일).
+    from metrics_common import social_unrest as _social_unrest
+    social_unrest = _social_unrest(reactions)
 
     # 신청의향지수: 평균 의향과 적극층 비율의 블렌드(0~100).
     application_index = 0.6 * m_intent + 0.4 * (high_intent_ratio * 100.0)
@@ -372,7 +407,7 @@ def _compute_metrics(reactions: list, personas: list) -> dict:
     return {
         # 핵심 3지표(0~100).
         "policy_acceptance": round(acceptance, 1),   # 정책수용도
-        "social_unrest": round(social_unrest, 1),    # 사회혼란도
+        "social_unrest": round(social_unrest, 1),     # 사회혼란도
         "application_index": round(application_index, 1),  # 신청의향지수
         # 5축 평균.
         "axis_means": {
