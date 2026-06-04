@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "merge_threshold": 28,
+  "_comment": "건물 -> 대표 도로 waypoint 노드 매핑. node 는 index.html 의 PATH_DATA.nodes 키. policy_channel/space_key 는 2차(정책) 훅 — 1차에선 정의만 하고 안 씀. space_key 는 graph/spaces.py PLACE_KEYS 와 정합.",
+  "locations": [
+    { "key": "policy_center",    "label": "정책지원센터",     "node": "custom_1",   "kind": "civic",     "policy_channel": true,  "space_key": "online_portal" },
+    { "key": "community_center", "label": "주민센터",         "node": "custom_37",  "kind": "civic",     "policy_channel": true,  "space_key": "community_center" },
+    { "key": "town_hall",        "label": "마을회관",         "node": "custom_73",  "kind": "civic",     "policy_channel": false, "space_key": null },
+    { "key": "welfare_center",   "label": "복지관",           "node": "custom_119", "kind": "civic",     "policy_channel": true,  "space_key": "welfare_center" },
+    { "key": "cafe",             "label": "카페",             "node": "custom_25",  "kind": "commerce",  "policy_channel": false, "space_key": "work_market" },
+    { "key": "fountain_plaza",   "label": "분수광장",         "node": "custom_57",  "kind": "public",    "policy_channel": false, "space_key": null },
+    { "key": "park_pond",        "label": "마을공원",         "node": "custom_100", "kind": "public",    "policy_channel": false, "space_key": null },
+    { "key": "garden",           "label": "마을텃밭",         "node": "custom_597", "kind": "public",    "policy_channel": false, "space_key": null },
+    { "key": "bus_stop",         "label": "버스정류장",       "node": "custom_566", "kind": "transit",   "policy_channel": false, "space_key": null },
+    { "key": "playground",       "label": "어린이놀이터",     "node": "custom_187", "kind": "public",    "policy_channel": false, "space_key": null },
+    { "key": "daycare",          "label": "마을공동육아",     "node": "custom_639", "kind": "care",      "policy_channel": false, "space_key": null },
+    { "key": "houses",           "label": "주택가",           "node": "custom_315", "kind": "home",      "policy_channel": false, "space_key": "home" },
+    { "key": "school",           "label": "학교",             "node": "custom_460", "kind": "education", "policy_channel": false, "space_key": null }
+  ]
+}
