@@ -15,15 +15,52 @@ import math
 from pathlib import Path
 import re
 from typing import Iterable, Protocol
+from uuid import uuid4
 
 
 _TOKEN_RE = re.compile(r"[가-힣A-Za-z0-9]{2,}")
 _SENTENCE_RE = re.compile(r"(?<=[.!?。])\s+|\n+")
+_POLICY_LABELS = (
+    "신청 대상",
+    "지원 대상",
+    "지원 내용",
+    "지원 금액",
+    "금액 및 기간",
+    "지원 기간",
+    "신청 방법",
+    "접수 방법",
+    "필요 서류",
+    "제출 서류",
+    "신청 기간",
+    "접수 기간",
+    "유의 사항",
+    "제외 대상",
+    "대상",
+    "방법",
+    "서류",
+)
+_POLICY_LABEL_RE = re.compile(
+    r"^\s*(?:" + "|".join(re.escape(label) for label in _POLICY_LABELS) + r")\s*[:：]"
+)
+_INLINE_POLICY_LABEL_RE = re.compile(
+    r"(?<![가-힣A-Za-z0-9])(?:"
+    + "|".join(re.escape(label) for label in _POLICY_LABELS)
+    + r")\s*[:：]"
+)
 _STOPWORDS = {
     "그리고", "그러나", "또는", "및", "으로", "에서", "에게", "하는", "합니다",
     "있습니다", "됩니다", "대한", "관련", "무엇", "어떻게", "언제", "어디",
     "신청", "지원", "정책",
 }
+_METRIC_STOPWORDS = {
+    "그리고", "그러나", "또는", "및", "대한", "관련", "무엇", "어떻게",
+    "언제", "어디", "결론", "주요", "참고",
+}
+_METRIC_SUFFIXES = (
+    "입니다", "합니다", "됩니다", "였습니다", "였습니다", "입니다만",
+    "이고", "이며", "하는", "되는", "에서", "으로", "에게", "까지",
+    "부터", "이나", "이나마", "이고요", "은", "는", "이", "가", "을", "를",
+)
 
 
 @dataclass(frozen=True)
@@ -66,6 +103,8 @@ class AnswerResult:
     sources: list[dict]
     metrics: dict
     mode: str = "rag"
+    retrieval_backend: str = ""
+    retrieval_backend_label: str = ""
 
 
 class Embedder(Protocol):
@@ -79,6 +118,13 @@ class AnswerGenerator(Protocol):
     name: str
 
     def generate(self, question: str, hits: list[SearchHit]) -> str:
+        ...
+
+
+class SearchIndex(Protocol):
+    backend: str
+
+    def search(self, query: str, *, k: int = 5, min_score: float = 0.0) -> list[SearchHit]:
         ...
 
 
@@ -103,10 +149,33 @@ def _token_features(text: str) -> list[str]:
     return features
 
 
+def _metric_token_features(text: str) -> set[str]:
+    features: set[str] = set()
+    for raw in _TOKEN_RE.findall((text or "").lower()):
+        token = raw
+        changed = True
+        while changed:
+            changed = False
+            for suffix in _METRIC_SUFFIXES:
+                if token.endswith(suffix) and len(token) - len(suffix) >= 2:
+                    token = token[:-len(suffix)]
+                    changed = True
+                    break
+        if len(token) < 2 or token in _METRIC_STOPWORDS:
+            continue
+        features.add(token)
+    return features
+
+
 def _cosine(a: list[float], b: list[float]) -> float:
     if not a or not b:
         return 0.0
-    return sum(x * y for x, y in zip(a, b))
+    dot = sum(x * y for x, y in zip(a, b))
+    a_norm = math.sqrt(sum(x * x for x in a))
+    b_norm = math.sqrt(sum(y * y for y in b))
+    if a_norm == 0 or b_norm == 0:
+        return 0.0
+    return dot / (a_norm * b_norm)
 
 
 class HashingEmbedder:
@@ -160,6 +229,8 @@ def _is_metric_boilerplate(sentence: str) -> bool:
     boilerplate_markers = (
         "문서 근거에 따르면",
         "다음과 같이 안내",
+        "주요 내용",
+        "참고",
         "정확한 최종 판단",
         "최종 확인",
         "담당 기관",
@@ -174,6 +245,80 @@ def _stable_chunk_id(document_name: str, page: int | None, index: int, text: str
     return hashlib.sha1(raw).hexdigest()[:16]
 
 
+def retrieval_backend_label(backend: str) -> str:
+    labels = {
+        "chroma-vector": "Chroma + OpenAI Embedding",
+        "local-hashing-vector": "로컬 해시 벡터 검색",
+        "in-memory-vector": "메모리 벡터 검색",
+    }
+    return labels.get(backend or "", backend or "-")
+
+
+def retrieval_score_label(score) -> str:
+    if score is None:
+        return ""
+    try:
+        value = float(score)
+    except (TypeError, ValueError):
+        return ""
+
+    if value >= 0.75:
+        grade = "높음"
+    elif value >= 0.35:
+        grade = "적합"
+    elif value >= 0.15:
+        grade = "보조"
+    else:
+        grade = "낮음"
+    return f"근거 매칭: {grade}"
+
+
+def _policy_label_sections(text: str) -> list[str]:
+    lines = [_normalize_space(line) for line in (text or "").splitlines()]
+    lines = [line for line in lines if line]
+    sections: list[str] = []
+    current = ""
+    title = ""
+
+    for line in lines:
+        if line.startswith("[") and line.endswith("]"):
+            if not title:
+                title = line
+            continue
+        if _POLICY_LABEL_RE.match(line):
+            if current:
+                sections.append(current)
+            current = line
+            continue
+        if current:
+            current = _normalize_space(f"{current} {line}")
+        else:
+            current = line
+
+    if current:
+        sections.append(current)
+
+    labelled = [section for section in sections if _POLICY_LABEL_RE.match(section)]
+    if len(labelled) >= 2:
+        if title:
+            return [title] + sections
+        return sections
+
+    normalized = _normalize_space(text)
+    matches = list(_INLINE_POLICY_LABEL_RE.finditer(normalized))
+    if len(matches) < 2:
+        return []
+
+    inline_sections: list[str] = []
+    for idx, match in enumerate(matches):
+        start = match.start()
+        end = matches[idx + 1].start() if idx + 1 < len(matches) else len(normalized)
+        section = normalized[start:end].strip(" .;·")
+        if section:
+            inline_sections.append(section)
+    return inline_sections
+
+
 def _chunk_page(
     *,
     document_name: str,
@@ -183,6 +328,35 @@ def _chunk_page(
     max_chars: int,
     overlap_chars: int,
 ) -> list[PolicyChunk]:
+    labelled_sections = _policy_label_sections(text)
+    if labelled_sections:
+        chunks: list[PolicyChunk] = []
+        idx = start_index
+        for section in labelled_sections:
+            if len(section) <= max_chars:
+                chunks.append(
+                    PolicyChunk(
+                        id=_stable_chunk_id(document_name, page, idx, section),
+                        text=section,
+                        document_name=document_name,
+                        page=page,
+                        chunk_index=idx,
+                    )
+                )
+                idx += 1
+                continue
+            section_chunks = _chunk_page(
+                document_name=document_name,
+                page=page,
+                text=section,
+                start_index=idx,
+                max_chars=max_chars,
+                overlap_chars=overlap_chars,
+            )
+            chunks.extend(section_chunks)
+            idx += len(section_chunks)
+        return chunks
+
     sentences = _split_sentences(text)
     if not sentences:
         return []
@@ -260,6 +434,11 @@ class VectorIndex:
 
     def __init__(self, embedder: Embedder | None = None) -> None:
         self.embedder = embedder or HashingEmbedder()
+        self.backend = (
+            "local-hashing-vector"
+            if getattr(self.embedder, "name", "") == HashingEmbedder.name
+            else "in-memory-vector"
+        )
         self._chunks: list[PolicyChunk] = []
         self._vectors: list[list[float]] = []
 
@@ -272,9 +451,11 @@ class VectorIndex:
         self._vectors.clear()
 
     def add_chunks(self, chunks: Iterable[PolicyChunk]) -> None:
-        for chunk in chunks:
-            self._chunks.append(chunk)
-            self._vectors.append(self.embedder.embed(chunk.text))
+        items = list(chunks)
+        if not items:
+            return
+        self._chunks.extend(items)
+        self._vectors.extend(_embed_many(self.embedder, [chunk.text for chunk in items]))
 
     def search(self, query: str, *, k: int = 5, min_score: float = 0.0) -> list[SearchHit]:
         qvec = self.embedder.embed(query)
@@ -285,6 +466,106 @@ class VectorIndex:
         hits.sort(key=lambda h: h.score, reverse=True)
         filtered = [h for h in hits if h.score >= min_score]
         return filtered[: max(0, k)]
+
+
+def _embed_many(embedder: Embedder, texts: list[str]) -> list[list[float]]:
+    embed_many = getattr(embedder, "embed_many", None)
+    if callable(embed_many):
+        return [list(vector) for vector in embed_many(texts)]
+    return [embedder.embed(text) for text in texts]
+
+
+class ChromaVectorIndex:
+    """Ephemeral Chroma vector DB index for semantic policy retrieval."""
+
+    backend = "chroma-vector"
+
+    def __init__(
+        self,
+        *,
+        embedder: Embedder,
+        collection_name: str | None = None,
+    ) -> None:
+        try:
+            import chromadb
+        except Exception as exc:  # pragma: no cover - exercised when dependency is absent.
+            raise RuntimeError("chromadb 패키지가 필요합니다.") from exc
+
+        self.embedder = embedder
+        self.collection_name = collection_name or f"mirilab-board-{uuid4().hex}"
+        self._client = chromadb.EphemeralClient()
+        self._collection = self._client.create_collection(
+            name=self.collection_name,
+            metadata={"hnsw:space": "cosine"},
+        )
+        self._chunks_by_id: dict[str, PolicyChunk] = {}
+
+    @property
+    def chunks(self) -> list[PolicyChunk]:
+        return list(self._chunks_by_id.values())
+
+    def clear(self) -> None:
+        try:
+            self._client.delete_collection(self.collection_name)
+        except Exception:
+            pass
+        self._collection = self._client.create_collection(
+            name=self.collection_name,
+            metadata={"hnsw:space": "cosine"},
+        )
+        self._chunks_by_id.clear()
+
+    def add_chunks(self, chunks: Iterable[PolicyChunk]) -> None:
+        items = list(chunks)
+        if not items:
+            return
+
+        ids: list[str] = []
+        documents: list[str] = []
+        metadatas: list[dict] = []
+        for idx, chunk in enumerate(items):
+            chroma_id = f"{chunk.id}-{idx}"
+            ids.append(chroma_id)
+            documents.append(chunk.text)
+            metadatas.append(
+                {
+                    "document_name": chunk.document_name,
+                    "chunk_index": int(chunk.chunk_index),
+                    "page": -1 if chunk.page is None else int(chunk.page),
+                    "source": chunk.source_label,
+                }
+            )
+            self._chunks_by_id[chroma_id] = chunk
+
+        self._collection.add(
+            ids=ids,
+            documents=documents,
+            metadatas=metadatas,
+            embeddings=_embed_many(self.embedder, documents),
+        )
+
+    def search(self, query: str, *, k: int = 5, min_score: float = 0.0) -> list[SearchHit]:
+        if k <= 0 or not self._chunks_by_id:
+            return []
+
+        qvec = self.embedder.embed(query)
+        raw = self._collection.query(
+            query_embeddings=[qvec],
+            n_results=min(k, len(self._chunks_by_id)),
+            include=["distances"],
+        )
+        ids = (raw.get("ids") or [[]])[0]
+        distances = (raw.get("distances") or [[]])[0]
+
+        hits: list[SearchHit] = []
+        for chroma_id, distance in zip(ids, distances):
+            chunk = self._chunks_by_id.get(chroma_id)
+            if chunk is None:
+                continue
+            score = max(0.0, min(1.0, 1.0 - float(distance)))
+            if score >= min_score:
+                hits.append(SearchHit(chunk=chunk, score=score))
+        return hits
 
 
 class ExtractiveAnswerGenerator:
@@ -339,24 +620,26 @@ class QualityEvaluator:
     def answer_support_ratio(self, answer: str, source_texts: list[str]) -> float:
         sentences = [
             s for s in _split_sentences(answer)
-            if len(set(_token_features(s))) >= 2 and not _is_metric_boilerplate(s)
+            if len(_metric_token_features(s)) >= 2 and not _is_metric_boilerplate(s)
         ]
         if not sentences:
             return 0.0
-        source_features = [set(_token_features(src)) for src in source_texts]
+        source_features = [_metric_token_features(src) for src in source_texts]
         if not source_features:
             return 0.0
+        source_union = set().union(*source_features)
 
         supported = 0
         for sentence in sentences:
-            tokens = set(_token_features(sentence))
+            tokens = _metric_token_features(sentence)
             if not tokens:
                 continue
-            best = max(
+            best_single_source = max(
                 (len(tokens & src_tokens) / len(tokens) for src_tokens in source_features),
                 default=0.0,
             )
-            if best >= 0.35:
+            combined_sources = len(tokens & source_union) / len(tokens)
+            if max(best_single_source, combined_sources) >= 0.35:
                 supported += 1
         return supported / len(sentences)
 
@@ -380,7 +663,7 @@ class QualityEvaluator:
         source_count = len({hit.chunk.document_name for hit in hits})
 
         if not hits or support < 0.35:
-            verdict = "실패"
+            verdict = "확인 필요"
         elif support < 0.65 or top < 0.05:
             verdict = "주의"
         else:
@@ -404,7 +687,7 @@ class BoardRagService:
     def __init__(
         self,
         *,
-        index: VectorIndex,
+        index: SearchIndex,
         generator: AnswerGenerator | None = None,
         evaluator: QualityEvaluator | None = None,
     ) -> None:
@@ -423,6 +706,7 @@ class BoardRagService:
         if not clean_question:
             return AnswerResult(answer="", sources=[], metrics={}, mode="rag")
 
+        backend = getattr(self.index, "backend", "")
         hits = self.index.search(clean_question, k=k, min_score=0.01)
         answer = self.generator.generate(clean_question, hits)
         metrics = self.evaluator.build_metrics(
@@ -445,6 +729,8 @@ class BoardRagService:
             sources=sources,
             metrics=metrics,
             mode="rag",
+            retrieval_backend=backend,
+            retrieval_backend_label=retrieval_backend_label(backend),
         )
 
 

@@ -4,6 +4,9 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import hashlib
+import json
+import os
 from pathlib import Path
 from typing import Callable
 from uuid import uuid4
@@ -15,12 +18,13 @@ from .core import (
     ExtractiveAnswerGenerator,
     IndexStore,
     PolicyDocument,
-    VectorIndex,
     chunk_document,
+    retrieval_backend_label,
+    retrieval_score_label,
     suggest_questions,
 )
 from .document_loaders import load_uploaded_document
-from .openai_adapter import OpenAIAnswerGenerator, has_openai_key
+from .openai_adapter import OpenAIAnswerGenerator, build_retrieval_index, has_openai_key
 
 
 RUNTIME_DIR = Path(__file__).resolve().parent / ".runtime"
@@ -32,6 +36,7 @@ DOCS_KEY = "standalone_board_documents"
 CHUNKS_KEY = "standalone_board_chunks"
 CLEAR_QUESTION_KEY = "standalone_board_clear_question"
 SESSION_ID_KEY = "standalone_board_session_id"
+_INDEX_CACHE = {}
 
 
 @dataclass(frozen=True)
@@ -58,10 +63,15 @@ def _session_index_path() -> Path:
 def prepare_index_update(
     uploaded_files,
     *,
+    base_policy_text: str = "",
+    base_policy_name: str = "미리랩 설정 정책",
     loader: Callable[[str, bytes], PolicyDocument] = load_uploaded_document,
 ) -> IndexUpdate:
     documents: list[PolicyDocument] = []
     errors: list[str] = []
+    if (base_policy_text or "").strip():
+        documents.append(PolicyDocument(name=base_policy_name, text=base_policy_text))
+
     for file in uploaded_files or []:
         try:
             documents.append(loader(file.name, file.getvalue()))
@@ -94,9 +104,39 @@ def _load_saved_chunks() -> list:
     return chunks
 
 
-def _build_index(chunks: list) -> VectorIndex:
-    index = VectorIndex()
-    index.add_chunks(chunks)
+def clear_index_cache() -> None:
+    _INDEX_CACHE.clear()
+
+
+def _index_cache_key(chunks: list, *, prefer_openai: bool) -> str:
+    payload = {
+        "prefer_openai": prefer_openai,
+        "openai_key": has_openai_key(),
+        "embedding_model": os.getenv("OPENAI_EMBEDDING_MODEL", ""),
+        "chunks": [
+            {
+                "id": chunk.id,
+                "text": chunk.text,
+                "document": chunk.document_name,
+                "page": chunk.page,
+                "index": chunk.chunk_index,
+            }
+            for chunk in chunks
+        ],
+    }
+    raw = json.dumps(payload, ensure_ascii=False, sort_keys=True).encode("utf-8")
+    return hashlib.sha1(raw).hexdigest()
+
+
+def _build_index(chunks: list, *, prefer_openai: bool = True):
+    key = _index_cache_key(chunks, prefer_openai=prefer_openai)
+    cached = _INDEX_CACHE.get(key)
+    if cached is not None:
+        return cached
+
+    index = build_retrieval_index(chunks, prefer_openai=prefer_openai)
+    if not (prefer_openai and has_openai_key() and getattr(index, "backend", "") != "chroma-vector"):
+        _INDEX_CACHE[key] = index
     return index
 
 
@@ -112,20 +152,20 @@ def _metric_rows(metrics: dict) -> list[dict]:
         "top_similarity": "최고 검색 유사도",
         "avg_similarity": "평균 검색 유사도",
         "source_document_count": "근거 문서 수",
-        "answer_support_ratio": "근거 충실도",
-        "hallucination_risk": "환각 위험도",
+        "answer_support_ratio": "근거 일치도",
+        "hallucination_risk": "근거 밖 가능성",
         "reference_similarity": "기준 정답 유사도",
-        "verdict": "판정",
+        "verdict": "검수 상태",
     }
     descriptions = {
         "retrieval_count": "답변 생성에 사용한 문서 조각 개수",
-        "top_similarity": "질문과 가장 가까운 근거의 로컬 벡터 점수",
+        "top_similarity": "질문과 가장 가까운 근거의 검색 벡터 점수",
         "avg_similarity": "검색된 근거들의 평균 점수",
         "source_document_count": "서로 다른 원본 문서 개수",
-        "answer_support_ratio": "답변 문장이 검색 근거로 뒷받침되는 비율",
-        "hallucination_risk": "근거 밖 내용이 섞였을 가능성",
+        "answer_support_ratio": "답변 문장이 검색된 근거와 겹치는 비율",
+        "hallucination_risk": "검색된 근거와 직접 겹치지 않는 표현의 가능성",
         "reference_similarity": "기준 정답을 입력했을 때 답변과의 토큰 유사도",
-        "verdict": "학습/검수용 종합 판정",
+        "verdict": "학습/검수용 내부 상태",
     }
     return [
         {
@@ -148,8 +188,8 @@ def _render_document_panel() -> None:
     )
 
     col_a, col_b = st.sidebar.columns(2)
-    build_clicked = col_a.button("인덱스 생성", use_container_width=True)
-    clear_clicked = col_b.button("초기화", use_container_width=True)
+    build_clicked = col_a.button("인덱스 생성", width="stretch")
+    clear_clicked = col_b.button("초기화", width="stretch")
 
     if clear_clicked:
         st.session_state[DOCS_KEY] = []
@@ -202,7 +242,7 @@ def _render_suggestions(documents: list[PolicyDocument], chunks: list) -> None:
     st.subheader("예시 질문")
     cols = st.columns(2)
     for idx, question in enumerate(questions):
-        if cols[idx % 2].button(question, key=f"suggested_question_{idx}", use_container_width=True):
+        if cols[idx % 2].button(question, key=f"suggested_question_{idx}", width="stretch"):
             st.session_state[QUESTION_KEY] = question
             st.rerun()
 
@@ -236,17 +276,21 @@ def _render_question_box(chunks: list) -> None:
             return
 
         index = _build_index(chunks)
+        backend = getattr(index, "backend", "")
         generator = _generator_from_mode(mode)
         service = BoardRagService(index=index, generator=generator)
         mode_label = generator.name
         try:
             result = service.answer(q, k=5, reference_answer=reference)
         except Exception as exc:
-            if mode != "OpenAI":
+            if mode != "OpenAI" and backend == "local-hashing-vector":
                 st.error(f"답변 생성 중 오류가 발생했습니다: {exc}")
                 return
-            st.warning(f"OpenAI 답변 생성 실패로 근거 추출 답변으로 대체합니다: {exc}")
+            st.warning(f"검색 또는 OpenAI 답변 생성 실패로 근거 추출 답변으로 대체합니다: {exc}")
             generator = ExtractiveAnswerGenerator()
+            if backend != "local-hashing-vector":
+                index = _build_index(chunks, prefer_openai=False)
+                backend = getattr(index, "backend", "")
             service = BoardRagService(index=index, generator=generator)
             result = service.answer(q, k=5, reference_answer=reference)
             mode_label = "extractive-fallback"
@@ -258,6 +302,8 @@ def _render_question_box(chunks: list) -> None:
                 "sources": result.sources,
                 "metrics": result.metrics,
                 "mode": mode_label,
+                "retrieval_backend": backend,
+                "retrieval_backend_label": retrieval_backend_label(backend),
             }
         )
         st.session_state[CLEAR_QUESTION_KEY] = True
@@ -282,6 +328,8 @@ def _render_threads() -> None:
 
         with st.chat_message("assistant"):
             st.markdown(f"**정책 안내 답변** · {thread['mode']}")
+            if thread.get("retrieval_backend_label"):
+                st.caption(f"검색 방식: {thread['retrieval_backend_label']}")
             st.write(thread["answer"])
             if thread.get("metrics"):
                 st.markdown("**품질 지표**")
@@ -290,11 +338,22 @@ def _render_threads() -> None:
             if sources:
                 with st.expander(f"근거 문서 {len(sources)}건"):
                     for source in sources:
-                        st.markdown(
-                            f"- `{source.get('source', '')}` "
-                            f"(score={source.get('score', 0)})\n\n"
-                            f"  {source.get('text', '')}"
-                        )
+                        st.markdown(format_source_markdown(source))
+
+
+def format_source_markdown(source: dict) -> str:
+    source = source or {}
+    source_label = source.get("source", "")
+    match_label = retrieval_score_label(source.get("score"))
+    text = source.get("text", "")
+
+    parts = []
+    if source_label:
+        parts.append(f"`{source_label}`")
+    if match_label:
+        parts.append(match_label)
+    header = " · ".join(parts) if parts else "근거 문서"
+    return f"- {header}\n\n  {text}"
 
 
 def main() -> None:

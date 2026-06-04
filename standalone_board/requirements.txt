@@ -2,3 +2,4 @@ streamlit>=1.32
 openai>=2.0.0
 python-dotenv
 pypdf>=4
+chromadb
