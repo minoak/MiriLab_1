@@ -4,7 +4,7 @@
 - 한글 폰트 설정 후 페이지 설정/타이틀을 그린다.
 - 사이드바에서 정책 선택·시민 수·데모 모드를 받고, 버튼 클릭 시 시뮬레이션을 실행한다.
 - 실행 결과(SimState)와 그 뷰모델(ViewModel)을 session_state 에 저장한다.
-- 본문은 7개 탭으로 구성되며, 각 탭은 해당 render_*_tab(view) 를 호출한다.
+- 본문은 6개 탭으로 구성되며, 각 탭은 해당 render_*_tab(view) 를 호출한다.
 
 주의: import 시점에는 네트워크/OpenAI 호출이 절대 일어나지 않는다.
 실제 호출은 '시뮬레이션 실행' 버튼을 눌렀을 때만 run_simulation 내부에서 발생한다.
@@ -32,9 +32,7 @@ from ui import (
     tab_dashboard,
     tab_village,
     tab_chat,
-    tab_network,
     tab_improve,
-    tab_abtest,
     tab_board,
 )
 
@@ -253,9 +251,15 @@ def _render_sidebar() -> None:
                 sim["policy_spec"] = spec
                 st.session_state["sim"] = sim
                 st.session_state["view"] = build_view(sim)
+                # 새 정책으로 다시 시뮬했으니 이전 A/B 비교/후보를 무효화한다
+                # (정책이 바뀌면 view_b·수정안 후보가 옛 정책 기준이라 비교가 착시가 됨).
+                st.session_state.pop("view_b", None)
+                st.session_state.pop("abtest_policy_b", None)
             except Exception as e:  # 실행 실패 시 화면을 깨뜨리지 않고 예외 표시.
                 st.session_state["sim"] = None
                 st.session_state["view"] = None
+                st.session_state.pop("view_b", None)
+                st.session_state.pop("abtest_policy_b", None)
                 st.error("시뮬레이션 실행 중 오류가 발생했습니다.")
                 st.exception(e)
                 return
@@ -267,7 +271,7 @@ def _render_sidebar() -> None:
 
 
 # =====================================================================
-# 본문: 8개 탭
+# 본문: 6개 탭
 # =====================================================================
 def _render_body() -> None:
     """본문 탭들을 그린다. view 가 없으면 각 탭이 알아서 안내(st.info)한다."""
@@ -276,9 +280,7 @@ def _render_body() -> None:
         "시민 반응",
         "정책 인생극장",
         "SNS 채팅방",
-        "전파 그래프",
-        "개선 제안",
-        "AB 테스트",
+        "정책 개선",
         "게시판",
     ]
     tabs = st.tabs(tab_labels)
@@ -290,9 +292,7 @@ def _render_body() -> None:
         tab_dashboard.render_dashboard_tab,
         tab_village.render_village_tab,
         tab_chat.render_chat_tab,
-        tab_network.render_network_tab,
         tab_improve.render_improve_tab,
-        tab_abtest.render_abtest_tab,
         tab_board.render_board_tab,
     ]
 

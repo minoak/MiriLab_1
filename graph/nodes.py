@@ -48,9 +48,15 @@ class InteractOut(BaseModel):
 
 
 class AggregateOut(BaseModel):
-    """aggregate 노드의 요약/쉬운설명/개선안 구조화 출력."""
+    """aggregate 노드의 요약/수정안/개선안 구조화 출력.
+
+    easy_text 는 역사적 키 이름은 유지하되 의미가 '개선안을 반영해 다시 쓴 정책 수정안'으로
+    바뀌었다(쉬운글 변환 기능 폐지). 정책 개선 탭 A/B 비교에서 '수정안' 후보로 미리 채워진다.
+    """
     summary: str
-    easy_text: str
+    easy_text: str = Field(
+        description="시민이 겪은 문제를 해소하도록 개선안을 반영해 다시 쓴 정책 원문(수정안)."
+    )
     policy_fixes: list[str] = Field(default_factory=list)
 
 
