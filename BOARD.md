@@ -1,67 +1,70 @@
 # 정책 문의 게시판 — 개별 작업 가이드
 
-게시판(자동답변)은 **다른 탭·시뮬레이션과 분리돼 단독으로 작업**할 수 있게 정리돼 있다.
-API+RAG 통합은 **`board_engine.answer_with_rag()` 함수 하나만** 채우면 된다.
+게시판 작업은 다른 탭·시뮬레이션과 충돌하지 않도록 두 갈래로 분리한다.
+
+- 기존 앱 탭: `ui/tab_board.py` + `board_engine.py`
+- RAG 전용 독립 게시판: `standalone_board/` + `_preview_board.py`
+
+현재 RAG 작업은 **`standalone_board/` 안에서만** 진행한다. 기존 `app.py`,
+`ui/tab_board.py`, `board_engine.py`는 다른 기능과 연결된 공유 코드라 건드리지 않는다.
 
 ## 파일 구성
 
 | 파일 | 역할 | 만질 일 |
 | --- | --- | --- |
-| `board_engine.py` | 답변 엔진(순수 로직, streamlit 무의존). mock + **RAG 시임** | ⭐ 여기서 작업 |
-| `ui/tab_board.py` | 화면만(질문 폼·말풍선·근거 보기). 로직은 엔진에 위임 | 보통 안 건드림 |
-| `_preview_board.py` | 게시판만 띄우는 단독 실행기 | 시험용 |
-| `_test_board.py` | 엔진 단위 테스트 | 회귀 확인 |
+| `standalone_board/core.py` | 문서 청킹, 로컬 검색, 추출형 답변, 품질 지표, 인덱스 저장 | RAG 로직 작업 |
+| `standalone_board/openai_adapter.py` | OpenAI Responses API 기반 답변 생성기 | 모델/API 작업 |
+| `standalone_board/document_loaders.py` | PDF/TXT/MD 업로드 문서 로더 | 문서 입력 작업 |
+| `standalone_board/app.py` | Streamlit 독립 게시판 화면 | 게시판 UI 작업 |
+| `_preview_board.py` | 독립 게시판 실행 진입점 | 실행용 |
+| `_test_standalone_board.py` | 독립 게시판 회귀 테스트 | 필수 검증 |
+| `board_engine.py` / `ui/tab_board.py` | 기존 앱 탭용 mock 게시판 | 유지보수만 |
+| `_test_board.py` | 기존 앱 게시판 계약 테스트 | 공유 코드 회귀 확인 |
 
 ## 단독 실행
 
 ```bash
-# 게시판 탭만 띄우기 (전체 시뮬레이션 불필요)
+# 독립 RAG 게시판만 띄우기
 streamlit run _preview_board.py
 
-# 엔진 단위 테스트 (화면 없이)
+# 독립 게시판 테스트
+python _test_standalone_board.py
+
+# 기존 앱 게시판 계약 회귀 확인
 python _test_board.py
 ```
 
-`_preview_board.py` 사이드바에서 정책을 고르거나 직접 붙여넣고, **답변 엔진**을
-`mock`/`rag`/`auto` 로 바꿔 가며 시험할 수 있다.
+독립 게시판은 사이드바에서 PDF/TXT/MD 문서를 업로드한 뒤 **인덱스 생성**을 눌러
+근거 조각을 만든다. 질문을 등록하면 검색 근거, 답변, 품질 지표를 함께 보여준다.
 
-## API + RAG 붙이는 법
+## RAG 동작
 
-`board_engine.py` 의 `answer_with_rag(policy, question, k)` 를 구현한다.
+1. `document_loaders.py`가 업로드 문서를 `PolicyDocument`로 읽는다.
+2. `core.chunk_document()`가 문서를 page-aware chunk로 나눈다.
+3. `VectorIndex`가 로컬 해싱 임베딩으로 관련 근거를 검색한다.
+4. 답변 생성 모드:
+   - `근거 추출`: 네트워크 없이 검색 근거 문장을 뽑아 답변한다.
+   - `OpenAI`: `openai_adapter.py`가 Responses API로 근거 제한 답변을 만든다.
+5. `QualityEvaluator`가 검색 수, 근거 충실도, 환각 위험도, 기준 정답 유사도를 계산한다.
 
-**반환 계약** — 아래 dict 를 돌려주면 끝. 면책 문구·근거 표시·폴백은 이미 처리돼 있다.
+OpenAI 키가 없거나 OpenAI 호출이 실패하면 독립 게시판 UI는 근거 추출 답변으로 폴백한다.
 
-```python
-{
-    "answer":  str,    # 표시할 답변 본문
-    "sources": list,   # [{"text": 근거청크, "source": 출처라벨}, ...]  (없으면 [])
-}
-```
+## OpenAI 모델 호환
 
-권장 흐름:
-1. 정책 원문(`policy`)을 청크 분할 → 임베딩 → 벡터스토어 검색으로 관련 청크 `k`개.
-2. 검색 청크 + 질문을 LLM 에 넣어 답변 생성.
-   - 키 확인: `graph.llm.has_real_key()`
-   - 클라이언트/모델: `graph.llm.get_client()`, `graph.llm.MODEL`, `structured_call(...)` 재사용 가능
-   - ⚠️ openai·벡터스토어 import 는 **함수 안에서 지연 import**(import 시점 네트워크 호출 금지 규칙).
-3. 미구현 상태에서는 `NotImplementedError` 를 던진다 → 자동으로 mock 폴백(앱이 안 죽음).
+`OPENAI_MODEL=gpt-5-nano` 같은 reasoning 모델은 Chat Completions의 일부 파라미터와
+맞지 않는다. 독립 게시판은 `client.responses.create(...)`를 사용하고,
+reasoning 모델에는 `reasoning={"effort": "minimal"}`을 붙인다.
 
-## 동작 모드 (`answer_question` 의 `mode`)
-
-- `mock` — 규칙 기반(키·네트워크 불필요). 기본 동작이자 모든 실패의 폴백.
-- `rag`  — `answer_with_rag` 강제 시도. 미구현/오류면 안내 문구와 함께 mock 폴백.
-- `auto` — `MIRILAB_BOARD_RAG` 환경변수가 켜져 있으면 `rag`, 아니면 `mock`.
-
-본 앱(`app.py`)은 게시판에 mode 를 따로 넘기지 않아 **기본 `auto`** 로 돈다. RAG 를
-다 붙인 뒤 본 앱에서도 켜려면:
+환경 체크도 같은 API 경로를 사용한다.
 
 ```bash
-# Windows PowerShell
-$env:MIRILAB_BOARD_RAG = "1"; streamlit run app.py
+python check.py
 ```
 
 ## 경계(계약)
 
-- 게시판이 바깥에서 받는 것: `view["policy"]`(정책 원문) 하나. (선택: `view["board_mode"]`)
-- 게시판이 쓰는 상태: `st.session_state["board"]` (질문/답변 스레드 누적) 한 곳.
-- 따라서 다른 탭·`state.py`·사이드바를 건드리지 않고 게시판만 독립적으로 발전시킬 수 있다.
+- RAG 게시판 작업은 `standalone_board/`, `_preview_board.py`,
+  `_test_standalone_board.py` 중심으로 진행한다.
+- 기존 앱 탭은 `board_engine.answer_question()` 계약을 유지한다.
+- 기존 앱 회귀 테스트인 `_test_board.py`가 깨지면 공유 코드 영향으로 보고 즉시 고친다.
+- 런타임 인덱스와 로그는 `standalone_board/.runtime/`에 세션별로 저장되며 git에 올리지 않는다.
