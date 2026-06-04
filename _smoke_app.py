@@ -37,7 +37,7 @@ sel = view2.get("selection") or {}
 trio = sel.get("trio") or []
 print(f"[3] 인생극장 실행 OK — 대조 {len(trio)}명: "
       + ", ".join(f"{t['role']}={t['persona']['name']}" for t in trio))
-print(f"    매트릭스 {len(sel.get('matrix') or [])}명, 노트 {len(sel.get('notes') or [])}개")
+print(f"    결과표 {len(sel.get('outcomes') or [])}명, 노트 {len(sel.get('notes') or [])}개")
 
 # 카드뽑기: 첫 카드(수혜) '펼치기' 클릭 → 서사 렌더 무예외 확인
 first_pid = trio[0]["persona"]["id"]

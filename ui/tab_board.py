@@ -1,169 +1,41 @@
 # -*- coding: utf-8 -*-
-"""정책 문의 게시판 탭(stretch).
+"""정책 문의 게시판 탭(stretch) — 화면(폼·말풍선)만 담당.
 
-시민이 정책에 대해 질문을 남기면, 정책 원문을 바탕으로 한 간단한 규칙 기반
-자동답변과 가상 시민 댓글 1~2개가 함께 달린다. RAG는 MVP에서 연결하지 않으므로
-실제 검색이 아니라 정책 텍스트에서 키워드를 골라 안내 문구를 조립하는 mock 수준이다.
+답변을 만드는 로직은 전부 `board_engine` 으로 분리돼 있다. 이 파일은
+  · 질문 입력 폼을 그리고,
+  · 제출 시 `board_engine.answer_question()` / `make_comments()` 를 호출해
+    스레드를 만들어 `session_state['board']` 에 누적하고,
+  · 누적된 Q/A 스레드를 말풍선으로 표시한다.
+만 한다. mock↔RAG 교체나 답변 품질 작업은 `board_engine.py` 에서 하면 된다.
 
-질문/답변 스레드는 session_state['board']에 누적되어 탭을 다시 그려도 유지된다.
+게시판이 바깥에서 받는 것은 `view['policy']`(정책 원문) 하나뿐이고, 자기 상태는
+`session_state['board']` 에만 쌓는다. 그래서 전체 시뮬레이션 없이도 동작하며,
+`_preview_board.py` 로 이 탭만 단독 실행할 수 있다.
 """
-
-import random
-import re
 
 import streamlit as st
 
+import board_engine
 
-# ── 규칙 기반 자동답변에 쓰는 키워드 사전 ────────────────────────────
-# 질문에 아래 키워드가 들어가면, 정책 원문에서 관련 문장을 우선적으로 끌어와 답한다.
-_TOPIC_KEYWORDS = {
-    "대상": ["대상", "자격", "누가", "조건", "해당", "나이", "연령", "소득"],
-    "내용": ["얼마", "금액", "지원", "혜택", "내용", "기간", "몇", "한도", "개월"],
-    "방법": ["어떻게", "방법", "신청", "접수", "서류", "제출", "준비물", "어디"],
-    "기간": ["언제", "기간", "마감", "기한", "접수", "모집"],
-    "제외": ["제외", "안 되", "안되", "불가", "유의", "주의", "예외", "못"],
+
+# 답변 엔진 표시 배지 — view['board_mode'] 또는 실제 답한 엔진(mode)에 따라.
+_MODE_BADGE = {
+    "mock": "🧩 규칙 기반 자동응답 (RAG 미연결)",
+    "rag": "🔎 RAG 기반 자동응답",
 }
-
-# 가상 시민 댓글 풀 — 질문 톤에 공감하거나 경험을 보태는 한두 줄짜리 반응.
-_CITIZEN_COMMENTS = [
-    "저도 같은 게 궁금했어요. 좋은 질문 감사합니다!",
-    "지난주에 행정복지센터에 전화해보니 친절하게 안내해 주시더라고요.",
-    "서류 준비가 생각보다 간단했어요. 통장 사본이랑 신분증만 챙기시면 돼요.",
-    "예산이 빨리 소진된다는 얘기가 있어서 저는 서둘러 신청했습니다.",
-    "부모님 대신 신청해 드렸는데 대리 신청도 가능했어요.",
-    "온라인이 어려우면 직접 방문하는 게 마음 편하더라고요.",
-    "조건이 헷갈리면 신청 전에 한 번 문의해보시는 걸 추천드려요.",
-    "저는 자격이 안 돼서 아쉬웠는데, 해당되시면 꼭 받으세요!",
-    "공유해 주셔서 감사해요. 주변 친구들한테도 알려줘야겠어요.",
-    "후기 보니까 생각보다 빨리 처리된다고 하네요.",
-]
-
-
-def _split_sentences(policy: str) -> list:
-    """정책 원문을 문장 단위로 거칠게 분리한다.
-
-    줄바꿈과 마침표(。/.)를 기준으로 나누고, 너무 짧은 조각은 버린다.
-    """
-    if not policy:
-        return []
-    # 줄바꿈을 먼저 마침표로 바꿔 한 번에 분리
-    text = policy.replace("\n", ". ")
-    # 마침표/물음표/느낌표 뒤에서 끊기
-    raw = re.split(r"(?<=[.!?。])\s+", text)
-    sentences = []
-    for s in raw:
-        s = s.strip()
-        # 대괄호로 묶인 정책 제목 줄([청년 월세 …])은 제외
-        if not s or s.startswith("["):
-            continue
-        if len(s) < 6:
-            continue
-        sentences.append(s)
-    return sentences
-
-
-def _match_topic(question: str) -> str:
-    """질문 문자열에서 가장 많이 매칭되는 주제(대상/내용/방법/기간/제외)를 고른다.
-
-    매칭되는 키워드가 하나도 없으면 빈 문자열을 반환한다.
-    """
-    q = (question or "").lower()
-    best_topic = ""
-    best_hits = 0
-    for topic, kws in _TOPIC_KEYWORDS.items():
-        hits = sum(1 for kw in kws if kw in q)
-        if hits > best_hits:
-            best_hits = hits
-            best_topic = topic
-    return best_topic
-
-
-def _pick_relevant_sentences(policy: str, question: str, k: int = 2) -> list:
-    """질문 주제와 가장 관련 있는 정책 문장 k개를 고른다.
-
-    1순위: 질문에 등장한 단어가 직접 포함된 문장.
-    2순위: 주제 키워드가 포함된 문장.
-    아무것도 못 찾으면 앞쪽 문장으로 대체한다.
-    """
-    sentences = _split_sentences(policy)
-    if not sentences:
-        return []
-
-    # 질문에서 의미 있는 토큰(2글자 이상 한글/영문/숫자) 추출
-    q_tokens = [t for t in re.findall(r"[가-힣A-Za-z0-9]{2,}", question or "")]
-
-    topic = _match_topic(question)
-    topic_kws = _TOPIC_KEYWORDS.get(topic, [])
-
-    scored = []
-    for s in sentences:
-        score = 0
-        # 질문 토큰 직접 매칭(가중치 높음)
-        for t in q_tokens:
-            if t in s:
-                score += 2
-        # 주제 키워드 매칭
-        for kw in topic_kws:
-            if kw in s:
-                score += 1
-        scored.append((score, s))
-
-    # 점수 내림차순, 점수가 0인 문장은 뒤로
-    scored.sort(key=lambda x: x[0], reverse=True)
-    picked = [s for sc, s in scored if sc > 0][:k]
-
-    # 관련 문장을 못 찾으면 정책 앞부분으로 대체
-    if not picked:
-        picked = sentences[:k]
-    return picked
-
-
-def _build_auto_answer(policy: str, question: str) -> str:
-    """정책 원문 기반 규칙형 자동답변 문자열을 만든다(mock).
-
-    실제 LLM/RAG 호출 없이, 관련 문장을 골라 안내 문구로 감싼다.
-    """
-    topic = _match_topic(question)
-    relevant = _pick_relevant_sentences(policy, question, k=2)
-
-    # 주제별 도입 문구
-    intro_map = {
-        "대상": "신청 대상·자격 관련해서 안내드릴게요.",
-        "내용": "지원 내용과 금액 관련해서 안내드릴게요.",
-        "방법": "신청 방법·절차 관련해서 안내드릴게요.",
-        "기간": "신청 기간·일정 관련해서 안내드릴게요.",
-        "제외": "제외 대상·유의 사항 관련해서 안내드릴게요.",
-    }
-    intro = intro_map.get(topic, "문의하신 내용 관련해서 정책 안내를 정리해 드릴게요.")
-
-    if relevant:
-        body = "\n".join(f"- {s.rstrip('.')}." for s in relevant)
-    else:
-        body = "- 현재 등록된 정책 본문에서 관련 안내를 찾지 못했어요."
-
-    outro = (
-        "\n\n더 정확한 내용은 거주지 행정복지센터 또는 복지로 누리집에서 "
-        "확인해 주세요. (본 답변은 정책 원문을 기반으로 한 자동 안내이며, "
-        "실제 심사 결과와 다를 수 있습니다.)"
-    )
-    return f"{intro}\n\n{body}{outro}"
-
-
-def _make_comments() -> list:
-    """가상 시민 댓글 1~2개를 무작위로 뽑는다(중복 없이)."""
-    n = random.randint(1, 2)
-    return random.sample(_CITIZEN_COMMENTS, k=n)
 
 
 def render_board_tab(view):
     """정책 문의 게시판을 그린다.
 
-    상단 폼으로 질문을 입력받아 제출하면, 정책 텍스트 기반 자동답변과
-    가상 시민 댓글을 만들어 session_state['board']에 누적한다.
-    이후 누적된 Q/A 스레드를 최신순으로 chat_message 형태로 표시한다.
-    view가 None이면 안내 후 종료한다.
+    상단 폼으로 질문을 받아 제출하면, 정책 텍스트 기반 답변과 가상 시민 댓글을
+    만들어 session_state['board'] 에 누적하고, 누적된 스레드를 최신순으로 표시한다.
+    view 가 None 이면 안내 후 종료한다.
+
+    엔진 선택: view['board_mode']('auto'|'mock'|'rag', 기본 'auto')를 그대로
+    board_engine.answer_question 에 넘긴다. 일반 앱에서는 키가 없으면 'auto' 가
+    mock 으로 동작하고, _preview_board.py 는 이 값을 바꿔 RAG 를 단독 시험한다.
     """
-    # view 없을 때 가드 — 아직 시뮬레이션을 돌리지 않은 상태
     if view is None:
         st.info("아직 시뮬레이션 결과가 없습니다. 정책을 입력하고 시뮬레이션을 실행해 주세요.")
         return
@@ -171,13 +43,12 @@ def render_board_tab(view):
     st.subheader("정책 문의 게시판")
     st.caption(
         "정책에 대해 궁금한 점을 남겨 보세요. 정책 원문을 바탕으로 한 자동 안내와 "
-        "가상 시민들의 댓글이 달립니다. (RAG 미연결 — 데모용 자동응답)"
+        "가상 시민들의 댓글이 달립니다."
     )
 
-    # 현재 시뮬레이션 대상 정책 원문(자동답변 근거로 사용)
     policy = view.get("policy", "") or ""
+    mode = view.get("board_mode", "auto")
 
-    # 게시판 세션 상태 초기화
     if "board" not in st.session_state:
         st.session_state["board"] = []
 
@@ -196,14 +67,16 @@ def render_board_tab(view):
         if not q:
             st.warning("질문 내용을 입력해 주세요.")
         else:
-            # 자동답변 + 가상 시민 댓글 생성 후 스레드로 누적
-            answer = _build_auto_answer(policy, q)
-            comments = _make_comments()
+            # 답변/댓글 생성은 전부 엔진에 위임 — 이 탭은 결과를 누적·표시만 한다.
+            result = board_engine.answer_question(policy, q, mode=mode)
+            comments = board_engine.make_comments(q)
             st.session_state["board"].append(
                 {
                     "nickname": (nickname or "시민").strip() or "시민",
                     "question": q,
-                    "answer": answer,
+                    "answer": result.get("answer", ""),
+                    "sources": result.get("sources", []),
+                    "mode": result.get("mode", "mock"),
                     "comments": comments,
                 }
             )
@@ -217,24 +90,46 @@ def render_board_tab(view):
         st.info("아직 등록된 문의가 없습니다. 첫 질문을 남겨 보세요!")
         return
 
-    # 최신 글이 위로 오도록 역순 순회
     for idx, thread in enumerate(reversed(board)):
-        # 질문(시민) 말풍선
-        with st.chat_message("user"):
-            st.markdown(f"**{thread.get('nickname', '시민')}** 님의 질문")
-            st.write(thread.get("question", ""))
-
-        # 자동 안내 답변 말풍선
-        with st.chat_message("assistant"):
-            st.markdown("**정책 안내 도우미**")
-            st.write(thread.get("answer", ""))
-
-        # 가상 시민 댓글들
-        for comment in thread.get("comments", []):
-            with st.chat_message("user"):
-                st.caption("다른 시민의 댓글")
-                st.write(comment)
-
+        _render_thread(thread)
         # 스레드 사이 구분선(마지막 스레드 제외)
         if idx < len(board) - 1:
             st.divider()
+
+
+def _render_thread(thread: dict) -> None:
+    """질문 1건 + 자동답변 + 시민 댓글 묶음(스레드 1개)을 말풍선으로 그린다."""
+    # 질문(시민) 말풍선
+    with st.chat_message("user"):
+        st.markdown(f"**{thread.get('nickname', '시민')}** 님의 질문")
+        st.write(thread.get("question", ""))
+
+    # 자동 안내 답변 말풍선
+    with st.chat_message("assistant"):
+        badge = _MODE_BADGE.get(thread.get("mode", "mock"), _MODE_BADGE["mock"])
+        st.markdown(f"**정책 안내 도우미** · {badge}")
+        st.write(thread.get("answer", ""))
+        _render_sources(thread.get("sources", []))
+
+    # 가상 시민 댓글들
+    for comment in thread.get("comments", []):
+        with st.chat_message("user"):
+            st.caption("다른 시민의 댓글")
+            st.write(comment)
+
+
+def _render_sources(sources) -> None:
+    """답변 근거(정책 문장/RAG 청크)를 접이식으로 표시한다. 없으면 아무것도 안 그림.
+
+    mock 과 RAG 둘 다 [{"text":.., "source":..}] 모양으로 sources 를 주므로
+    렌더는 한 곳에서 공통으로 처리된다.
+    """
+    if not sources:
+        return
+    with st.expander(f"📎 답변 근거 {len(sources)}건 보기"):
+        for s in sources:
+            text = (s or {}).get("text", "")
+            src = (s or {}).get("source", "")
+            if not text:
+                continue
+            st.markdown(f"- {text}" + (f"  \n  *— {src}*" if src else ""))

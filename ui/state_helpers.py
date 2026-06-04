@@ -153,8 +153,9 @@ def run_contrast_sim(
     mock: bool = False,
     step_labels: list | None = None,
     specs: list | None = None,
+    reactions_by_id: dict | None = None,
 ) -> dict:
-    """정책 인생극장(DESIGN v3): 패키지로 대조 3명 선별 + 그 3명만 인생 시뮬.
+    """정책 인생극장(DESIGN v3): 전원 인생 시뮬 후 실제 결과에서 대조 3명 선별.
 
     contrast.run_contrast 를 mock/real 분기와 함께 감싼다.
 
@@ -178,17 +179,17 @@ def run_contrast_sim(
         return run_contrast(
             personas, policies, simulate=_mock_sim,
             grounded=grounded, step_labels=step_labels, use_llm_spec=False,
-            specs=specs,
+            specs=specs, reactions_by_id=reactions_by_id,
         )
 
     # 실제 경로: simulate=None → 진짜 simulate_village, 명세는 LLM 추출 허용.
     try:
         with st.status("정책 인생극장 시뮬레이션 중...", expanded=False) as status:
-            status.update(label="대상 인물 선별 + 3인 인생 궤적 생성 중...")
+            status.update(label="전원 인생 궤적 생성 + 대조 3명 선별 중...")
             result = run_contrast(
                 personas, policies, simulate=None,
                 grounded=grounded, step_labels=step_labels, use_llm_spec=True,
-                specs=specs,
+                specs=specs, reactions_by_id=reactions_by_id,
             )
             status.update(label="인생극장 시뮬 완료", state="complete")
         return result
@@ -199,5 +200,5 @@ def run_contrast_sim(
         return run_contrast(
             personas, policies, simulate=_mock_sim,
             grounded=grounded, step_labels=step_labels, use_llm_spec=False,
-            specs=specs,
+            specs=specs, reactions_by_id=reactions_by_id,
         )

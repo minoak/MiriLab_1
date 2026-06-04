@@ -1,0 +1,142 @@
+{
+  "minsu": {
+    "name": "민수",
+    "role": "청년 주민",
+    "sheet": "assets/sprites/minsu.png",
+    "cell": 48,
+    "renderCell": 40,
+    "rowMap": {
+      "down": 0,
+      "left": 2,
+      "right": 1,
+      "up": 3
+    },
+    "frames": 3
+  },
+  "staff": {
+    "name": "영희",
+    "role": "정책 담당 공무원",
+    "sheet": "assets/sprites/staff.png",
+    "cell": 48,
+    "renderCell": 40,
+    "rowMap": {
+      "down": 0,
+      "left": 2,
+      "right": 1,
+      "up": 3
+    },
+    "frames": 3
+  },
+  "owner": {
+    "name": "박사장",
+    "role": "카페 사장",
+    "sheet": "assets/sprites/owner.png",
+    "cell": 48,
+    "renderCell": 40,
+    "rowMap": {
+      "down": 0,
+      "left": 2,
+      "right": 1,
+      "up": 3
+    },
+    "frames": 3
+  },
+  "grandma": {
+    "name": "김할머니",
+    "role": "복지관 이용자",
+    "sheet": "assets/sprites/grandma.png",
+    "cell": 48,
+    "renderCell": 40,
+    "rowMap": {
+      "down": 0,
+      "left": 2,
+      "right": 1,
+      "up": 3
+    },
+    "frames": 3
+  },
+  "sua": {
+    "name": "수아",
+    "role": "학생 여자",
+    "sheet": "assets/sprites/sua.png",
+    "cell": 48,
+    "renderCell": 40,
+    "rowMap": {
+      "down": 0,
+      "left": 2,
+      "right": 1,
+      "up": 3
+    },
+    "frames": 3
+  },
+  "junho": {
+    "name": "준호",
+    "role": "학생 남자",
+    "sheet": "assets/sprites/junho.png",
+    "cell": 48,
+    "renderCell": 40,
+    "rowMap": {
+      "down": 0,
+      "left": 2,
+      "right": 1,
+      "up": 3
+    },
+    "frames": 3
+  },
+  "miyoung": {
+    "name": "미영",
+    "role": "주민 여성",
+    "sheet": "assets/sprites/miyoung.png",
+    "cell": 48,
+    "renderCell": 40,
+    "rowMap": {
+      "down": 0,
+      "left": 2,
+      "right": 1,
+      "up": 3
+    },
+    "frames": 3
+  },
+  "oldman": {
+    "name": "박어르신",
+    "role": "노인 남성",
+    "sheet": "assets/sprites/oldman.png",
+    "cell": 48,
+    "renderCell": 40,
+    "rowMap": {
+      "down": 0,
+      "left": 2,
+      "right": 1,
+      "up": 3
+    },
+    "frames": 3
+  },
+  "jimin": {
+    "name": "지민",
+    "role": "어린이",
+    "sheet": "assets/sprites/jimin.png",
+    "cell": 48,
+    "renderCell": 40,
+    "rowMap": {
+      "down": 0,
+      "left": 2,
+      "right": 1,
+      "up": 3
+    },
+    "frames": 3
+  },
+  "daeun": {
+    "name": "다은",
+    "role": "주민 여성",
+    "sheet": "assets/sprites/daeun.png",
+    "cell": 48,
+    "renderCell": 40,
+    "rowMap": {
+      "down": 0,
+      "left": 2,
+      "right": 1,
+      "up": 3
+    },
+    "frames": 3
+  }
+}

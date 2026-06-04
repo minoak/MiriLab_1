@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""정책 인생극장 실모드 검증 (실제 OpenAI LLM). 3명×3턴 = 9콜.
+"""정책 인생극장 실모드 검증 (실제 OpenAI LLM). 전원 n명×3턴 시뮬 후 결과에서 3명 선별.
 
 정책 패키지를 주입했을 때 LLM 이 세 인물의 삶을 실제로 다르게 그리는지 본다.
 실행: python _verify_real.py   (.env 에 OPENAI_API_KEY 필요)
@@ -15,7 +15,8 @@ from graph.spaces import place_label, status_label
 PKG = "디지털 복지 3종 (소득·세대로 갈림)"
 
 personas = load_personas(n=8, seed=42)
-print(f"실모드 시뮬 시작 — 패키지: {PKG} (3명 × 3턴 = 9콜)\n")
+print(f"실모드 시뮬 시작 — 패키지: {PKG} "
+      f"(전원 {len(personas)}명 × 3턴 = {len(personas) * 3}콜, 결과에서 대조 3명 선별)\n")
 
 res = run_contrast(personas, PACKAGES[PKG], simulate=None,  # None → 실제 simulate_village
                    grounded=True, use_llm_spec=False)

@@ -40,8 +40,17 @@ class VillageStepOut(BaseModel):
     place: Literal[
         "online_portal", "community_center", "welfare_center", "work_market", "home"
     ] = Field(description="이 시점 주민이 닿은 장소(정책 채널) 키")
+    reached_via: str = Field(
+        description="이 정책을 어떻게/누구를 통해 알게 되거나 신청에 닿았는지 한 줄로"
+        "(예: 딸이 대신 알려줌, 동료 입소문, 복지사 안내, 공지문, 직접 검색). "
+        "어느 경로로도 닿지 못했으면 그 사실을 쓰세요."
+    )
     action: str = Field(description="이 기간의 행동·사건, 2~4문장")
     policy_status: Literal["unaware", "aware", "applied", "received", "blocked"]
+    barrier: str = Field(
+        description="신청·접근이 막힌 경우(blocked) 정확히 어디서 막혔는지 한 줄로"
+        "(예: 온라인 본인인증, 소득 요건 초과, 서류 미비). 막히지 않았으면 빈 문자열."
+    )
     economic: int = Field(ge=0, le=100, description="경제적 여유")
     wellbeing: int = Field(ge=0, le=100, description="심리적 안정·만족")
     note: str = Field(description="이번 시점 한 줄 요약")
@@ -54,6 +63,26 @@ DEFAULT_STEPS = ["시행 1개월 후", "시행 3개월 후", "시행 6개월 후
 _STATUS_ORDER = ["unaware", "aware", "applied", "received", "blocked"]
 
 
+def _guard_status(prev: str, cur: str, barrier: str):
+    """상태 비퇴행 가드. LLM 이 '알게 된 뒤 다시 unaware' 로 떨어뜨리는 실수를 교정한다.
+
+    - prev 가 applied(실제 신청까지 감) 인데 cur==unaware → blocked(시도했다 막힘)로
+      교정하고, barrier 가 비어 있으면 기본 사유를 채운다. (예: 신청하려다 서류에 막혀 포기)
+    - prev 가 aware(알기만 함)/received 인데 cur==unaware → 직전 상태 유지(되돌리지 않음).
+      ★ aware→unaware 를 'blocked'로 단정하지 않는 게 핵심: 비대상이 그냥 관심을 끊은 걸
+      '서류에 막힌 사각'으로 오기하던 문제(46세가 청년정책에 '자격 막힘'으로 잡히던)를 막는다.
+      (신청까지 갔다 포기한 진짜 막힘은 prev==applied 로 잡힌다.)
+    그 외에는 그대로 둔다.
+
+    Returns: (교정된_status, 교정된_barrier)
+    """
+    if cur == "unaware" and prev == "applied":
+        return "blocked", ((barrier or "").strip() or "신청·서류 절차에서 막혀 포기")
+    if cur == "unaware" and prev in ("aware", "received"):
+        return prev, barrier
+    return cur, barrier
+
+
 # ---------------------------------------------------------------------------
 # 메인 시뮬레이션
 # ---------------------------------------------------------------------------
@@ -63,6 +92,7 @@ def simulate_village(
     step_labels: list | None = None,
     grounded: bool = True,
     max_workers: int = 8,
+    reactions_by_id: dict | None = None,
 ) -> dict:
     """마을 주민들의 정책 영향 궤적을 시뮬레이션한다.
 
@@ -78,6 +108,7 @@ def simulate_village(
     """
     personas = personas or []
     step_labels = step_labels or DEFAULT_STEPS
+    reactions_by_id = reactions_by_id or {}  # 주민별 1차 반응(A-2 grounding), 없으면 {}
     space_menu = space_menu_text()  # 프롬프트 주입용 장소 메뉴(1회 계산, 순수)
 
     # 주민별 누적 컨테이너
@@ -95,13 +126,16 @@ def simulate_village(
                 msgs = build_village_messages(
                     persona, policy, histories[pid], label,
                     grounded=grounded, space_menu=space_menu,
+                    reaction=reactions_by_id.get(pid),
                 )
                 out: VillageStepOut = structured_call(
                     msgs, VillageStepOut, temperature=0.8
                 )
                 return {
                     "id": pid, "step": si, "label": label, "place": out.place,
+                    "reached_via": out.reached_via,
                     "action": out.action, "policy_status": out.policy_status,
+                    "barrier": out.barrier,
                     "economic": int(out.economic), "wellbeing": int(out.wellbeing),
                     "note": out.note,
                 }
@@ -111,8 +145,10 @@ def simulate_village(
                 return {
                     "id": pid, "step": si, "label": label,
                     "place": prev["place"] if prev else "home",
+                    "reached_via": prev.get("reached_via", "") if prev else "",
                     "action": "(이 시점 기록 생성 실패)",
                     "policy_status": prev["policy_status"] if prev else "unaware",
+                    "barrier": prev.get("barrier", "") if prev else "",
                     "economic": prev["economic"] if prev else 50,
                     "wellbeing": prev["wellbeing"] if prev else 50,
                     "note": "(기록 없음)",
@@ -122,10 +158,16 @@ def simulate_village(
 
         for res in results:
             pid = res["id"]
-            residents[pid]["timeline"].append(
+            tl = residents[pid]["timeline"]
+            # 상태 비퇴행 가드: 알게 된 뒤 unaware 로 떨어지는 LLM 실수를 교정.
+            prev_status = tl[-1]["policy_status"] if tl else "unaware"
+            res["policy_status"], res["barrier"] = _guard_status(
+                prev_status, res["policy_status"], res.get("barrier", "")
+            )
+            tl.append(
                 {k: res[k] for k in
-                 ("step", "label", "place", "action", "policy_status",
-                  "economic", "wellbeing", "note")}
+                 ("step", "label", "place", "reached_via", "action",
+                  "policy_status", "barrier", "economic", "wellbeing", "note")}
             )
             # 다음 스텝이 볼 history 갱신(한 줄 요약 누적).
             histories[pid] = (

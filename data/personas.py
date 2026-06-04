@@ -551,6 +551,58 @@ def policy_fit(persona: dict, spec: dict) -> float:
     return round(age_match * income_match * family_match, 3)
 
 
+# ----------------------------------------------------------------------------
+# 대상 여부(eligibility) 게이트 — 태그(나이·소득·가구)로 '이 정책 대상인가'만 결정론적
+# 으로 판정한다. *결과(수혜/막힘) 예측이 아니라* 선언된 대상 범위에 드는지의 사실 판정.
+# (결과는 시뮬 궤적이 정한다 — contrast.select_trio_from_outcomes.) policy_fit 의 소프트
+# 나이 감쇠 대신 선언된 범위 [lo,hi] 의 하드 체크를 쓴다(예: 46세는 청년정책 확실히 제외).
+# ----------------------------------------------------------------------------
+# 소득 레벨 표기 정규화 — mock(한글 '저/중간/고소득')과 HF 파생(영문 low/mid/high),
+# spec(영문)이 섞이므로 비교 전에 영문 캐논으로 맞춘다.
+_INCOME_ALIAS = {
+    "저소득": "low", "중간소득": "mid", "고소득": "high",
+    "low": "low", "mid": "mid", "high": "high",
+}
+
+
+def _norm_income(v: str) -> str:
+    return _INCOME_ALIAS.get((v or "").strip(), (v or "").strip())
+
+
+def _meets_spec(persona: dict, spec: dict, age_margin: int = 0) -> bool:
+    """이 사람이 정책 spec 의 선언된 대상 조건(나이·소득·가구)을 모두 만족하는가(AND)."""
+    d = persona.get("demographics") or {}
+    s = persona.get("signals") or {}
+    # 나이: 선언된 범위 [lo,hi] 안(작은 여유 age_margin 허용). 범위 없으면 통과.
+    rng = spec.get("age")
+    if rng:
+        lo, hi = rng
+        age = d.get("age") or 0
+        if age and not (lo - age_margin <= age <= hi + age_margin):
+            return False
+    # 소득: 선언된 대상 레벨에 포함(한↔영 정규화). 없으면 통과. (income_level 은 직업 기반 휴리스틱 — 근사.)
+    inc_targets = spec.get("income")
+    if inc_targets:
+        if _norm_income(s.get("income_level")) not in {_norm_income(t) for t in inc_targets}:
+            return False
+    # 가구: family_kw 가 가구형태에 포함. 없으면 통과.
+    fam_kw = spec.get("family_kw")
+    if fam_kw and fam_kw not in (d.get("family_type") or ""):
+        return False
+    return True
+
+
+def is_target(persona: dict, specs, age_margin: int = 0) -> bool:
+    """정책 패키지의 *어느 한 정책*이라도 대상이면 True(사실 게이트, LLM 0).
+
+    specs 가 비면(대상 조건 미지정) 전원 대상으로 본다(graceful). 나이가 결정적이고
+    소득은 휴리스틱이라, 나이 범위 밖이면 확실히 비대상으로 걸러진다(예: 46세↔청년정책).
+    """
+    if not specs:
+        return True
+    return any(_meets_spec(persona, s, age_margin) for s in specs)
+
+
 def score_persona(
     persona: dict, specs: list,
     tau: float = _BENEFIT_TAU, fit_hi: float = _FIT_HI, access_lo: float = _ACCESS_LO,

@@ -4,7 +4,7 @@
 기존 필드 이름은 절대 바꾸지 말 것. 새 필드는 추가만(additive) 한다.
 모든 모듈은 정확히 이 키들을 읽고 쓴다.
 """
-from typing import TypedDict, Annotated, Optional
+from typing import TypedDict, Annotated, Optional, NotRequired
 from operator import add
 
 
@@ -61,6 +61,9 @@ class VillageStep(TypedDict):
     economic: int       # 경제적 여유 0~100
     wellbeing: int      # 심리적 안정·만족 0~100
     note: str           # 타임라인 한 줄 요약
+    # --- 확장 (additive, 옵션) — 접근 '방향 추적' ---
+    reached_via: NotRequired[str]  # 어떻게/누구를 통해 정책에 닿았나(경로·계기 한 줄)
+    barrier: NotRequired[str]      # blocked 일 때 정확히 어디서 막혔는지(한 줄)
 
 
 class Resident(TypedDict):
@@ -103,6 +106,6 @@ class SimState(TypedDict):
     village: dict                        # {steps, residents:[Resident...], aggregate} (graph/village.py)
     # --- 정책 인생극장(DESIGN v3): 멀티 정책 + 대조 3명 선별 ---
     policies: list                       # 동시 시행 정책 패키지(정책명/원문/{name,text} 리스트). 단일은 [policy].
-    selection: dict                      # data/personas.select_contrast_trio 결과 {specs, tau, matrix, trio, notes}
+    selection: dict                      # contrast.select_trio_from_outcomes 결과 {specs, trio, outcomes, notes}. (구 select_contrast_trio 매트릭스 선별은 dormant.)
     # --- 정책 태그(사이드바 직접 지정): 결정론 명세 + 분류 라벨 ---
     policy_spec: dict                    # policy_spec.spec_from_tags 결과 {name,text,age,income,family_kw,channel,category,support_type}. 매칭/프롬프트/미래 RAG 라벨용.

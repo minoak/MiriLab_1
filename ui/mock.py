@@ -610,6 +610,34 @@ def _action_for(name: str, place: str, status: str) -> str:
     return templates.get(status, f"{name} 씨는 {pl}에서 시간을 보냈다.")
 
 
+# 장소(채널)별 '어떻게/누구를 통해 닿았나' 경로 표현 (mock 결정론)
+_REACHED_VIA = {
+    "online_portal": "복지로(온라인)에서 직접 검색해 신청",
+    "community_center": "주민센터를 직접 찾아가 문의",
+    "welfare_center": "복지관 복지사·어르신 모임을 통해 전해 들음",
+    "work_market": "직장·시장에서 동료·이웃 입소문으로",
+    "home": "가족이 전해 준 소식으로",
+}
+
+
+def _reached_via_for(place: str, status: str) -> str:
+    """이번 시점 정책에 닿은 경로·계기 한 줄(결정론). 못 닿았으면 그 사실을."""
+    if status == "unaware":
+        return "아직 어느 경로로도 정책 소식이 닿지 않음"
+    return _REACHED_VIA.get(place, "경로 불명")
+
+
+def _barrier_for(category: str, status: str, dl: float) -> str:
+    """blocked 일 때 막힌 지점 한 줄(결정론). 막히지 않았으면 빈 문자열."""
+    if status != "blocked":
+        return ""
+    if category == "parent_block":
+        return "부모와 동거 → 가구 분리(별거) 요건에서 막힘"
+    if category == "eligible" and dl < 0.4:
+        return "온라인 본인인증·서류 제출 단계에서 막힘"
+    return "신청 요건·절차에서 막힘"
+
+
 def sample_village(personas: list, policy: str | None = None,
                    step_labels: list | None = None) -> dict:
     """페르소나 리스트로 결정론적 마을 시뮬 결과를 생성한다(LLM 호출 0).
@@ -648,8 +676,10 @@ def sample_village(personas: list, policy: str | None = None,
             wb = max(0, min(100, wb + (wb_d[i] if i < len(wb_d) else 0)))
             timeline.append({
                 "step": i + 1, "label": label, "place": place,
+                "reached_via": _reached_via_for(place, statuses[i]),
                 "action": _action_for(name, place, statuses[i]),
                 "policy_status": statuses[i],
+                "barrier": _barrier_for(category, statuses[i], dl),
                 "economic": int(econ), "wellbeing": int(wb),
                 "note": f"{place_label(place)} · {status_label(statuses[i])}",
             })

@@ -317,6 +317,55 @@ def build_aggregate_messages(policy: str, metrics: dict, digest: str) -> list:
 # 4단계: 미리 마을 — 정책 시행 후 시간 경과별 주민의 삶
 # ---------------------------------------------------------------------------
 
+def _reaction_text(reaction: Optional[dict]) -> str:
+    """주민의 1차 반응(react 단계 결과)을 마을 시뮬 프롬프트용 블록으로 만든다.
+
+    인생극장이 '시민 반응'과 같은 출발점을 갖게 하는 grounding(슬라이스 A-2). reaction
+    이 없으면 빈 문자열(블록 생략). 점수·텍스트는 그 사람이 스스로 매긴 1차 인상이며,
+    이후 6개월 궤적이 이 지점에서 자연스럽게 이어지도록 모델에 함께 전달한다.
+    """
+    if not reaction:
+        return ""
+    stance_kr = {"support": "찬성", "oppose": "반대", "mixed": "혼합"}.get(
+        (reaction.get("stance") or "").strip(), "혼합"
+    )
+    # 개행 제거 + 섹션 마커(■) 중화: 자유 서술이 프롬프트 섹션 경계를 흉내내 모델을
+    # 혼란시키지 않도록(방어 심층). 인용은 시민의 말일 뿐 지시가 아님.
+    txt = (reaction.get("text") or "").strip().replace("\n", " ").replace("■", "·")
+    if len(txt) > 200:
+        txt = txt[:200].rstrip() + "…"
+    sc = reaction.get("scores") or {}
+
+    def _s(key):
+        v = sc.get(key)
+        return v if isinstance(v, (int, float)) else "?"
+
+    # actions 는 list 계약이나 _reaction_text 는 공용 빌더라 방어한다:
+    # 리스트/튜플이 아니면(문자열 등) 글자 단위 분해되지 않게 단일 항목으로 감싼다.
+    raw_actions = reaction.get("actions")
+    if isinstance(raw_actions, (list, tuple)):
+        acts = list(raw_actions)
+    elif raw_actions:
+        acts = [raw_actions]
+    else:
+        acts = []
+    act = ", ".join(str(a) for a in acts[:4])
+
+    lines = [
+        "■ 이 주민의 1차 반응 (시뮬 시작점 — 이 입장·심정에서 6개월을 이어가세요)",
+        f"- 입장: {stance_kr}",
+    ]
+    if txt:
+        lines.append(f'- 한 말: "{txt}"')
+    lines.append(
+        f"- 스스로 매긴 점수: 수혜 가능성 {_s('benefit')} / 신청 의향 {_s('intent')} / "
+        f"이해도 {_s('understanding')} / 불만 {_s('dissatisfaction')} (각 0~100)"
+    )
+    if act:
+        lines.append(f"- 예상 행동: {act}")
+    return "\n".join(lines) + "\n\n"
+
+
 def build_village_messages(
     persona: dict,
     policy: str,
@@ -324,6 +373,7 @@ def build_village_messages(
     step_label: str,
     grounded: bool = True,
     space_menu: str = "",
+    reaction: Optional[dict] = None,
 ) -> list:
     """가상 마을 주민 1명이 '이 시점'에 어떻게 살아가는지 묘사하도록 요청.
 
@@ -340,7 +390,9 @@ def build_village_messages(
         "능력·소득·정부 신뢰)이 정책 체감에 그대로 반영되게 하세요. 정책 정보는 '어느 장소에 "
         "닿느냐'에 따라 전해집니다. 그 사람이 현실적으로 닿을 수 있는 장소를 골라야 하며, "
         "어디에도 닿지 못하면 정책을 모른 채(unaware) 집에 머뭅니다. 정책을 모르거나 신청에 "
-        "실패할 수도 있습니다. 반드시 지정된 구조화 형식으로만 답하세요."
+        "실패할 수도 있습니다. 주민의 '1차 반응'(입장·심정·점수)이 주어지면 그 지점을 "
+        "출발점으로 삼아 이야기가 거기서 자연스럽게 이어지게 하세요. "
+        "반드시 지정된 구조화 형식으로만 답하세요."
     )
 
     policy_text = (policy or "").strip()
@@ -379,10 +431,14 @@ def build_village_messages(
         places_block = ""
         place_item = ""
 
+    # 1차 반응 블록(A-2 grounding) — grounded 일 때만, reaction 이 주어지면.
+    reaction_block = _reaction_text(reaction) if grounded else ""
+
     user = (
         f"{person_block}"
         "■ 정책\n"
         f"{policy_text}\n\n"
+        f"{reaction_block}"
         f"{places_block}"
         "■ 지금까지의 삶 (이전 시점 요약)\n"
         f"{hist_text}\n\n"
@@ -390,14 +446,25 @@ def build_village_messages(
         "■ 요청\n"
         "이 시점에서 이 주민의 삶을 다음으로 묘사하세요.\n"
         f"{place_item}"
-        "2) 행동·사건(action): 이 기간 동안 이 사람이 이 정책과 관련해(또는 무관하게) "
-        "실제로 한 행동과 겪은 일을, 고른 장소와 자연스럽게 이어지게 2~4문장으로 쓰세요.\n"
-        "3) 정책 관여 상태(policy_status): unaware(모름) / aware(알게 됨) / "
-        "applied(신청함) / received(수령·혜택 받음) / blocked(시도했으나 막힘) 중 "
-        "이번 시점의 단계. (이전 단계에서, 그리고 닿은 장소에서 자연스럽게 이어지게)\n"
-        "4) 경제적 여유(economic, 0~100)와 심리적 안정·만족(wellbeing, 0~100)을 "
+        "2) 경로·계기(reached_via): 이 주민이 이 정책을 이번 시점에 어떻게/누구를 통해 "
+        "알게 되거나 신청에 닿았는지 한 줄로 쓰세요(예: 딸이 대신 알려줌, 동료 입소문, "
+        "복지사 안내, 주민센터 공지문, 직접 검색). 어느 경로로도 닿지 못했으면 그 사실을 "
+        "그대로 쓰세요. 그 사람의 디지털 능력·연결망·거동에 비춰 현실적인 경로여야 합니다.\n"
+        "3) 행동·사건(action): 이 기간 동안 이 사람이 이 정책과 관련해(또는 무관하게) "
+        "실제로 한 행동과 겪은 일을, 고른 장소·경로와 자연스럽게 이어지게 2~4문장으로 쓰세요.\n"
+        "4) 정책 관여 상태(policy_status): unaware(정책을 끝까지 알지도 못함) / "
+        "aware(알게 됨) / applied(신청함) / received(수령·혜택 받음) / "
+        "blocked(알거나 신청했으나 요건·서류·절차에 막혀 못 받고 포기) 중 이번 시점의 단계.\n"
+        "   ★ 상태는 되돌아가지 않습니다: 한 번 aware 이상이 되면 다시 unaware 로 갈 수 "
+        "없습니다. 신청·시도했다가 서류·요건 때문에 포기·실패하면 unaware 가 아니라 "
+        "blocked 입니다. unaware 는 정책을 처음부터 끝까지 몰랐던 경우에만 쓰세요. "
+        "(이전 시점 상태에서, 그리고 닿은 장소·경로에서 자연스럽게 이어지게)\n"
+        "5) 막힌 지점(barrier): 신청·접근이 막혔다면(blocked) 정확히 어디서 막혔는지 "
+        "한 줄로 쓰세요(예: 온라인 본인인증 단계, 소득 요건 초과, 서류 미비, 거동 불편으로 방문 불가). "
+        "막히지 않았으면 빈 문자열로 두세요.\n"
+        "6) 경제적 여유(economic, 0~100)와 심리적 안정·만족(wellbeing, 0~100)을 "
         "이번 시점 기준으로.\n"
-        "5) 한 줄 요약(note): 이번 시점을 한 문장으로."
+        "7) 한 줄 요약(note): 이번 시점을 한 문장으로."
     )
 
     return [

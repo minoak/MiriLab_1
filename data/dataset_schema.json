@@ -1,0 +1,115 @@
+{
+  "repo": "nvidia/Nemotron-Personas-Korea",
+  "parquet_file": "data/train-00000-of-00009.parquet",
+  "num_parquet_shards": 9,
+  "num_rows_in_shard": 111112,
+  "num_row_groups": 5,
+  "num_columns": 26,
+  "columns": [
+    {
+      "name": "uuid",
+      "type": "string"
+    },
+    {
+      "name": "professional_persona",
+      "type": "string"
+    },
+    {
+      "name": "sports_persona",
+      "type": "string"
+    },
+    {
+      "name": "arts_persona",
+      "type": "string"
+    },
+    {
+      "name": "travel_persona",
+      "type": "string"
+    },
+    {
+      "name": "culinary_persona",
+      "type": "string"
+    },
+    {
+      "name": "family_persona",
+      "type": "string"
+    },
+    {
+      "name": "persona",
+      "type": "string"
+    },
+    {
+      "name": "cultural_background",
+      "type": "string"
+    },
+    {
+      "name": "skills_and_expertise",
+      "type": "string"
+    },
+    {
+      "name": "skills_and_expertise_list",
+      "type": "string"
+    },
+    {
+      "name": "hobbies_and_interests",
+      "type": "string"
+    },
+    {
+      "name": "hobbies_and_interests_list",
+      "type": "string"
+    },
+    {
+      "name": "career_goals_and_ambitions",
+      "type": "string"
+    },
+    {
+      "name": "sex",
+      "type": "string"
+    },
+    {
+      "name": "age",
+      "type": "int64"
+    },
+    {
+      "name": "marital_status",
+      "type": "string"
+    },
+    {
+      "name": "military_status",
+      "type": "string"
+    },
+    {
+      "name": "family_type",
+      "type": "string"
+    },
+    {
+      "name": "housing_type",
+      "type": "string"
+    },
+    {
+      "name": "education_level",
+      "type": "string"
+    },
+    {
+      "name": "bachelors_field",
+      "type": "string"
+    },
+    {
+      "name": "occupation",
+      "type": "string"
+    },
+    {
+      "name": "district",
+      "type": "string"
+    },
+    {
+      "name": "province",
+      "type": "string"
+    },
+    {
+      "name": "country",
+      "type": "string"
+    }
+  ],
+  "note": "footer-only read (no full download). first shard schema. RAG 준비용."
+}

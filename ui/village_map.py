@@ -28,9 +28,15 @@ import streamlit as st
 import streamlit.components.v1 as components
 
 from graph.spaces import PLACE_KEYS, place_label, status_label
-# 상태색 단일 진실원 — tab_village 에 이미 정의됨(중복 정의 금지).
-# tab_village 가 이 모듈을 함수 안에서 지연 import 하므로 순환 import 없음.
-from ui.tab_village import _STATUS_COLOR
+# ⚠ DORMANT — 이 오버월드 맵 모듈은 현재 어디에서도 import/호출되지 않는다(인생극장은
+# 카드 서사로 통일됨, tab_village docstring 참조). 부활 시 검증 필요.
+# 상태색: tab_village 가 _STATUS_COLOR → _STATUS_META(이모지·라벨·색 3-튜플)로 바뀌었으므로
+# 색만 추출해 과거 {상태: 색} dict(_STATUS_COLOR) 형태로 재구성한다(import 안전).
+from ui.tab_village import _status_meta
+_STATUS_COLOR = {
+    k: _status_meta(k)[2]
+    for k in ("unaware", "aware", "applied", "received", "blocked")
+}
 
 
 # ---------------------------------------------------------------------------
