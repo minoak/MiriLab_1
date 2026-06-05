@@ -124,6 +124,10 @@ def render_minivillage_tab(view=None) -> None:
         "묻어나는 대화를 나눕니다. 화면 안의 ▶시작·속도·좌표편집은 모두 브라우저에서만 "
         "동작하며(녹화 재생), 키가 없어도 그대로 재생됩니다."
     )
+    st.info(
+        "ℹ️ 지금 미리마을은 **정책이 반영되지 않은 '기본 하루'**입니다. "
+        "정책 주입은 다음 단계(step2)에서 추가됩니다."
+    )
 
     root = MINIVILLAGE_ROOT
     if not (root / "index.html").exists():

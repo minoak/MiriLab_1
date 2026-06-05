@@ -15,9 +15,11 @@
 다중 문서/품질지표를 위해 standalone_board.BoardRagService 를 직접 쓴다).
 """
 import hashlib
+import re
 
 import streamlit as st
 
+from ui.rerun_util import rerun_fragment
 from standalone_board.app import (
     CHUNKS_KEY,
     CLEAR_QUESTION_KEY,
@@ -28,9 +30,17 @@ from standalone_board.app import (
     _generator_from_mode,
     _metric_rows,
     _session_index_path,
+    clear_index_cache,
     format_source_markdown,
     prepare_index_update,
 )
+
+# 근거 본문에 든 마크다운 제어문자(*, #, `, _ 등)가 표시를 깨뜨리지 않도록 이스케이프.
+_MD_SPECIAL = re.compile(r"([\\`*_#~>\[\]|])")
+
+
+def _escape_md(text: str) -> str:
+    return _MD_SPECIAL.sub(r"\\\1", text or "")
 from standalone_board.core import (
     BoardRagService,
     ExtractiveAnswerGenerator,
@@ -45,6 +55,7 @@ from standalone_board.openai_adapter import has_openai_key
 _POLICY_SIG_KEY = "board_policy_sig"
 
 
+@st.fragment   # 질문 등록·문서 업로드·라디오의 rerun 이 전체 앱을 다시 그려 첫 탭으로 튕기지 않도록 조각 격리
 def render_board_tab(view):
     """정책 문의 게시판(풀 RAG)을 그린다. view 가 None 이면 안내 후 종료."""
     if view is None:
@@ -94,11 +105,27 @@ def _ensure_base_index(policy: str) -> None:
     sig = _policy_sig(policy)
     if st.session_state.get(_POLICY_SIG_KEY) == sig and st.session_state.get(CHUNKS_KEY):
         return
+
+    # 정책이 바뀐 경우인지(이전 sig 존재) + 그때 업로드 문서가 있었는지 기록.
+    is_policy_change = st.session_state.get(_POLICY_SIG_KEY) is not None
+    had_uploads = len(st.session_state.get(DOCS_KEY) or []) > 1  # base 정책 1개 외
+
     update = prepare_index_update([], base_policy_text=policy)
     st.session_state[CHUNKS_KEY] = update.chunks
     st.session_state[DOCS_KEY] = update.documents
     st.session_state[_POLICY_SIG_KEY] = sig
     _persist(update.chunks)
+
+    if is_policy_change:
+        # 정책이 바뀌면 옛 정책 기준 답변·인덱스는 무효 → 스레드와 전역 인덱스 캐시를
+        # 비워 스테일 답변 노출과 캐시 누적을 막는다(app.py 의 view_b 무효화와 동형).
+        st.session_state[THREADS_KEY] = []
+        clear_index_cache()
+        if had_uploads:
+            st.info(
+                "정책이 바뀌어 기본 인덱스를 새로 만들었습니다. 이전에 올린 문서는 "
+                "'문서 인덱싱'으로 다시 추가해 주세요."
+            )
 
 
 def _persist(chunks) -> None:
@@ -133,11 +160,12 @@ def _render_documents(policy: str) -> None:
         )
 
         if clear:
-            # 정책 기본 인덱스로 되돌린다(업로드 문서 제거).
+            # 정책 기본 인덱스로 되돌린다(업로드 문서 제거). 전역 인덱스 캐시도 비운다.
             st.session_state.pop(_POLICY_SIG_KEY, None)
             st.session_state[CHUNKS_KEY] = []
             st.session_state[DOCS_KEY] = []
-            st.rerun()
+            clear_index_cache()
+            rerun_fragment()
 
         if build:
             update = prepare_index_update(uploaded, base_policy_text=policy)
@@ -153,7 +181,7 @@ def _render_documents(policy: str) -> None:
                 st.success(
                     f"문서 {len(update.documents)}개, 근거 조각 {len(update.chunks)}개 인덱싱"
                 )
-                st.rerun()
+                rerun_fragment()
 
 
 def _render_suggestions(documents, chunks) -> None:
@@ -172,7 +200,7 @@ def _render_suggestions(documents, chunks) -> None:
     for i, q in enumerate(questions):
         if st.button(q, key=f"board_suggest_{i}", use_container_width=True):
             st.session_state[QUESTION_KEY] = q
-            st.rerun()
+            rerun_fragment()
 
 
 def _render_question(chunks) -> None:
@@ -230,7 +258,7 @@ def _submit_question(question: str, mode: str, reference: str, chunks) -> None:
         }
     )
     st.session_state[CLEAR_QUESTION_KEY] = True
-    st.rerun()
+    rerun_fragment()
 
 
 def _render_threads() -> None:
@@ -254,9 +282,17 @@ def _render_threads() -> None:
             st.write(thread.get("answer", ""))
             if thread.get("metrics"):
                 with st.expander("품질 지표"):
-                    st.table(_metric_rows(thread["metrics"]))
+                    # '값' 열에 숫자와 '-'(기준정답 없을 때 None)가 섞이면 st.table 의
+                    # arrow 변환이 깨진다 → 열 타입을 문자열로 통일해 안전하게 렌더.
+                    rows = [
+                        {**r, "값": str(r["값"])}
+                        for r in _metric_rows(thread["metrics"])
+                    ]
+                    st.table(rows)
             sources = thread.get("sources", [])
             if sources:
                 with st.expander(f"근거 문서 {len(sources)}건"):
                     for s in sources:
-                        st.markdown(format_source_markdown(s))
+                        # 본문의 마크다운 제어문자를 이스케이프해 표시 깨짐을 막는다.
+                        safe = {**s, "text": _escape_md(s.get("text", ""))}
+                        st.markdown(format_source_markdown(safe))

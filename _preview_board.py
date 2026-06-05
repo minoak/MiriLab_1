@@ -7,10 +7,9 @@
 정책 원문을 직접 고르거나 붙여넣고, 답변 엔진(auto/mock/rag)을 골라 자동답변을
 반복 시험할 수 있다. 게시판은 view['policy'] 하나만 읽으므로 최소 view 만 주입하면 된다.
 
-API+RAG 작업 흐름:
-  1) board_engine.answer_with_rag() 를 구현한다.
-  2) 아래 사이드바에서 '답변 엔진'을 'rag' 로 골라 단독으로 시험한다.
-  3) 본 앱(app.py)에서도 켜려면 환경변수 MIRILAB_BOARD_RAG=1 로 두면 'auto'가 RAG 를 쓴다.
+게시판 탭은 standalone_board 풀 RAG(문서 업로드 + Chroma/OpenAI 검색 + 품질지표)를
+쓴다. 답변 방식(OpenAI/근거추출)은 탭 안 라디오로 고른다. 정책을 고치거나 붙여넣고
+질문을 남겨 시험하면 된다.
 """
 
 # 한글 폰트 → 페이지 설정 → 타이틀 (app.py 와 동일한 순서 고정)
@@ -46,25 +45,20 @@ with st.sidebar:
         help="샘플을 고치거나, 통째로 지우고 직접 붙여넣어도 됩니다.",
     )
 
-    # 2) 답변 엔진 선택 ---------------------------------------------
-    mode = st.radio(
-        "답변 엔진",
-        ["auto", "mock", "rag"],
-        index=1,  # 기본 mock — 키 없이도 바로 동작
-        help=(
-            "mock=규칙 기반(키 불필요) · rag=board_engine.answer_with_rag 강제 시험 "
-            "· auto=환경변수 MIRILAB_BOARD_RAG 에 따름"
-        ),
-    )
+    # 2) 키 상태 안내 — 답변 방식(OpenAI/근거추출)은 게시판 탭 안에서 고른다.
     st.caption(
-        ("✅ OpenAI 키 감지됨" if has_real_key() else "⚠️ OpenAI 키 없음 — rag 는 mock 으로 폴백")
+        "✅ OpenAI 키 감지됨 (Chroma + OpenAI 의미검색)"
+        if has_real_key() else "⚠️ OpenAI 키 없음 — 로컬 해시 검색 + 추출식 폴백"
     )
+    st.caption("답변 방식(OpenAI/근거추출)은 게시판 탭 안에서 고릅니다.")
 
     if st.button("게시판 비우기", use_container_width=True):
-        st.session_state["board"] = []
+        from standalone_board.app import QUESTION_KEY, THREADS_KEY
+        st.session_state[THREADS_KEY] = []
+        st.session_state[QUESTION_KEY] = ""
         st.rerun()
 
 
-# 게시판이 읽는 최소 view 만 주입(board_mode 는 위 라디오 선택값).
-view = {"policy": policy, "board_mode": mode}
+# 게시판이 읽는 최소 view 만 주입(정책 원문 하나).
+view = {"policy": policy}
 render_board_tab(view)

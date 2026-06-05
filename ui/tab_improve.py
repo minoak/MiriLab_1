@@ -16,6 +16,7 @@ import access_analysis as access
 from ui.tab_abtest import render_abtest_section
 
 
+@st.fragment   # 탭 안 A/B 체크박스·버튼의 rerun 이 전체 앱을 다시 그려 첫 탭으로 튕기지 않도록 조각 격리
 def render_improve_tab(view):
     """정책 개선 탭을 렌더링한다.
 
@@ -79,9 +80,12 @@ def _card_html(title: str, value: str, color: str, sub: str = "") -> str:
     """라이트 테마 요약 카드 1개 HTML."""
     sub_html = (f"<div style='font-size:0.72rem;color:#9AA7B2;margin-top:4px;'>{sub}</div>"
                 if sub else "")
+    # min-height + flex 세로 중앙정렬 → sub(하단 설명줄) 유무와 상관없이 3개 카드가
+    # 똑같은 높이로 보이게 한다('주요 병목'만 sub 가 없어 더 짧던 문제 해결).
     return (
         "<div style='border:1px solid #E8ECEF;border-radius:10px;padding:14px 16px;"
-        "text-align:center;background:#FAFBFC;height:100%;'>"
+        "text-align:center;background:#FAFBFC;min-height:118px;display:flex;"
+        "flex-direction:column;justify-content:center;align-items:center;'>"
         f"<div style='font-size:0.8rem;color:#7A8794;margin-bottom:6px;'>{title}</div>"
         f"<div style='font-size:1.5rem;font-weight:800;color:{color};line-height:1.2;'>{value}</div>"
         f"{sub_html}</div>"
