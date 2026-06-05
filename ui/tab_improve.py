@@ -1,97 +1,148 @@
 # -*- coding: utf-8 -*-
-"""개선안 탭.
+"""정책 개선 탭 — 'AS 작업'(정책 요약에서 드러난 문제를 해소).
 
-집계 요약(summary)과 정책 개선 제안(policy_fixes),
-그리고 '쉬운 글 변환'(원문 vs 쉬운 글) 비교를 보여준다.
-view 는 ui/model.py 의 build_view(sim) 결과(ViewModel) 이다.
+한 화면이 진단 → 개선 → 검증으로 이어진다.
+  진단 : 요약 카드 3개(주요 병목 / 도움창구 개선폭 / 우선 지원 시민) + 집계 요약(서사)
+  개선 : ① 정책 문구·절차 수정(LLM 개선안)  ② 도움창구 운영 제안(접근성 분석 기반)
+  검증 : A/B — 현재 정책 vs 수정안(개선안을 반영해 다시 쓴 정책)을 같은 시민으로 비교
+
+쉬운글 변환 기능은 폐지됐다. 'easy_text' 는 의미가 '수정안'으로 바뀌어 A/B 후보로만
+내부적으로 쓰인다(별도 패널 없음). view 는 ui/model.py build_view 결과.
 """
 
 import streamlit as st
 
+import access_analysis as access
+from ui.tab_abtest import render_abtest_section
+
 
 def render_improve_tab(view):
-    """개선안 탭을 렌더링한다.
+    """정책 개선 탭을 렌더링한다.
 
     매개변수
     --------
     view : dict | None
-        ViewModel. 아직 시뮬레이션을 돌리지 않았으면 None 일 수 있다.
-        다음 키를 사용한다.
-          - 'summary'      : 집계 요약 문장(마크다운)
-          - 'policy'       : 원문 정책 텍스트
-          - 'improvements' : {'policy_fixes': list[str], 'easy_text': str}
+        ViewModel. 시뮬레이션 전이면 None.
+        사용 키: 'summary', 'metrics', 'improvements'{'policy_fixes'},
+                 'personas', 'reactions_by_id', 'policy_spec', 'policy'.
     """
-    # view 가 없으면 안내만 하고 종료(시뮬레이션 미실행 상태)
     if view is None:
         st.info("먼저 정책을 입력하고 시뮬레이션을 실행해 주세요. 결과가 나오면 개선안이 여기에 표시됩니다.")
         return
 
-    # ── 1) 집계 요약 ───────────────────────────────────────────────
+    # 접근성 분석(병목/우선시민/도움창구 제안) — 시민 반응 기반, 결정론.
+    analysis = access.analyze(view)
+
+    # ── 진단: 요약 카드 3개 ──────────────────────────────────────
+    _render_summary_cards(view, analysis)
+
+    st.divider()
+
+    # ── 개선(AS): 정책 문구 수정 + 도움창구 운영 제안 ────────────
+    _render_fixes(view)
+    st.markdown("<div style='height:6px;'></div>", unsafe_allow_html=True)
+    _render_helpdesk(analysis)
+
+    st.divider()
+
+    # ── 진단 서사: 집계 요약 ──────────────────────────────────────
     st.subheader("집계 요약")
     summary = view.get("summary") or "요약 정보가 아직 없습니다."
     st.markdown(summary)
 
     st.divider()
 
-    # improvements 안전 추출(키가 비어 있어도 동작하도록)
-    improvements = view.get("improvements") or {}
-    policy_fixes = improvements.get("policy_fixes") or []
-    easy_text = improvements.get("easy_text") or ""
+    # ── 검증: A/B (현재 정책 vs 수정안) ──────────────────────────
+    st.subheader("개선 효과 확인 — 현재 정책 vs 수정안")
+    render_abtest_section(view)
 
-    # ── 2) 정책 개선 제안(번호 목록) ───────────────────────────────
-    st.subheader("정책 개선 제안")
-    if policy_fixes:
-        # 번호를 매겨 한 줄씩 마크다운 정렬 목록으로 출력
-        lines = []
-        for i, fix in enumerate(policy_fixes, start=1):
-            text = str(fix).strip()
-            if text:
-                lines.append(f"{i}. {text}")
-        if lines:
-            st.markdown("\n".join(lines))
-        else:
-            st.caption("제안된 개선안이 없습니다.")
-    else:
-        st.caption("제안된 개선안이 없습니다.")
 
-    st.divider()
+# ─────────────────────────────────────────────────────────────────────────
+# 요약 카드 3개
+# ─────────────────────────────────────────────────────────────────────────
+def _improvement_delta(view) -> float | None:
+    """A/B 가 실행됐으면 수정안의 신청의향지수 개선폭(b − a), 아니면 None.
 
-    # ── 3) 쉬운 글 변환(원문 vs 쉬운 글 나란히) ────────────────────
-    st.subheader("쉬운 글 변환")
-    st.caption("왼쪽은 원문, 오른쪽은 시민이 이해하기 쉽게 다시 쓴 글입니다.")
+    (해석1: 도움창구 개선폭 = A/B 결과의 신청의향 변화를 미러링.)
+    """
+    view_b = st.session_state.get("view_b")
+    if not isinstance(view_b, dict):
+        return None
+    a = (view.get("metrics") or {}).get("신청의향지수")
+    b = (view_b.get("metrics") or {}).get("신청의향지수")
+    if isinstance(a, (int, float)) and isinstance(b, (int, float)):
+        return round(float(b) - float(a), 1)
+    return None
 
-    policy_text = view.get("policy") or "원문 정책 텍스트가 없습니다."
 
-    col_orig, col_easy = st.columns(2)
-    with col_orig:
-        st.markdown("**원문 정책**")
-        # 원문은 그대로 보여주기 위해 코드/텍스트 영역으로 표시
-        st.text_area(
-            "원문",
-            value=policy_text,
-            height=320,
-            disabled=True,
-            label_visibility="collapsed",
-        )
-    with col_easy:
-        st.markdown("**쉬운 글**")
-        if easy_text:
-            st.text_area(
-                "쉬운 글",
-                value=easy_text,
-                height=320,
-                disabled=True,
-                label_visibility="collapsed",
-            )
-        else:
-            st.info("쉬운 글 변환 결과가 아직 없습니다.")
-
-    # 쉬운 글 내려받기(있을 때만 활성화)
-    st.download_button(
-        label="쉬운 글 내려받기 (.txt)",
-        data=(easy_text or "").encode("utf-8"),
-        file_name="쉬운글.txt",
-        mime="text/plain",
-        disabled=(not easy_text),
-        use_container_width=True,
+def _card_html(title: str, value: str, color: str, sub: str = "") -> str:
+    """라이트 테마 요약 카드 1개 HTML."""
+    sub_html = (f"<div style='font-size:0.72rem;color:#9AA7B2;margin-top:4px;'>{sub}</div>"
+                if sub else "")
+    return (
+        "<div style='border:1px solid #E8ECEF;border-radius:10px;padding:14px 16px;"
+        "text-align:center;background:#FAFBFC;height:100%;'>"
+        f"<div style='font-size:0.8rem;color:#7A8794;margin-bottom:6px;'>{title}</div>"
+        f"<div style='font-size:1.5rem;font-weight:800;color:{color};line-height:1.2;'>{value}</div>"
+        f"{sub_html}</div>"
     )
+
+
+def _render_summary_cards(view, analysis: dict) -> None:
+    """주요 병목 / 도움창구 개선폭 / 우선 지원 시민 카드 3개."""
+    bottleneck = analysis.get("main_bottleneck") or "없음"
+    priority = analysis.get("priority") or {}
+    pri_count = int(priority.get("count", 0))
+    pri_pct = int(priority.get("threshold_pct", 40))
+
+    delta = _improvement_delta(view)
+    if delta is None:
+        delta_val, delta_color, delta_sub = "—", "#9AA7B2", "A/B 실행 시 표시"
+    else:
+        sign = "+" if delta >= 0 else ""
+        delta_val = f"{sign}{delta}%p"
+        delta_color = "#27AE60" if delta > 0 else ("#C0392B" if delta < 0 else "#7A8794")
+        delta_sub = "수정안 신청의향 변화"
+
+    c1, c2, c3 = st.columns(3)
+    with c1:
+        st.markdown(
+            _card_html("주요 병목", bottleneck, "#C0392B" if bottleneck != "없음" else "#7A8794"),
+            unsafe_allow_html=True,
+        )
+    with c2:
+        st.markdown(
+            _card_html("도움창구 개선폭", delta_val, delta_color, delta_sub),
+            unsafe_allow_html=True,
+        )
+    with c3:
+        st.markdown(
+            _card_html("우선 지원 시민", f"{pri_count}명", "#2D7DD2",
+                       f"접근 가능성 {pri_pct}% 미만"),
+            unsafe_allow_html=True,
+        )
+
+
+# ─────────────────────────────────────────────────────────────────────────
+# 개선(AS): 정책 문구 수정 + 도움창구 운영 제안
+# ─────────────────────────────────────────────────────────────────────────
+def _render_fixes(view) -> None:
+    """정책 문구·절차 수정 (LLM 개선안 = improvements.policy_fixes)."""
+    st.subheader("정책 문구·절차 수정")
+    fixes = (view.get("improvements") or {}).get("policy_fixes") or []
+    lines = [f"- {str(f).strip()}" for f in fixes if str(f).strip()]
+    if lines:
+        st.markdown("\n".join(lines))
+    else:
+        st.caption("제안된 수정 사항이 아직 없습니다.")
+
+
+def _render_helpdesk(analysis: dict) -> None:
+    """도움창구 운영 제안 (접근성 분석 기반 결정론 제안)."""
+    st.subheader("도움창구 운영 제안")
+    recs = analysis.get("helpdesk") or []
+    lines = [f"- {str(r).strip()}" for r in recs if str(r).strip()]
+    if lines:
+        st.markdown("\n".join(lines))
+    else:
+        st.caption("운영 제안이 없습니다.")

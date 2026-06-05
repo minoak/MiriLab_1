@@ -25,6 +25,4 @@ pypdf>=4
 # Demo UI + visualization
 streamlit>=1.32
 plotly
-networkx
-pyvis
 matplotlib
