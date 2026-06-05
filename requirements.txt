@@ -1,5 +1,5 @@
 # Core LLM
-openai
+openai>=2.0.0
 python-dotenv
 
 # Agent orchestration
@@ -20,6 +20,7 @@ pyarrow
 
 # RAG (optional module: OpenAI embeddings + Chroma)
 chromadb
+pypdf>=4
 
 # Demo UI + visualization
 streamlit>=1.32

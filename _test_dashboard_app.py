@@ -40,6 +40,13 @@ for b in at.button:
 at.run()
 assert not at.exception, f"데모 시뮬 예외: {at.exception}"
 
+for r in at.radio:
+    if r.key == "main_tab":
+        r.set_value("시민 반응")
+        break
+at.run()
+assert not at.exception, f"시민 반응 탭 선택 예외: {at.exception}"
+
 # 1) 컴포넌트 너머 푸터까지 렌더됐나(= 표 컴포넌트가 예외 없이 그려졌다는 증거)
 assert FOOTER in all_text(at), "대시보드 렌더가 표 컴포넌트 이후 푸터까지 도달 못함"
 print("[1] 히트맵 컴포넌트 렌더 OK — 푸터까지 도달, 예외 없음")

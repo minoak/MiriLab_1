@@ -27,6 +27,14 @@ sim = at.session_state["sim"] if "sim" in at.session_state else {}
 view = at.session_state["view"] if "view" in at.session_state else {}
 print(f"[2] 데모 시뮬 OK — sim keys={len(sim)}개, personas={len(view.get('personas') or [])}명")
 
+# 상태 저장형 본문 탭에서 정책 인생극장을 선택한 뒤 액션 버튼을 찾는다.
+for r in at.radio:
+    if r.key == "main_tab":
+        r.set_value("정책 인생극장")
+        break
+at.run()
+assert not at.exception, f"정책 인생극장 탭 선택 예외: {at.exception}"
+
 # 미리 마을 탭의 '인생극장 실행' 버튼 클릭 (key 로 직접 접근)
 at.button(key="village_run_contrast").click()
 at.run()
