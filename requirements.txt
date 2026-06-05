@@ -1,5 +1,5 @@
-# Core LLM
-openai
+# Core LLM (>=2: 게시판 RAG 가 OpenAI Responses API 사용)
+openai>=2
 python-dotenv
 
 # Agent orchestration
@@ -18,8 +18,9 @@ huggingface_hub
 pandas
 pyarrow
 
-# RAG (optional module: OpenAI embeddings + Chroma)
+# RAG (게시판 standalone_board: OpenAI 임베딩 + Chroma 벡터 + PDF 로더)
 chromadb
+pypdf>=4
 
 # Demo UI + visualization
 streamlit>=1.32

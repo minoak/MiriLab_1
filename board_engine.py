@@ -10,11 +10,13 @@
   3) **mock 을 진짜 API+RAG 로 갈아끼울 자리(seam)가 함수 하나로 모인다.**
 
 ──────────────────────────────────────────────────────────────────────
-▣ 팀원 작업 지점 (API + RAG 통합)
+▣ RAG 통합 지점 (✅ standalone_board 에 연결됨)
 ──────────────────────────────────────────────────────────────────────
-게시판 자동답변을 RAG/LLM 로 바꾸려면 **`answer_with_rag()` 하나만** 채우면 된다.
-나머지(폼/말풍선/스레드 누적/폴백)는 건드릴 필요가 없다. 자세한 계약은
-`answer_with_rag` 의 docstring 과 `BOARD.md` 참고.
+게시판 자동답변 RAG/LLM 은 `answer_with_rag()` 한 함수가 격리된 `standalone_board`
+패키지(검색→생성→평가)에 위임한다. 나머지(폼/말풍선/스레드 누적/폴백)는 그대로다.
+`MIRILAB_BOARD_RAG=1` 로 켜면 auto 모드에서도 RAG 가 동작하고, 키가 없으면 로컬
+해시 검색 + 추출식 답변으로 폴백한다. 자세한 계약은 `answer_with_rag` 의 docstring
+과 `BOARD.md` 참고.
 
 import 시점에는 네트워크/OpenAI 호출이 절대 일어나지 않는다(키 없어도 import 가능).
 실제 호출은 함수 실행 시점에만 발생하고, 실패하면 규칙 기반 답변으로 폴백한다.
@@ -22,6 +24,8 @@ import 시점에는 네트워크/OpenAI 호출이 절대 일어나지 않는다(
 
 from __future__ import annotations
 
+import hashlib
+import logging
 import os
 import random
 import re
@@ -57,6 +61,14 @@ _DISCLAIMER = (
     "확인해 주세요. (본 답변은 정책 원문을 기반으로 한 자동 안내이며, "
     "실제 심사 결과와 다를 수 있습니다.)"
 )
+
+# ── RAG 인덱스 캐시 ────────────────────────────────────────────────────
+# 같은 정책에 질문이 여러 개 와도 청크 분할·임베딩을 1회만 수행하기 위한 캐시.
+# 키 = (정책 sha1, 키유무). 작은 상한으로 메모리 누수를 막는다.
+_LOG = logging.getLogger(__name__)
+_RAG_INDEX_CACHE: dict = {}
+_RAG_INDEX_ORDER: list = []
+_RAG_INDEX_MAX = 4
 
 
 # =====================================================================
@@ -102,18 +114,19 @@ def answer_question(policy: str, question: str, *, mode: str = "auto",
                 "sources": list(res.get("sources", [])),
                 "mode": "rag",
             }
-        except NotImplementedError:
-            # RAG 가 아직 안 붙음. auto 면 조용히, rag(강제)면 사유를 덧붙여 mock.
+        except Exception:
+            # RAG 실패(미설치·네트워크·LLM 오류·근거 없음 등) → 화면이 죽지 않게
+            # mock 으로 폴백한다. auto 는 조용히(데모 안전), rag(강제)는 사유를
+            # 덧붙여 'RAG 요청이 대체됐음' 을 인지시킨다. 조용한 삼킴이 디버깅을
+            # 막지 않도록 예외는 로그로 남긴다.
+            _LOG.exception("게시판 RAG 답변 실패 — 규칙 기반(mock)으로 폴백")
             fallback = _answer_mock(policy, question)
             if mode == "rag":
                 fallback["answer"] = (
-                    "⚠️ RAG 엔진이 아직 연결되지 않아 규칙 기반 답변으로 "
-                    "대체했습니다.\n\n" + fallback["answer"]
+                    "⚠️ RAG 답변 생성에 실패해 규칙 기반 답변으로 대체했습니다.\n\n"
+                    + fallback["answer"]
                 )
             return fallback
-        except Exception:
-            # 네트워크/LLM 오류 등 — 화면이 죽지 않도록 mock 으로 폴백한다.
-            return _answer_mock(policy, question)
 
     return _answer_mock(policy, question)
 
@@ -143,46 +156,86 @@ def _rag_enabled() -> bool:
     return flag not in ("", "0", "false", "no", "off")
 
 
+def _rag_index(policy: str, has_key: bool):
+    """정책 원문에 대한 검색 인덱스를 (정책, 키유무)로 캐시해 돌려준다.
+
+    같은 정책에 질문이 여러 개 와도 청크 분할·임베딩을 1회만 수행한다(키가 있으면
+    OpenAI 임베딩 재호출/과금 방지). standalone_board.app 의 _INDEX_CACHE 와 같은
+    취지를 streamlit 의존 없이 board_engine 안에서 수행하며, 작은 상한으로 메모리
+    누수를 막는다.
+    """
+    from standalone_board.core import PolicyDocument, chunk_document
+    from standalone_board.openai_adapter import build_retrieval_index
+
+    cache_key = (hashlib.sha1(policy.encode("utf-8")).hexdigest(), bool(has_key))
+    cached = _RAG_INDEX_CACHE.get(cache_key)
+    if cached is not None:
+        return cached
+
+    index = build_retrieval_index(
+        chunk_document(PolicyDocument(name="현재 정책", text=policy))
+    )
+    _RAG_INDEX_CACHE[cache_key] = index
+    _RAG_INDEX_ORDER.append(cache_key)
+    while len(_RAG_INDEX_ORDER) > _RAG_INDEX_MAX:
+        _RAG_INDEX_CACHE.pop(_RAG_INDEX_ORDER.pop(0), None)
+    return index
+
+
 def answer_with_rag(policy: str, question: str, k: int = 4) -> dict:
-    """▣ 팀원 작업 지점 — 정책 문서 RAG + LLM 자동답변.
+    """▣ 정책 문서 RAG + LLM 자동답변 — `standalone_board` 엔진에 위임.
 
-    여기에 API+RAG 파이프라인을 구현한다. 권장 흐름:
+    격리된 RAG 패키지 `standalone_board`(검색→생성→평가)의 파이프라인을 호출해
+    게시판 시임 반환 계약({answer, sources})으로 매핑한다. 근거 문서는 현재 정책
+    원문(policy) 단일이다.
 
-      1) 정책 원문(policy)을 청크로 분할 → 임베딩 → 벡터스토어 검색.
-         (질문과 가장 관련 있는 청크 k개를 가져온다.)
-      2) 검색된 청크 + 질문을 LLM 프롬프트에 넣어 답변 문장을 생성한다.
-         (`graph.llm.get_client()` / `structured_call()` 재사용 가능,
-          `graph.llm.has_real_key()` 로 키 존재 확인.)
-      3) 아래 반환 계약을 지킨다.
+      1) 정책 원문(policy)을 청크로 분할한다.
+      2) 검색 인덱스: OpenAI 키가 있으면 Chroma + OpenAI 임베딩 의미검색,
+         없으면(또는 임베딩/Chroma 실패 시) 로컬 해시 벡터로 자동 폴백한다.
+      3) 답변 생성: 키가 있으면 OpenAI grounded(Responses API), 없으면 추출식
+         (둘 다 키 없이도 안전한 폴백 경로가 있음).
+      4) AnswerResult.sources({text, source, score, ...}) → 시임 {text, source} 축약.
+
+    두 생성기 모두 자체 안내·면책 문구를 포함하므로 `_DISCLAIMER` 는 덧붙이지 않는다.
 
     반환(계약)
     ----------
     dict {
-        "answer":  str,    # 표시할 답변 본문(면책 문구는 호출측에서 안 붙임 — 직접 포함)
+        "answer":  str,    # 표시할 답변 본문(생성기가 면책 문구까지 포함)
         "sources": list,   # [{"text": 근거청크, "source": 출처라벨}, ...] (없으면 [])
     }
 
-    구현 전에는 NotImplementedError 를 던진다 → `answer_question` 이 mock 으로
-    안전하게 폴백한다. 구현을 마치면 환경변수 `MIRILAB_BOARD_RAG=1` 로 켜거나,
-    `_preview_board.py` 에서 엔진을 "rag" 로 골라 단독 테스트하면 된다.
-
-    참고: import 시점 네트워크 호출 금지 규칙을 지키려면 openai/벡터스토어 import 를
-    이 함수 안에서(지연 import) 수행할 것.
+    실패(빈 정책 · 네트워크 · LLM 오류 등)는 예외로 전파하고, 호출측 `answer_question`
+    이 mock 으로 안전하게 폴백한다. openai/chromadb import 는 이 함수 안에서(지연
+    import) 수행해 import 시점 네트워크/무거운 의존 로딩 금지 규칙을 지킨다.
     """
-    # 예시 골격(주석) — 실제 구현 시 아래를 채우고 raise 를 지운다.
-    #
-    #   from graph.llm import has_real_key, get_client, MODEL
-    #   if not has_real_key():
-    #       raise RuntimeError("OpenAI 키가 없습니다.")
-    #   chunks = _retrieve_policy_chunks(policy, question, k=k)   # 팀원 RAG
-    #   prompt = _build_rag_prompt(policy, question, chunks)
-    #   answer = get_client().chat.completions.create(...)        # LLM 호출
-    #   return {"answer": answer + _DISCLAIMER,
-    #           "sources": [{"text": c, "source": "정책 원문"} for c in chunks]}
-    raise NotImplementedError(
-        "answer_with_rag 가 아직 구현되지 않았습니다. board_engine.py 의 이 함수에 "
-        "정책 RAG + LLM 답변을 채워 주세요."
-    )
+    # 지연 import — import 시점 네트워크/무거운 의존(chromadb 등) 로딩 금지 규칙 준수.
+    from standalone_board.core import BoardRagService, ExtractiveAnswerGenerator
+    from standalone_board.openai_adapter import OpenAIAnswerGenerator, has_openai_key
+
+    policy = (policy or "").strip()
+    if not policy:
+        # 근거 문서가 없으면 RAG 가 성립하지 않는다 → 예외 → answer_question 이 mock 폴백.
+        raise RuntimeError("정책 원문이 비어 있어 RAG 근거를 구성할 수 없습니다.")
+
+    # 1~2) 정책 → (캐시된) 검색 인덱스. 키 있으면 Chroma+OpenAI, 없으면 로컬 폴백.
+    has_key = has_openai_key()
+    index = _rag_index(policy, has_key)
+
+    # 3) 답변 생성기를 키 유무로 선택.
+    generator = OpenAIAnswerGenerator() if has_key else ExtractiveAnswerGenerator()
+
+    # 4) 검색→생성→평가 후 시임 계약({text, source})으로 매핑.
+    result = BoardRagService(index=index, generator=generator).answer(question, k=k)
+    sources = [
+        {"text": s.get("text", ""), "source": s.get("source", "")}
+        for s in (result.sources or [])
+    ]
+    if not sources:
+        # 검색이 관련 근거를 못 찾음 → 빈약한 '근거 없음' 답 대신 예외로 전파해
+        # answer_question 이 mock(항상 정책 문장 1개 이상 제시)으로 폴백하게 한다.
+        raise RuntimeError("정책에서 질문과 관련된 근거를 찾지 못했습니다.")
+    return {"answer": (result.answer or "").strip(), "sources": sources}
 
 
 # =====================================================================

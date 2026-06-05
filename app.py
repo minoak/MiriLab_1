@@ -4,7 +4,7 @@
 - 한글 폰트 설정 후 페이지 설정/타이틀을 그린다.
 - 사이드바에서 정책 선택·시민 수·데모 모드를 받고, 버튼 클릭 시 시뮬레이션을 실행한다.
 - 실행 결과(SimState)와 그 뷰모델(ViewModel)을 session_state 에 저장한다.
-- 본문은 6개 탭으로 구성되며, 각 탭은 해당 render_*_tab(view) 를 호출한다.
+- 본문은 7개 탭으로 구성되며, 각 탭은 해당 render_*_tab(view) 를 호출한다.
 
 주의: import 시점에는 네트워크/OpenAI 호출이 절대 일어나지 않는다.
 실제 호출은 '시뮬레이션 실행' 버튼을 눌렀을 때만 run_simulation 내부에서 발생한다.
@@ -34,6 +34,7 @@ from ui import (
     tab_chat,
     tab_improve,
     tab_board,
+    tab_minivillage,
 )
 
 
@@ -271,7 +272,7 @@ def _render_sidebar() -> None:
 
 
 # =====================================================================
-# 본문: 6개 탭
+# 본문: 7개 탭
 # =====================================================================
 def _render_body() -> None:
     """본문 탭들을 그린다. view 가 없으면 각 탭이 알아서 안내(st.info)한다."""
@@ -282,6 +283,7 @@ def _render_body() -> None:
         "SNS 채팅방",
         "정책 개선",
         "게시판",
+        "미리마을",
     ]
     tabs = st.tabs(tab_labels)
     view = st.session_state.get("view")
@@ -294,6 +296,7 @@ def _render_body() -> None:
         tab_chat.render_chat_tab,
         tab_improve.render_improve_tab,
         tab_board.render_board_tab,
+        tab_minivillage.render_minivillage_tab,
     ]
 
     for i, render_fn in enumerate(renderers):

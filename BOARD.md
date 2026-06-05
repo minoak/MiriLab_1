@@ -1,7 +1,9 @@
 # 정책 문의 게시판 — 개별 작업 가이드
 
 게시판(자동답변)은 **다른 탭·시뮬레이션과 분리돼 단독으로 작업**할 수 있게 정리돼 있다.
-API+RAG 통합은 **`board_engine.answer_with_rag()` 함수 하나만** 채우면 된다.
+RAG 통합은 **✅ 완료** — `board_engine.answer_with_rag()` 가 격리 패키지 `standalone_board`
+(검색→생성→평가)에 위임한다. 키가 있으면 Chroma + OpenAI 임베딩 의미검색 + Responses
+답변, 없으면 로컬 해시 검색 + 추출식으로 자동 폴백한다.
 
 ## 파일 구성
 
@@ -27,7 +29,8 @@ python _test_board.py
 
 ## API + RAG 붙이는 법
 
-`board_engine.py` 의 `answer_with_rag(policy, question, k)` 를 구현한다.
+`board_engine.py` 의 `answer_with_rag(policy, question, k)` 가 `standalone_board` 에 위임해
+**이미 구현돼 있다**. 아래는 그 반환 계약(다른 백엔드로 교체할 때 참고).
 
 **반환 계약** — 아래 dict 를 돌려주면 끝. 면책 문구·근거 표시·폴백은 이미 처리돼 있다.
 
@@ -38,13 +41,15 @@ python _test_board.py
 }
 ```
 
-권장 흐름:
-1. 정책 원문(`policy`)을 청크 분할 → 임베딩 → 벡터스토어 검색으로 관련 청크 `k`개.
-2. 검색 청크 + 질문을 LLM 에 넣어 답변 생성.
-   - 키 확인: `graph.llm.has_real_key()`
-   - 클라이언트/모델: `graph.llm.get_client()`, `graph.llm.MODEL`, `structured_call(...)` 재사용 가능
-   - ⚠️ openai·벡터스토어 import 는 **함수 안에서 지연 import**(import 시점 네트워크 호출 금지 규칙).
-3. 미구현 상태에서는 `NotImplementedError` 를 던진다 → 자동으로 mock 폴백(앱이 안 죽음).
+현재 구현(`standalone_board` 위임) 흐름:
+1. 정책 원문(`policy`)을 `chunk_document` 로 청크 분할 → `build_retrieval_index` 로 검색
+   인덱스(키 있으면 Chroma + OpenAI 임베딩, 없으면 로컬 해시 폴백). 같은 정책 재질문은
+   `board_engine._rag_index` 캐시로 임베딩을 1회만 한다.
+2. `BoardRagService.answer(question, k)` 로 검색 청크 + 질문을 답변 생성기에 넣어 답변 생성.
+   - 키 확인: `standalone_board.openai_adapter.has_openai_key()` (키리스면 추출식 폴백).
+   - ⚠️ openai·chromadb import 는 **함수 안에서 지연 import**(import 시점 네트워크 호출 금지 규칙).
+3. 실패(빈 정책·근거 0건·네트워크·LLM 오류)는 예외로 전파되어 자동 mock 폴백(앱이 안
+   죽음). `mode='rag'` 면 답변 앞에 ⚠️ 안내가 붙는다.
 
 ## 동작 모드 (`answer_question` 의 `mode`)
 

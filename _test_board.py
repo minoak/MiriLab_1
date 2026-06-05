@@ -68,23 +68,53 @@ def test_empty_question():
     print("ok  빈 질문 → 빈 답변")
 
 
-def test_rag_seam_raises():
-    raised = False
+def _force_keyless(fn):
+    """OpenAI 키 없는 경로(standalone 로컬 해시 + 추출식)를 강제로 타게 한다.
+
+    standalone has_openai_key() 는 'sk-your-key' 로 시작하면 False 를 반환하고,
+    openai_adapter 의 load_dotenv(override=False) 는 이미 설정된 환경변수를 덮지
+    않으므로, 이 센티넬을 미리 박아두면 .env 의 실제 키가 무시돼 네트워크 호출이
+    일어나지 않는다(단위 테스트 = 실 API 0).
+    """
+    saved = os.environ.get("OPENAI_API_KEY")
+    os.environ["OPENAI_API_KEY"] = "sk-your-key-board-test-keyless"
     try:
-        be.answer_with_rag(POLICY, "질문")
-    except NotImplementedError:
-        raised = True
-    assert raised, "answer_with_rag 는 미구현 상태에서 NotImplementedError 를 던져야 한다"
-    print("ok  answer_with_rag 미구현 시 NotImplementedError")
+        # 가드: 센티넬이 실제로 키리스를 강제하는지 단언한다. 누군가 load_dotenv 를
+        # override=True 로 바꿔 .env 실키가 새어들면 여기서 시끄럽게 실패한다(과금 차단).
+        from standalone_board.openai_adapter import has_openai_key
+        assert has_openai_key() is False, "키리스 센티넬 실패 — 테스트가 실 API 를 칠 위험"
+        return fn()
+    finally:
+        if saved is None:
+            os.environ.pop("OPENAI_API_KEY", None)
+        else:
+            os.environ["OPENAI_API_KEY"] = saved
 
 
-def test_rag_mode_fallback():
-    # rag 강제 → 미구현이므로 mock 으로 폴백하되, 사유(⚠️)를 앞에 덧붙인다.
-    res = be.answer_question(POLICY, "신청 방법 알려주세요", mode="rag")
-    assert res["answer"].startswith("⚠️"), "강제 rag 폴백은 안내 문구로 시작해야 한다"
-    assert res["mode"] == "mock"
-    assert res["answer"], "폴백 답변 본문이 있어야 한다"
-    print("ok  mode='rag' 미구현 → mock 폴백 + 안내")
+def test_rag_seam_returns_contract():
+    # 시임이 구현됨 → NotImplementedError 가 아니라 {answer, sources} 를 돌려준다.
+    res = _force_keyless(lambda: be.answer_with_rag(POLICY, "신청 서류는 무엇인가요?", k=4))
+    assert {"answer", "sources"} <= set(res)
+    assert isinstance(res["answer"], str) and res["answer"], "RAG 답변 본문이 있어야 한다"
+    assert isinstance(res["sources"], list) and res["sources"], "근거가 비면 안 된다"
+    # sources 는 시임 계약 {text, source} 모양으로 축약돼 있어야 한다.
+    assert all({"text", "source"} <= set(s) for s in res["sources"])
+    # 서류 질문 → 로컬 검색이 관련 근거(서류/계약서/통장)를 끌어와야 한다.
+    joined = " ".join(s.get("text", "") for s in res["sources"])
+    assert ("서류" in joined or "임대차계약서" in joined or "통장" in joined)
+    print("ok  answer_with_rag 구현 계약(키리스 로컬 폴백)")
+
+
+def test_rag_mode_runs_engine():
+    # rag 강제 → 시임이 구현됐으므로 실제 RAG 로 답한다(키리스면 로컬+추출식).
+    res = _force_keyless(
+        lambda: be.answer_question(POLICY, "신청 방법 알려주세요", mode="rag")
+    )
+    assert res["mode"] == "rag", "구현된 시임이므로 mode 는 'rag' 여야 한다"
+    assert res["answer"] and not res["answer"].startswith("⚠️"), \
+        "이제 미연결 안내(⚠️) 없이 실제 답변이 나와야 한다"
+    assert all({"text", "source"} <= set(s) for s in res["sources"])
+    print("ok  mode='rag' 실제 엔진 동작(키리스 로컬)")
 
 
 def test_auto_mode_default_mock():
@@ -121,8 +151,8 @@ def main():
     test_split_and_pick()
     test_answer_question_mock()
     test_empty_question()
-    test_rag_seam_raises()
-    test_rag_mode_fallback()
+    test_rag_seam_returns_contract()
+    test_rag_mode_runs_engine()
     test_auto_mode_default_mock()
     test_make_comments()
     print("\n전부 통과")
