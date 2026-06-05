@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 # Core LLM (>=2: 게시판 RAG 가 OpenAI Responses API 사용)
 openai>=2
+=======
+# Core LLM
+openai>=2.0.0
+>>>>>>> 740a98d076fc5e9021ac80ea286f72d1de3f9d95
 python-dotenv
 
 # Agent orchestration

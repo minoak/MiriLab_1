@@ -274,6 +274,9 @@ def _render_sidebar() -> None:
 # =====================================================================
 # 본문: 7개 탭
 # =====================================================================
+MAIN_TAB_KEY = "main_tab"
+
+
 def _render_body() -> None:
     """본문 탭들을 그린다. view 가 없으면 각 탭이 알아서 안내(st.info)한다."""
     tab_labels = [
@@ -285,10 +288,17 @@ def _render_body() -> None:
         "게시판",
         "미리마을",
     ]
-    tabs = st.tabs(tab_labels)
     view = st.session_state.get("view")
+    selected_tab = st.radio(
+        "결과 탭",
+        tab_labels,
+        key=MAIN_TAB_KEY,
+        horizontal=True,
+        label_visibility="collapsed",
+    )
 
     # 각 탭과 렌더 함수를 1:1로 매핑한다(라벨 순서와 동일).
+<<<<<<< HEAD
     renderers = [
         tab_input.render_input_tab,
         tab_dashboard.render_dashboard_tab,
@@ -298,13 +308,23 @@ def _render_body() -> None:
         tab_board.render_board_tab,
         tab_minivillage.render_minivillage_tab,
     ]
+=======
+    renderers = {
+        "정책 입력": tab_input.render_input_tab,
+        "시민 반응": tab_dashboard.render_dashboard_tab,
+        "정책 인생극장": tab_village.render_village_tab,
+        "SNS 채팅방": tab_chat.render_chat_tab,
+        "전파 그래프": tab_network.render_network_tab,
+        "개선 제안": tab_improve.render_improve_tab,
+        "AB 테스트": tab_abtest.render_abtest_tab,
+        "게시판": tab_board.render_board_tab,
+    }
+>>>>>>> 740a98d076fc5e9021ac80ea286f72d1de3f9d95
 
-    for i, render_fn in enumerate(renderers):
-        with tabs[i]:
-            try:
-                render_fn(view)
-            except Exception as e:  # 한 탭이 죽어도 다른 탭은 살아 있도록 격리.
-                st.exception(e)
+    try:
+        renderers[selected_tab](view)
+    except Exception as e:  # 한 화면이 죽어도 앱이 살아 있도록 격리.
+        st.exception(e)
 
 
 # =====================================================================

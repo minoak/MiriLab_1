@@ -6,7 +6,10 @@ Imports are lazy so the pure board package can run without an API key.
 
 from __future__ import annotations
 
+<<<<<<< HEAD
 import logging
+=======
+>>>>>>> 740a98d076fc5e9021ac80ea286f72d1de3f9d95
 import os
 from typing import Callable, Iterable
 
@@ -15,10 +18,14 @@ from dotenv import load_dotenv
 from .core import ChromaVectorIndex, Embedder, PolicyChunk, SearchHit, SearchIndex, VectorIndex
 
 
+<<<<<<< HEAD
 # override=False 필수: 회귀 테스트가 'sk-your-key' 센티넬을 환경변수에 미리 박아
 # 키리스를 강제한다. override=True 로 바꾸면 .env 의 실키가 센티넬을 덮어 키리스
 # 테스트가 실 OpenAI API 를 치고 과금된다 — 절대 True 로 바꾸지 말 것.
 load_dotenv(override=False)
+=======
+load_dotenv()
+>>>>>>> 740a98d076fc5e9021ac80ea286f72d1de3f9d95
 
 CHAT_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
 EMBEDDING_MODEL = os.getenv("OPENAI_EMBEDDING_MODEL", "text-embedding-3-small")
@@ -135,12 +142,17 @@ def build_retrieval_index(
             index = ChromaVectorIndex(embedder=embedder)
             index.add_chunks(items)
             return index
+<<<<<<< HEAD
         except Exception as exc:
             # 키/쿼터/Chroma 문제로 의미검색 빌드 실패 → 로컬 해시 검색으로 폴백한다.
             # 앱은 살리되, 무엇이 실패했는지 알 수 있게 경고만 남긴다(키 값은 안 찍음).
             logging.getLogger(__name__).warning(
                 "OpenAI/Chroma 인덱스 빌드 실패 → 로컬 해시 검색 폴백: %s", exc
             )
+=======
+        except Exception:
+            pass
+>>>>>>> 740a98d076fc5e9021ac80ea286f72d1de3f9d95
 
     index = VectorIndex()
     index.add_chunks(items)
