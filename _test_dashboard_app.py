@@ -28,6 +28,14 @@ def all_text(at):
     return "\n".join(out)
 
 
+def select_main_tab(at, label):
+    for radio in at.radio:
+        if radio.key == "main_tab":
+            radio.set_value(label)
+            return
+    raise AssertionError("상태 저장형 메인 탭 선택 위젯을 찾지 못함")
+
+
 FOOTER = "불만도는 높을수록 부정 신호"
 
 at = AppTest.from_file("app.py", default_timeout=60)
@@ -43,6 +51,10 @@ for b in at.button:
         b.click()
 at.run()
 assert not at.exception, f"데모 시뮬 예외: {at.exception}"
+
+select_main_tab(at, "시민 반응")
+at.run()
+assert not at.exception, f"시민 반응 탭 선택 예외: {at.exception}"
 
 # 1) 컴포넌트 너머 푸터까지 렌더됐나(= 표 컴포넌트가 예외 없이 그려졌다는 증거)
 assert FOOTER in all_text(at), "대시보드 렌더가 표 컴포넌트 이후 푸터까지 도달 못함"

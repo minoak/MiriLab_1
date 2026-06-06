@@ -21,12 +21,16 @@ def main():
         fails.append(f"예외 발생: {[str(e.value)[:120] for e in at.exception]}")
     print(f"[{'PASS' if not at.exception else 'FAIL'}] 초기 렌더 예외 0")
 
-    # 2) '미리마을' 탭 라벨 존재 (7탭 구성)
-    labels = [t.label for t in at.tabs]
+    # 2) '미리마을' 메인 화면 선택지 존재 (7개 결과 화면 구성)
+    labels = []
+    for radio in at.radio:
+        if radio.key == "main_tab":
+            labels = list(radio.options)
+            break
     has_tab = "미리마을" in labels
     if not has_tab:
-        fails.append(f"미리마을 탭 라벨 없음. labels={labels}")
-    print(f"[{'PASS' if has_tab else 'FAIL'}] 미리마을 탭 라벨 존재 (labels={labels})")
+        fails.append(f"미리마을 화면 선택지 없음. labels={labels}")
+    print(f"[{'PASS' if has_tab else 'FAIL'}] 미리마을 화면 선택지 존재 (labels={labels})")
 
     print()
     if fails:

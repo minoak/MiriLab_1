@@ -157,13 +157,13 @@ def render_abtest_section(view) -> None:
     # '개선안으로 다시 채우기' — 편집한 걸 버리고 쉬운 글로 리셋(위젯 생성 전에 처리).
     cols_top = st.columns([1, 1])
     with cols_top[0]:
-        if st.button("↺ AI 수정안으로 다시 채우기", use_container_width=True,
+        if st.button("↺ AI 수정안으로 다시 채우기", width="stretch",
                      disabled=not easy_text,
                      help="AI가 만든 수정안으로 수정안 칸을 초기화합니다."):
             st.session_state[_CANDIDATE_KEY] = easy_text or base_policy
             rerun_fragment()
     with cols_top[1]:
-        if st.button("원문으로 채우기", use_container_width=True,
+        if st.button("원문으로 채우기", width="stretch",
                      disabled=not base_policy,
                      help="원문 정책으로 수정안 칸을 되돌립니다."):
             st.session_state[_CANDIDATE_KEY] = base_policy
@@ -184,7 +184,7 @@ def render_abtest_section(view) -> None:
     with col_run:
         run_clicked = st.button(
             "수정안으로 비교", type="primary",
-            use_container_width=True, key="abtest_run_btn",
+            width="stretch", key="abtest_run_btn",
         )
 
     if run_clicked:
@@ -238,7 +238,7 @@ def _render_comparison(view_a, view_b) -> None:
         )
         for label, key, _ in _KEY_METRICS:
             st.plotly_chart(gauge(_num(ma.get(key)), label),
-                            use_container_width=True, key=f"ab_a_{key}")
+                            width="stretch", key=f"ab_a_{key}")
     with col_b:
         st.markdown(
             "<div style='text-align:center;font-weight:700;color:#27AE60;'>"
@@ -247,7 +247,7 @@ def _render_comparison(view_a, view_b) -> None:
         )
         for label, key, _ in _KEY_METRICS:
             st.plotly_chart(gauge(_num(mb.get(key)), label),
-                            use_container_width=True, key=f"ab_b_{key}")
+                            width="stretch", key=f"ab_b_{key}")
 
     # ── 변화(Δ) 요약 ──
     st.markdown("#### 변화 요약")

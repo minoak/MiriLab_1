@@ -167,10 +167,17 @@ def _metric_rows(metrics: dict) -> list[dict]:
         "reference_similarity": "기준 정답을 입력했을 때 답변과의 토큰 유사도",
         "verdict": "학습/검수용 내부 상태",
     }
+    def display_value(value) -> str:
+        if value is None:
+            return "-"
+        if isinstance(value, float):
+            return f"{value:.4f}".rstrip("0").rstrip(".")
+        return str(value)
+
     return [
         {
             "지표": labels[key],
-            "값": "-" if value is None else value,
+            "값": display_value(value),
             "의미": descriptions[key],
         }
         for key, value in metrics.items()
