@@ -9,6 +9,7 @@
 핵심 계약(state.py):
 - Persona: id,name,description,sources,demographics,persona_text,signals,meta
 - Reaction: persona_id,stance('support'|'oppose'|'mixed'),text,evidence,scores(5축),actions,grounded
+            + behavior_class/behavior_tag/behavior_text (일탈 행동 축, DESIGN §9)
 - Interaction: round,from_id,to_id,text,stance_shift
 - edges: {'from','to','round'}
 - metrics: 정책수용도/신청의향지수/사회혼란도/axis_means/세그먼트 등
@@ -189,6 +190,7 @@ def _reactions() -> list:
         "scores": _scores(understanding=22, benefit=8, intent=5, dissatisfaction=35, shareability=18),
         "actions": ["주민센터 문의", "포기"],
         "grounded": True,
+        "behavior_class": "inaction", "behavior_tag": "", "behavior_text": "",
     })
 
     # p02 이준호(28, 자취 직장인) — 핵심 대상자. support, intent 매우 높음.
@@ -201,6 +203,7 @@ def _reactions() -> list:
         "scores": _scores(understanding=88, benefit=85, intent=90, dissatisfaction=12, shareability=72),
         "actions": ["신청 시도", "친구 공유", "복지로 검색"],
         "grounded": True,
+        "behavior_class": "comply", "behavior_tag": "", "behavior_text": "",
     })
 
     # p03 박상철(35, 자영업) — 나이 초과·자가 아님이지만 본인 비대상. oppose(형평성 불만).
@@ -213,6 +216,11 @@ def _reactions() -> list:
         "scores": _scores(understanding=58, benefit=15, intent=10, dissatisfaction=78, shareability=40),
         "actions": ["불만 토로", "상인회 공유"],
         "grounded": True,
+        # 일탈 행동 축(DESIGN §9): 불만의 행동화 — 형평성 박탈감이 집단 민원으로.
+        "behavior_class": "complain",
+        "behavior_tag": "상인회 집단 민원",
+        "behavior_text": "상인회 단톡방에 글 올려서 구청에 단체로 민원 넣자고 할 참이에요. "
+                         "맨날 청년만 챙기는 게 말이 됩니까.",
     })
 
     # p04 정미영(42, 워킹맘) — 본인 비대상이나 정보 허브. mixed, shareability 매우 높음.
@@ -225,6 +233,7 @@ def _reactions() -> list:
         "scores": _scores(understanding=80, benefit=20, intent=15, dissatisfaction=22, shareability=92),
         "actions": ["맘카페 공유", "단톡방 공유", "조카에게 알림"],
         "grounded": True,
+        "behavior_class": "comply", "behavior_tag": "", "behavior_text": "",
     })
 
     # p05 최유진(19, 대학생 기숙사) — 부모와 별거·무주택. support지만 소득·계약 조건 불확실.
@@ -237,6 +246,11 @@ def _reactions() -> list:
         "scores": _scores(understanding=70, benefit=55, intent=60, dissatisfaction=30, shareability=85),
         "actions": ["친구 공유", "조건 확인", "추후 신청 고려"],
         "grounded": True,
+        # 일탈 행동 축(DESIGN §9): 합법적 틈새 — 요건을 '만들어서' 맞추는 경계 행동.
+        "behavior_class": "workaround",
+        "behavior_tag": "계약 형식 맞추기",
+        "behavior_text": "기숙사 나와서 친구랑 방을 같이 구할 때 계약서를 제 명의로 쓰면 "
+                         "요건이 맞지 않을까, 그 생각은 솔직히 해봤어요.",
     })
 
     # p06 한영수(60, 농업) — 비대상·온라인 약함. oppose/mixed. understanding 낮음.
@@ -249,6 +263,7 @@ def _reactions() -> list:
         "scores": _scores(understanding=33, benefit=12, intent=8, dissatisfaction=48, shareability=25),
         "actions": ["이장에게 문의", "손주에게 알림"],
         "grounded": True,
+        "behavior_class": "inaction", "behavior_tag": "", "behavior_text": "",
     })
 
     # p07 송경자(54, 주부) — 자녀(청년) 대신 챙김. mixed→support 경향, 공유 활발.
@@ -261,6 +276,7 @@ def _reactions() -> list:
         "scores": _scores(understanding=68, benefit=58, intent=65, dissatisfaction=18, shareability=80),
         "actions": ["자녀 대신 신청 준비", "가족방 공유", "서류 확인"],
         "grounded": True,
+        "behavior_class": "comply", "behavior_tag": "", "behavior_text": "",
     })
 
     # p08 오태경(33, 고소득 IT) — 소득 초과로 비대상. oppose(형평성·세금 논리), 의견 적극.
@@ -273,6 +289,11 @@ def _reactions() -> list:
         "scores": _scores(understanding=90, benefit=10, intent=5, dissatisfaction=70, shareability=65),
         "actions": ["온라인 비판 댓글", "지인 토론"],
         "grounded": True,
+        # 일탈 행동 축(DESIGN §9): 불만의 행동화 — 설계 허점 공론화.
+        "behavior_class": "complain",
+        "behavior_tag": "온라인 공론화",
+        "behavior_text": "설계 허점을 정리해서 커뮤니티에 올릴 겁니다. 소득 기준 경계에서 "
+                         "역전이 생기는 걸 사람들이 알아야죠.",
     })
 
     # p09 윤말순(68, 어르신) — 청년 정책 비대상. mixed, 이해도 매우 낮음.
@@ -285,6 +306,7 @@ def _reactions() -> list:
         "scores": _scores(understanding=25, benefit=8, intent=5, dissatisfaction=32, shareability=20),
         "actions": ["경로당에서 물어봄", "포기"],
         "grounded": True,
+        "behavior_class": "inaction", "behavior_tag": "", "behavior_text": "",
     })
 
     # p10 강도현(31, 신혼·월세) — 무주택 부부지만 '부모와 별도 거주 청년' 요건 애매. mixed/support.
@@ -297,6 +319,7 @@ def _reactions() -> list:
         "scores": _scores(understanding=62, benefit=50, intent=58, dissatisfaction=35, shareability=55),
         "actions": ["행정복지센터 문의", "조건 확인", "아내와 상의"],
         "grounded": True,
+        "behavior_class": "comply", "behavior_tag": "", "behavior_text": "",
     })
 
     # p11 임수빈(26, 취준생·부모 동거) — 소득 없지만 '부모와 별도 거주' 요건에 막힘. oppose(좌절).
@@ -309,6 +332,12 @@ def _reactions() -> list:
         "scores": _scores(understanding=82, benefit=18, intent=20, dissatisfaction=75, shareability=58),
         "actions": ["커뮤니티에 불만 글", "다른 청년 지원 검색"],
         "grounded": True,
+        # 일탈 행동 축(DESIGN §9): 부정수급 시도 의향 — '부모와 별거' 요건을 위장 전입으로
+        # 우회할까 하는 속내(의향 수준의 시나리오 — 행동 예측이 아님).
+        "behavior_class": "exploit",
+        "behavior_tag": "위장 전입 검토",
+        "behavior_text": "솔직히 친구 자취방에 전입신고만 옮겨 둘까 생각도 했어요. "
+                         "부모랑 산다고 월 20만 원을 못 받는 게 더 이상하잖아요.",
     })
 
     # p12 조병국(49, 일용직·고시원) — 비대상·정보 소외·연결망 빈약. mixed, 금방 포기 경향.
@@ -321,6 +350,7 @@ def _reactions() -> list:
         "scores": _scores(understanding=38, benefit=15, intent=10, dissatisfaction=55, shareability=12),
         "actions": ["포기"],
         "grounded": True,
+        "behavior_class": "inaction", "behavior_tag": "", "behavior_text": "",
     })
 
     return R
@@ -446,6 +476,15 @@ def _metrics(reactions: list, personas: list) -> dict:
         },
     }
 
+    # 일탈 행동 분포(DESIGN §9) — 집계노드(graph.nodes)와 동일 키/규칙('' 미측정 제외).
+    behavior_counts: dict = {}
+    for r in reactions:
+        bc = str(r.get("behavior_class") or "").strip()
+        if bc:
+            behavior_counts[bc] = behavior_counts.get(bc, 0) + 1
+    measured = sum(behavior_counts.values())
+    n_deviant = behavior_counts.get("workaround", 0) + behavior_counts.get("exploit", 0)
+
     return {
         # 한글 대표 지표 3종(개요 요구 키)
         "정책수용도": clamp100(accept),
@@ -457,6 +496,10 @@ def _metrics(reactions: list, personas: list) -> dict:
         "stance_dist": stance_dist,
         # 세그먼트 분석
         "segments": segments,
+        # 일탈 행동 축(DESIGN §9)
+        "behavior_counts": behavior_counts,
+        "deviance_rate": round((n_deviant / measured) if measured else 0.0, 3),
+        "complaint_rate": round((behavior_counts.get("complain", 0) / measured) if measured else 0.0, 3),
         # 부가 메타
         "n": n,
         "polarization": round(polarization, 2),
@@ -470,7 +513,8 @@ def _improvements() -> dict:
     """수정안(개선 반영 정책) + 정책 개선 제안.
 
     easy_text 키는 계약상 유지하되 의미는 '쉬운 글'이 아니라 '개선안을 반영해 다시 쓴
-    정책 수정안'이다(쉬운글 변환 폐지). 정책 개선 탭 A/B 비교의 '수정안' 후보로 쓰인다.
+    정책 수정안'이다(쉬운글 변환 폐지). 종합 리포트 5절(수정안 전문)의 재료로 쓰인다
+    (A/B 비교는 폐지 — LLM 비결정성 탓에 델타가 노이즈와 구분 안 됨).
     """
     easy_text = (
         "[청년 월세 한시 특별지원 — 수정안]\n\n"
@@ -498,6 +542,36 @@ def _improvements() -> dict:
         "지역 격차를 줄인다(한영수·조병국 같은 접근성 문제 보완).",
     ]
     return {"easy_text": easy_text, "policy_fixes": policy_fixes}
+
+
+# ---------------------------------------------------------------------------
+# 일탈 행동 캐스팅(casting) — graph.nodes.run_casting 과 동일 형태(DESIGN §9).
+# 발현(manifest) 인물은 반응(_reactions)의 behavior 와 일관되게 손으로 맞춘다.
+# ---------------------------------------------------------------------------
+def _casting(keep_ids: set) -> dict:
+    """캐스팅 결과 — '왜 이 사람이 일탈 성향인가'의 근거(rationale) 포함."""
+    members = {
+        # 발현(임계값 60 이상): 처지에서 나오는 근거를 명시.
+        "p03": {"score": 68, "tag": "상인회 집단 민원",
+                "rationale": "매출 감소 압박 + '늘 대상에서 빠진다'는 누적 박탈감 — 상인회라는 행동 채널 보유",
+                "manifest": True},
+        "p05": {"score": 62, "tag": "계약 형식 맞추기",
+                "rationale": "실질 대상이지만 기숙사라 계약서 요건과 어긋남 — 요건을 '만들' 유인 존재",
+                "manifest": True},
+        "p08": {"score": 64, "tag": "온라인 공론화",
+                "rationale": "설계 허점을 따지는 성향 + 온라인 발화력 — 불만을 공론화로 옮길 채널 보유",
+                "manifest": True},
+        "p11": {"score": 78, "tag": "위장 전입 검토",
+                "rationale": "소득 0 인데 '부모 동거' 요건만으로 배제 — 요건과 실질의 어긋남이 가장 큰 인물",
+                "manifest": True},
+        # 비발현 예시 일부(점수만 — 자연스러운 분포 시연용).
+        "p02": {"score": 18, "tag": "", "rationale": "정공법으로 충분히 받는 핵심 대상자", "manifest": False},
+        "p12": {"score": 35, "tag": "", "rationale": "절차 피로로 일탈보다 포기를 택하는 처지", "manifest": False},
+    }
+    return {
+        "threshold": 60,
+        "members": {pid: m for pid, m in members.items() if pid in keep_ids},
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -743,6 +817,7 @@ def sample_simstate(policy: str | None = None, n: int = 12) -> dict:
     improvements = _improvements()
     summary = _summary()
     village = sample_village(personas, policy)  # 미리 마을(공간 트리) 데모 데이터
+    casting = _casting(keep_ids)                # 일탈 행동 캐스팅(DESIGN §9)
 
     return {
         "policy": policy,
@@ -756,4 +831,5 @@ def sample_simstate(policy: str | None = None, n: int = 12) -> dict:
         "improvements": improvements,
         "edges": edges,
         "village": village,
+        "casting": casting,
     }

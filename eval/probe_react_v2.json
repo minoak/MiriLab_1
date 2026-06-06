@@ -1,0 +1,2162 @@
+{
+ "design": "A=현행(뉴스 프레임) vs B=인물독해+발표프레임+믿음자유 (설문·스키마 동일, 캐스팅 생략)",
+ "model_note": "react temperature 1.0 (제품 동일), 독해 0.7",
+ "personas": [
+  {
+   "id": "3d49b5e5b9664958bca3dd8f5eebcc99",
+   "name": "김은서",
+   "age": 26
+  },
+  {
+   "id": "6ba9217998384a8f8b1fac54e907d9cd",
+   "name": "신민재",
+   "age": 24
+  },
+  {
+   "id": "72405b57dbd34325b141f50b432ab696",
+   "name": "이준영",
+   "age": 41
+  },
+  {
+   "id": "9eedde7feb8f4849a5c9fa13a2970a6e",
+   "name": "조유정",
+   "age": 31
+  },
+  {
+   "id": "e89543a75aef40d28744a681939ea81c",
+   "name": "박성인",
+   "age": 46
+  },
+  {
+   "id": "f6d719eb00a642c9affdd76e851284a7",
+   "name": "정명숙",
+   "age": 60
+  },
+  {
+   "id": "0eab51c0a392443599c2af8b8c7147f9",
+   "name": "장원주",
+   "age": 66
+  },
+  {
+   "id": "31398b9c870c48958b913fe31621f19c",
+   "name": "심석현",
+   "age": 26
+  },
+  {
+   "id": "72197f63ec80468bb33f34165fe349d3",
+   "name": "장도형",
+   "age": 54
+  },
+  {
+   "id": "825fe1ad2fb4429a900b27cbab6e16ae",
+   "name": "천명준",
+   "age": 19
+  },
+  {
+   "id": "67e25537ca064a3fa889c21ad4c8fd2f",
+   "name": "서현빈",
+   "age": 21
+  },
+  {
+   "id": "a930366678d642cd89794a2239c37301",
+   "name": "신선옥",
+   "age": 60
+  },
+  {
+   "id": "84127925a1414b3d953dc525ee2e47df",
+   "name": "조순점",
+   "age": 77
+  },
+  {
+   "id": "d67dfc42d07c41189d3328b9dac3729e",
+   "name": "김춘영",
+   "age": 55
+  },
+  {
+   "id": "6d8a8fdd04e34aefb96be1f2581d8dda",
+   "name": "강현일",
+   "age": 53
+  },
+  {
+   "id": "a436b26fcb24455587621f6263f82dbc",
+   "name": "반하늘",
+   "age": 33
+  },
+  {
+   "id": "86acfdcefc8744ec9fddefb57f4c148f",
+   "name": "이영희",
+   "age": 65
+  },
+  {
+   "id": "fc200827d7524330970cef12b19c33cb",
+   "name": "이현근",
+   "age": 47
+  },
+  {
+   "id": "7c04c2c157694de19db4215bb1b31a35",
+   "name": "박지선",
+   "age": 34
+  },
+  {
+   "id": "40e61b7943ae413b95723d237dbeb28d",
+   "name": "함재훈",
+   "age": 63
+  },
+  {
+   "id": "a3f8d20cbd584c27b99e6250f15b16d8",
+   "name": "오성철",
+   "age": 50
+  },
+  {
+   "id": "aad81ac85ed94226832513545969a56f",
+   "name": "이수현",
+   "age": 70
+  },
+  {
+   "id": "41e0f809f6984ee6a40e18654ea984be",
+   "name": "박보경",
+   "age": 23
+  },
+  {
+   "id": "92628b222daa4ee383f49c6a774ddbac",
+   "name": "배태완",
+   "age": 31
+  }
+ ],
+ "readings": {
+  "3d49b5e5b9664958bca3dd8f5eebcc99": "김은서 씨는 경북 예천에서 주방 보조로 일하며, 자신만의 브런치 카페를 차리는 꿈을 가진 26세 여성입니다. 일상에서 지역 농산물을 활용한 요리를 하면서도, 예술적인 플레이팅에 대한 열망을 가지고 있습니다. 남편과 함께 신혼 생활을 즐기며, 주변의 따뜻한 이웃 문화 속에서도 자신의 독립적인 공간과 시간을 중시합니다. 주말에는 인테리어 유튜브 영상을 보며 집을 꾸미는 데 시간을 보내고, 친구들과의 외식에서는 사진 촬영을 즐깁니다. 격렬한 운동보다는 여유로운 휴식을 선호하며, 여행을 통해 새로운 요리 기법을 배우는 것을 즐깁니다. 음식에 대한 취향은 한식을 선호하지만, 디저트 카페의 신메뉴에도 관심이 많아 플레이팅을 연구하는 모습이 흥미롭습니다.",
+  "6ba9217998384a8f8b1fac54e907d9cd": "신민재는 24세의 사무 보조원으로, 현재 경기도 용인에서 부모님과 함께 살고 있는 낙천적이고 사교적인 청년입니다. 농림어업을 전공하고 있으며, 그 전문성을 살려 프리미엄 펫 푸드 브랜드 창업을 꿈꾸고 있습니다. 그는 직장에서 엑셀 시트를 정리하고 재고를 관리하는 일에 매진하면서도, 사람들과의 소통을 즐기고 까다로운 거래처 담당자와도 쉽게 친해지는 능력을 갖추고 있습니다. 주말에는 친구들과 산책하거나 디저트 카페를 찾아다니며 여유를 즐기고, 복잡한 도시를 벗어나 자연을 만끽하는 여행을 좋아합니다. 신민재는 따뜻한 집밥과 가족과의 소소한 일상 속에서 안정감을 느끼며, 앞으로의 목표를 향해 실무 능력을 쌓아가는 중입니다.",
+  "72405b57dbd34325b141f50b432ab696": "이준영 씨는 41세의 자동차공학 기술자로 대전 대덕구에서 가족과 함께 안정된 삶을 살고 있습니다. 그는 꼼꼼하고 완벽주의적인 성향을 지니고 있으며, 직장에서는 동료들과 유쾌한 분위기를 만들면서도 정밀한 데이터 검증과 보고서 작성에 집착합니다. 가족에 대한 책임감이 강하고 자녀의 교육을 체계적으로 계획하는 모습을 보이지만, 때로는 높은 기준을 아이들에게 강요하여 아내와의 작은 갈등을 겪기도 합니다. 주말에는 가족과 드라이브를 즐기며 자연을 감상하고, 동네 사우나에서 스트레스를 푸는 것을 좋아합니다. 그는 차세대 모빌리티 프로젝트의 팀장이라는 꿈을 가지고 있으며, 개인의 성과뿐만 아니라 팀원들의 효율성을 높이는 데 큰 의미를 두고 있습니다. 평소에는 잔잔한 재즈 음악을 즐기고, 보드게임 카페에서 친구들과 치열한 전략 게임을 하며 숨겨진 승부욕을 발산하기도 합니다.",
+  "9eedde7feb8f4849a5c9fa13a2970a6e": "조유정 씨는 31세의 미혼 여성으로, 경기 고양시 일산서구에서 인사 및 노무 사무원으로 일하고 있습니다. 그녀는 안정적인 일상과 반려견과의 조용한 삶을 중시하며, 세심하고 내성적인 성향을 가지고 있습니다. 매달 급여일에는 꼼꼼하게 엑셀 시트를 확인하고, 직원들의 고충 상담 시 상대방의 감정을 잘 이해하며 다독이는 능력이 돋보입니다. 갈등을 피하려는 성향 덕분에 원만한 대인관계를 유지하지만, 자신의 실수에는 강박적으로 반응하는 경향이 있습니다. 주말에는 조용한 사우나에서 반신욕을 즐기거나, 일본 드라마를 보며 긴장을 풀고, 가끔은 미술관에서 조용한 전시를 감상하며 마음을 정리합니다. 그녀는 직장에서의 안정적인 환경을 선호하며, 대체 불가능한 실무자로 자리 잡고 싶어 합니다.",
+  "e89543a75aef40d28744a681939ea81c": "박성인 씨는 46세의 경상남도 사천시에 거주하는 표백기 조작원으로, 20년간의 경력을 가지고 있습니다. 그는 겉으로는 무뚝뚝해 보이지만, 가족과 이웃에 대한 따뜻한 정을 지니고 있습니다. 특히 자녀의 교육을 위해 성실히 일하며, 아내의 미세한 감정 변화도 잘 캐치하는 세심함을 가지고 있습니다. 주말에는 친구들과 소주를 즐기거나 아내와 함께 고즈넉한 유적지를 거닐며 옛 이야기에 젖어드는 시간을 소중히 여기고, 운동은 격한 것보다는 느긋한 산책을 선호합니다. 복잡한 서류 작업에는 부담을 느끼지만, 현장에서의 감각은 매우 뛰어나며, 은퇴 후에는 소박한 삶을 꿈꾸고 있습니다.",
+  "f6d719eb00a642c9affdd76e851284a7": "정명숙 씨는 60세의 전업주부로, 경상남도 김해에서 남편과 함께 살아가고 있습니다. 평생 배움을 멈추지 않고, 요즘은 유튜브를 통해 다양한 요리법을 배우며 살림을 잘 꾸려 나가는 모습이 인상적입니다. 그녀는 건강한 노후를 위해 매일 조금씩 걷기를 실천하고, 가족과의 소중한 시간을 중요시합니다. 고즈넉한 길에서의 산책과 트로트 음악을 즐기는 한편, 가족 여행을 통해 마음의 평온을 찾으려 노력합니다. 소소한 일상 속에서 작은 행복을 발견하며, 지역 특산물에 관심을 가지는 등 세상을 따뜻하게 바라보는 시각을 가지고 있습니다.",
+  "0eab51c0a392443599c2af8b8c7147f9": "장원주 씨는 66세의 간호사로, 서울 동작구에서 가족과 함께 살며 이타적인 삶을 지향합니다. 평소에는 환자의 작은 변화도 놓치지 않는 세심함과 꼼꼼함으로 동료들에게 신뢰받고 있으며, 환자와의 소통을 통해 실질적인 도움을 주는 것에 큰 보람을 느끼고 있습니다. 여가 시간에는 바둑을 두며 마음을 가라앉히고, 홀로 산행을 즐기며 자연의 변화를 감상하는 것을 좋아합니다. 그에게 있어 독서는 세상의 다양한 관점을 탐구하는 소중한 시간이며, 매일 아침 보라매공원을 걷는 일상은 그에게 내면의 평화를 가져다줍니다. 가족과 함께하는 소소한 외식이나 여유로운 식사도 장원주 씨에게 중요한 행복의 한 부분입니다.",
+  "31398b9c870c48958b913fe31621f19c": "심석현 씨는 26세의 차분하고 성실한 남자로, 서울 용산구에서 혼자 거주하며 소매업 사무 보조로 일하고 있습니다. 그는 재고 관리와 엑셀 작업에 능숙하고, 갑작스러운 문제에도 침착하게 대응하는 성격을 가지고 있습니다. 평소에는 3쿠션 당구와 테크 영상 시청을 즐기며, 일주일에 한 번은 배달 치킨으로 소소한 보상을 받는 편입니다. 가족들과의 유대가 깊고, 어린 시절부터 변해가는 동네를 지켜보며 조용한 삶을 선호하게 됐습니다. 여행은 강원도 속초의 조용한 리조트를 좋아하고, 매일의 성실함을 통해 직장에서 신뢰를 쌓아가는 목표를 가지고 있습니다.",
+  "72197f63ec80468bb33f34165fe349d3": "장도형 씨는 54세의 충청남도 아산시에 살고 있는 가장으로, 은퇴 후의 여유로운 삶을 즐기고 있습니다. 그는 공학적 재능을 바탕으로 집안의 수리 작업을 수행하며, 가끔은 지인들의 리모델링 요청에도 응답해 소소한 성취감을 느낍니다. 주말 저녁에는 유튜브로 야구 경기를 보며 가족과의 시간을 소중히 여기고, 혼자서 차를 몰고 다니며 지역의 숨은 맛집을 찾아다니는 것을 즐깁니다. 평소에는 다소 무뚝뚝하지만, 가족이 필요할 때는 꼼꼼하게 집안 일을 챙기며, 투박한 한식과 함께 하는 소박한 일상을 통해 안정감을 추구합니다.",
+  "825fe1ad2fb4429a900b27cbab6e16ae": "천명준 씨는 서울 양천구 목동에서 자란 19세의 남성으로, 현재는 게임 컨셉 아티스트를 꿈꾸며 디지털 드로잉에 몰두하고 있습니다. 그는 부모님의 기대 속에서 자라며 갈등을 겪고 있지만, 자신의 감성을 표현하기 위해 끊임없이 노력하고 있습니다. 완벽주의적인 성향으로, 작업의 완성도를 높이기 위해 선 하나도 놓치지 않으려는 집착을 보이고, 주말에는 친구들과의 산책을 통해 자연을 즐기며 영감을 얻습니다. 요즘 그는 가상 세계를 세밀하게 구축하는 데 집중하며, 자신만의 상상력을 현실로 만들기 위해 끊임없이 탐구하고 있습니다.",
+  "67e25537ca064a3fa889c21ad4c8fd2f": "서현빈 씨는 21세의 남성으로, 현재 육군에서 병사로 복무 중입니다. 경기 고양시 일산서구에서 자라난 그는 정돈된 환경을 중시하며, 꼼꼼하고 계획적인 성향을 가지고 있지만 내면에는 불안함이 존재합니다. 군 생활 중에는 통신 장비의 문제를 잘 해결하는 능력을 보이지만, 갑작스러운 변화에 약간의 당황함을 드러내기도 합니다. 전역 후에는 안정적인 공기업 기술직에 입사해 평범한 일상을 꿈꾸고 있으며, 친구들과의 조용한 시간과 유튜브 영상 시청을 통해 스트레스를 풀고 있습니다. 그는 효율적인 동선과 예약을 중시하는 성향 덕분에 여행 계획을 세우는 데도 강박적인 면이 있으며, 가족과의 저녁 시간을 소중히 여깁니다.",
+  "a930366678d642cd89794a2239c37301": "신선옥 씨는 60세의 여성으로, 경상북도 예천군에서 홀로 지내며 자연과 사진을 사랑하는 사람입니다. 사별 후 적적함을 느끼지만, 손주들을 위해 음식을 정성껏 준비하는 할머니로서의 삶에 기쁨을 느끼고 있습니다. 정식 직업은 없지만, 베란다에서 고추와 상추를 기르며 이웃과 나누는 작은 농사꾼이며, 주민센터 사진 동호회에서 활동하며 마을의 아름다움을 기록하는 아마추어 사진가로 알려져 있습니다. 늦은 나이에 문해 교실을 통해 글자를 익히고, 최신 스마트폰 기능도 빠르게 습득한 그녀는 매일 산책하며 계절의 변화를 관찰하고, 유튜브로 여행 영상을 보며 새로운 세상을 꿈꾸기도 합니다. 소소한 일상 속에서 배움의 즐거움을 찾으며, 가족과의 소중한 시간을 보내는 그녀는 자신의 사진들을 모아 앨범을 만들고 싶어하는 따뜻한 마음을 가진 사람입니다.",
+  "84127925a1414b3d953dc525ee2e47df": "조순점 씨는 77세의 어르신으로, 경상남도 거창에서 부모님과 함께 살며 소박한 행복을 찾고 있는 분입니다. 일상 속에서 이웃들과의 따뜻한 정을 나누며, 가끔씩 소소한 갈등을 중재하는 역할을 자처하고 있습니다. 임영웅의 노래를 사랑하고, 베란다에서 기르는 텃밭의 상추와 고추를 통해 소소한 기쁨을 느끼며, 손주들에게는 서툰 문자로 안부를 전하는 정감 어린 할머니입니다. 과거의 배움에 대한 아쉬움을 삶의 지혜로 채워가며, 여전히 세상에 대한 호기심과 관심을 잃지 않고 있습니다. 친구들과의 소중한 시간과 자연 속에서의 여유를 사랑하며, 단순하고 진솔한 일상을 살아가는 모습을 통해 주변에 큰 힘이 되어주는 분입니다.",
+  "d67dfc42d07c41189d3328b9dac3729e": "김춘영 씨는 55세의 서울 동대문구에 거주하는 평범한 주부로, 가족과의 소소한 일상에서 행복을 찾는 분입니다. 경동시장에서 제철 나물을 고르는 능력이 뛰어나며, 살림에 대한 전문성을 갖추고 있습니다. 동네 아주머니들 사이에서 발생하는 작은 갈등을 능숙하게 중재하는 한편, 본인의 권리를 주장할 때는 논리적으로 접근하는 능력을 지니고 있습니다. 디지털 기기에 익숙하진 않지만, 손주들의 사진을 공유하며 소통하는 즐거움을 느끼고, 임영웅의 공연 영상을 보며 일상의 스트레스를 풀고 있습니다. 건강한 노후를 위해 친구들과의 여유로운 산책과 여행을 즐기며, 가족과의 시간을 소중히 여기고 있는 김춘영 씨는 소소한 행복을 추구하는 전형적인 한국의 어머니입니다.",
+  "6d8a8fdd04e34aefb96be1f2581d8dda": "강현일 씨는 53세의 남성으로, 가족과 이웃을 소중히 여기는 다정한 아버지입니다. 경기 고양시 덕양구에 거주하며, 정보통신기술을 바탕으로 유통 조사 전문가로서 경력을 쌓아왔고, 복잡한 도매 시장의 데이터를 분석해 최적의 매입처를 찾아내는 일에 능숙합니다. 그는 매월 둘째 주 토요일 북한산에서 산행을 즐기고, 그 후에는 동호회원들과 청국장 집에서의 수다를 소중히 여깁니다. 가족과 함께 텃밭을 가꾸며 소소한 일상을 나누고, 아이들과 금요일 밤 피자 파티를 즐기는 등 일상에서의 작은 행복을 추구합니다. 강현일 씨는 후배들에게 자신의 노하우를 전수하고, 업계에서 신뢰받는 전문가로 남고자 하는 목표를 가지고 있습니다.",
+  "a436b26fcb24455587621f6263f82dbc": "반하늘 씨는 대구 달성군에서 혼자 살며 소소한 일상과 안정된 관계를 중시하는 33세 여성입니다. 현재는 무직이지만, 이전 직장에서 쌓은 꼼꼼한 문서 작성 능력을 바탕으로 친구들의 여행 경비를 정리하는 등 성실함을 발휘하고 있습니다. 가족과의 정서적 유대가 깊고, 주말에는 수목원에서 산책을 하거나 정갈한 나물 반찬을 부모님께 전하는 등 일상에서 작은 행복을 찾고 있습니다. 그녀는 조용한 삶을 추구하며, 변화보다는 예측 가능한 일자리를 원하고 있으며, 주변의 기분을 맞추느라 자신의 속마음을 숨기는 경향이 있습니다. 문화적으로는 인테리어와 문학에 관심이 많고, 자연 속에서의 휴식을 통해 정서적인 안정을 찾고 있습니다.",
+  "86acfdcefc8744ec9fddefb57f4c148f": "이영희 씨는 부산 사상구에 사는 65세 여성으로, 부녀회와 경로당에서 활동하며 꼼꼼한 장부 정리로 신뢰를 쌓고 있는 사람입니다. 배움에 대한 갈증이 커 시니어 문화 해설사 교육을 받으며 부산의 숨은 이야기를 기록하고 있습니다. 남편과의 오랜 세월 속에서 서로의 습관을 잘 알고 있으며, 주말마다 삼락생태공원을 산책하며 여유로운 시간을 즐깁니다. 가족과의 소중한 순간을 위해 여행 계획을 치밀하게 세우고, 동네 친구들과 함께하는 빵 나눔을 통해 소통의 즐거움을 찾고 있습니다. 건강을 위해 복부 비만을 해결하려는 목표를 가지고 있으며, 예술과 문화에 대한 깊은 관심을 가지고 있습니다. 그녀의 일상은 세심함과 따뜻한 인간관계로 채워져 있습니다.",
+  "fc200827d7524330970cef12b19c33cb": "이현근 씨는 47세의 미혼 남성으로, 경기 남양주에서 베테랑 운전원으로 일합니다. 그는 어머니와 함께 단독주택에 살며, 가족에 대한 책임을 다하면서도 캠핑이라는 개인적 취미를 통해 여유를 찾고자 합니다. 남양주의 지리에 능통한 그는 좁은 골목길을 잘 알고 있으며, 무거운 짐을 빈틈없이 적재하는 기술로 동료들 사이에서 인정받고 있습니다. 주말에는 친구들과 함께 북한강변에서 캠핑을 즐기며, 소소한 일상과 작은 낭만을 추구하는 삶을 살아갑니다. 그는 큰 성공보다는 안정적인 삶을 원하며, 조용한 휴식과 소소한 즐거움을 소중히 여깁니다.",
+  "7c04c2c157694de19db4215bb1b31a35": "박지선 씨는 34세의 사무 보조원으로, 경상남도 진주에서 할머니와 함께 살고 있습니다. 그녀는 공학을 전공한 만큼 논리적이고 철저한 성격을 지니고 있으며, 사무실에서의 업무를 엑셀 자동화로 혁신적으로 개선해 동료들로부터 신뢰를 받습니다. 숫자에 대한 완벽주의가 강해, 작은 실수에도 큰 스트레스를 받곤 합니다. 박씨는 전통적인 가족 가치와 현대적인 개인주의가 섞인 환경에서 자라, 예의를 중시하면서도 개인의 사생활은 철저히 지키려는 태도를 갖고 있습니다. 여가 시간에는 자연 속에서 혼자만의 시간을 즐기며, 자신의 내면과 소통하는 것을 선호합니다. 일주일의 피로를 풀기 위해 양식당에서 스테이크를 즐기고, 정적인 휴식을 통해 에너지를 충전하는 것을 중요하게 여깁니다.",
+  "40e61b7943ae413b95723d237dbeb28d": "함재훈 씨는 63세의 은퇴자로, 강원도 홍천에서 아내와 함께 한적한 단독주택에서 살고 있습니다. 정보통신기술을 전공한 그는 현재 무직이지만, 집안의 모든 전자기기를 능숙하게 다루며 건강과 가계부를 철저하게 관리하는 생활을 이어가고 있습니다. 겉으로는 차분해 보이지만 내면에서는 세심한 감정의 변화를 느끼며, 자신의 기준에 맞지 않는 것에 대해 예민하게 반응하는 경향이 있습니다. 여가 시간에는 배드민턴과 바둑을 즐기고, 클래식 음악을 듣거나 역사 강연을 시청하며 지적 호기심을 채우는 데 집중합니다. 그는 건강한 삶을 위해 공복혈당과 허리둘레 관리에 신경 쓰고 있으며, 전 직장 동료들과의 유대 관계를 소중히 여기며 역사 유적지를 답사하는 것을 즐깁니다.",
+  "a3f8d20cbd584c27b99e6250f15b16d8": "오성철 씨는 50세의 전기 용접원으로, 경기 오산에서 가족을 위해 성실하게 살아온 가장입니다. 그는 30년 가까운 경력을 바탕으로 현장에서 동료들에게 신뢰를 받고 있으며, 꼼꼼한 성격 덕분에 작업 중에도 세심한 주의를 기울입니다. 주말에는 가족과 함께 요리를 하거나 등산을 즐기고, 조용필의 음악을 들으며 소소한 여유를 만끽하는 삶을 살고 있습니다. 후배들에게 자신의 노하우를 전수하는 것을 목표로 하며, 정년까지 안전하게 근무하는 것을 꿈꾸고 있습니다. 평범한 일상 속에서도 가족과의 시간을 소중히 여기며, 여행이나 외식 또한 즐기는 따뜻한 성격의 소유자입니다.",
+  "aad81ac85ed94226832513545969a56f": "이수현 씨는 울산 동구의 바다 근처에서 가족과 이웃과의 조화로운 삶을 추구하는 70세의 여성입니다. 당뇨 관리를 위해 건강한 식단을 연구하고, 배드민턴과 독서를 즐기며 매일의 일상을 보내고 있습니다. 정규 교육은 받지 않았지만, 시장통에서 사람들과의 소통을 통해 삶의 지혜를 쌓아온 베테랑 주부로, 동네 사람들의 고민을 들어주고 현실적인 해결책을 제공하는 역할을 자처합니다. 가족과의 소소한 갈등을 부드럽게 해결하며, 자식들에게 잔소리를 듣는 동시에 따뜻한 아침 식사를 준비하는 다정한 어머니입니다. 최근에는 소설 다섯 권을 완독하는 목표를 세우고, 간단한 여행과 동네 산책을 통해 소중한 추억을 쌓고 있습니다.",
+  "41e0f809f6984ee6a40e18654ea984be": "박보경 씨는 광주 서구에서 23세의 교육학 전공자로 임용 고시 합격을 위해 열심히 공부하는 젊은 여성입니다. 무직 상태이지만, 책임감 있게 스터디 카페에서 동료 수험생들과 함께하며 복잡한 교육 이론을 정리하는 데 능숙합니다. 친구들과의 소소한 술자리나 주말 여행을 통해 여유를 찾고, 팟캐스트를 통해 사회 이슈를 접하며 세상을 바라보는 시각을 넓힙니다. 집에서는 부모님의 잔소리를 유연하게 넘기고 가족 간의 갈등을 중재하는 역할을 맡고 있으며, 안정적인 교육 환경을 만들기 위해 공립학교 교사가 되는 것을 목표로 하고 있습니다. 박보경 씨는 격한 운동보다는 산책을 즐기며, 친구들과 함께하는 활동을 통해 평온한 일상을 유지하려고 합니다.",
+  "92628b222daa4ee383f49c6a774ddbac": "배태완 씨는 31세의 미혼 남성으로 서울 중랑구에서 온라인 쇼핑몰을 운영하며 어머니와 함께 사는 다정한 아들입니다. 그는 경쟁이 치열한 온라인 시장에서 성공하기 위해 매일 새벽까지 데이터를 분석하고, 고객과의 소통에서 단호함과 예의를 동시에 갖추려 노력합니다. 평소에는 어머니와 함께 전국의 숨은 맛집을 찾아다니며, 여유로운 산책이나 사우나로 스트레스를 풀고, 가전제품 리뷰와 인테리어 영상을 보며 자신의 공간을 더 효율적으로 꾸미는 상상을 즐깁니다. 그러나 내면에는 성공에 대한 갈망과 미래에 대한 불안함이 공존해, 혼자 있는 시간에는 작은 걱정거리에도 쉽게 마음이 쓰이는 섬세한 성향을 지니고 있습니다."
+ },
+ "results": {
+  "10억지급(비현실)": {
+   "A": [
+    {
+     "text": "10억 원 주는 거? 솔직히 말하면, 뭐 생각할 필요도 없이 좋긴 한데, 정말 다 줄 수 있을까? 정부가 말하는 건 다 좋은데, 실제로 누가 받는지는 또 다를 수 있으니까.",
+     "stance": "mixed",
+     "lean": "support",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "우리 집도 쓸 수 있는 돈이 생기면 좋겠지만, 진짜 받을 수 있을까?",
+      "benefit": "some_help",
+      "intent": "probably",
+      "dissatisfaction": "not_much",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "친구들과 이야기를 나눌 것",
+      "뉴스 더 찾아볼 것"
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "하긴, 10억 원씩 주면 좋겠네. 근데 실현 가능성은 좀 의문이야.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "부모님도 받을 수 있으니까, 우리 집에도 괜찮은 지원이 될 것 같아.",
+      "benefit": "some_help",
+      "intent": "probably",
+      "dissatisfaction": "not_much",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "주변에 이야기하기",
+      "얼른 신청해보기",
+      "좀 더 알아보기"
+     ],
+     "behavior_text": "그냥 받을 수 있으면 좋게 생각하고 신청할 것 같아.",
+     "behavior_tag": "신청 예정",
+     "behavior_class": "comply"
+    },
+    {
+     "text": "10억 원을 다 줘서 뭐하겠냐고 생각해요. 그 돈을 어떻게 운영할지가 더 중요할 것 같아요. 공돈이 생긴다고 해도 관리 못 하면 다 날리기 쉬우니까요.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "우리 집도 받을 수 있는 대상이니까, 가계에는 좀 도움이 될 수 있어요.",
+      "benefit": "some_help",
+      "intent": "probably",
+      "dissatisfaction": "somewhat",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "친구들과 이야기해볼 것",
+      "가족과 상의해볼 것"
+     ],
+     "behavior_text": "그냥 대충 확인하고, 필요할 때 신청하면 될 것 같아요.",
+     "behavior_tag": "일단 신청 고려",
+     "behavior_class": "comply"
+    },
+    {
+     "text": "음... 일단 그런 정책이 나온다니 신기하긴 한데, 사실 저한텐 별로 큰 도움이 될 것 같진 않아요. 그냥 너무 큰 돈이니까, 좀 복잡하게 될 것 같기도 하고.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "아마 제 반려견과의 생활에 직접적인 영향은 없을 것 같아요.",
+      "benefit": "some_help",
+      "intent": "probably",
+      "dissatisfaction": "not_much",
+      "shareability": "rarely"
+     },
+     "actions": [
+      "그냥 상황 지켜보기",
+      "친구에게 이야기해보기"
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "글쎄요, 생소하네요. 10억 원을 다 주면 좋겠지만 진짜로 그런다고? 좀 불안한데.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "가족의 재정에 도움이 될 것 같음.",
+      "benefit": "some_help",
+      "intent": "probably",
+      "dissatisfaction": "not_much",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "가족이랑 상의해 볼 것",
+      "뉴스 더 체크할 것"
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "음... 듣기 좋은 소리 같기도 한데, 진짜 필요할까? 받은 돈 어떻게 쓰지 싶네.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "가정에 추가 수입이 있을 수 있어서 좋을 것 같아요.",
+      "benefit": "some_help",
+      "intent": "probably",
+      "dissatisfaction": "not_much",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "뉴스에 대한 의견 나누기",
+      "가족과 이야기해보기",
+      "신청 방법 알아보기"
+     ],
+     "behavior_text": "음... 그냥 아마 신청할까, 별 기대 안 하고.",
+     "behavior_tag": "신청할까 고민",
+     "behavior_class": "comply"
+    },
+    {
+     "text": "10억 원 지급한다고 하니까 좋네요. 하지만 실현 가능성이 걱정됩니다. 정부가 다시 잘할지는 좀 의문이에요.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "우리 가정도 혜택을 받을 수 있을 것 같아요.",
+      "benefit": "some_help",
+      "intent": "probably",
+      "dissatisfaction": "somewhat",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "주변과 이 얘기 나누기",
+      "뉴스 보며 상황 지켜보기"
+     ],
+     "behavior_text": "실제로는 별로 바라는 건 없지만, 상황이 어떤지 지켜보려구요.",
+     "behavior_tag": "관심은 두지만 소극적",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "뭐, 받으면 좋겠지만... 그냥 돈이 너무 많이 풀리면 물가 더 오를 것 같아.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "집에서 쓸 수 있는 돈이 좀 늘어나겠죠.",
+      "benefit": "some_help",
+      "intent": "probably",
+      "dissatisfaction": "not_much",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "레코드 담아두기",
+      "기다려보기"
+     ],
+     "behavior_text": "그냥 신청할 것 같긴 한데, 잘 모르겠다.",
+     "behavior_tag": "신청 고민",
+     "behavior_class": "comply"
+    },
+    {
+     "text": "1인당 10억 원이라... 이게 현실인지 모르겠네. 그걸 다 믿을 순 없지.",
+     "stance": "oppose",
+     "lean": "oppose",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "가족과 함께 사용할 수 있는 금액이라 필요할지도 모르겠지만, 왠지 믿음이 안 가.",
+      "benefit": "some_help",
+      "intent": "probably",
+      "dissatisfaction": "somewhat",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "용도 생각해보기",
+      "가족과 상의하기"
+     ],
+     "behavior_text": "정확한 내용은 잘 모르겠지만, 일단 신청해보는 게 좋겠다는 생각이야.",
+     "behavior_tag": "",
+     "behavior_class": "comply"
+    },
+    {
+     "text": "10억 원 지급? 그거 진짜 가능할까? 이상한 것도 같고, 갑자기 보너스 받는 느낌도 들어. 하지만 그런 돈도 집안에서 이렇게 저렇게 나가겠지.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "우리 집에도 도움 되는 돈이긴 한데, 어떻게 쓸지 고민이 많고, 다 쓸 것 같음.",
+      "benefit": "some_help",
+      "intent": "unsure",
+      "dissatisfaction": "not_much",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "신청해 볼까?",
+      "그냥 지나칠 거 같아.",
+      "부모님과 상의해 볼 것 같아."
+     ],
+     "behavior_text": "신청할지 말지 고민하고 있을 것 같아.",
+     "behavior_tag": "신청 고민 중",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "이 정책, 당연히 좋네요. 누구나 받을 수 있으니까 긍정적으로 생각할 수 있을 것 같아요. 다들 좋을 것 같아요.",
+     "stance": "support",
+     "lean": "support",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "이 정책으로 우리 집에도 큰 도움이 될 것 같아요.",
+      "benefit": "big_help",
+      "intent": "probably",
+      "dissatisfaction": "not_much",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "주변 친구들한테 이야기할 것",
+      "신청해볼까 생각"
+     ],
+     "behavior_text": "아마 신청할 것 같아요.",
+     "behavior_tag": "신청 의향 있음",
+     "behavior_class": "comply"
+    },
+    {
+     "text": "그냥 돈 주는 건 좋긴 한데, 실질적으로 뭘 할 수 있을지 의문이야. 이렇게 큰 돈이 각 가구에 도움이 될지 잘 모르겠어. 가끔 외부에서 유입되는 큰 돈이 오히려 혼란을 만들기도 하잖아?",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "혼자서 살고 있다보니, 도움이 된다면 고마울 것 같아.",
+      "benefit": "some_help",
+      "intent": "probably",
+      "dissatisfaction": "not_much",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "주민센터에 가서 자세히 알아보기",
+      "친구들과 얘기해보기",
+      "정보가 더 나올 때까지 기다리기"
+     ],
+     "behavior_text": "정확히 어떤 도움인지 궁금하면서도 신청해볼까 고민하고 있어.",
+     "behavior_tag": "정보 수집 후 신청 검토",
+     "behavior_class": "workaround"
+    },
+    {
+     "text": "음... 10억 원 지급한다고 하는데, 진짜일까? 내가 쓸 데가 다 있겠지. 하지만 조금 의아하네. 정작 그런 큰 돈이 어디서 나오나 싶고, 관리가 잘 될지 싶어.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "우리가 살고 있는 형편에 도움이 될 수 있을 것 같습니다.",
+      "benefit": "some_help",
+      "intent": "probably",
+      "dissatisfaction": "not_much",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "친구들한테 물어보기",
+      "주민센터 가서 좀 알아보기"
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "10억 원이네. 그게 진짜 생긴다면 좋겠네, 근데 또 어떻게 오는지 궁금해. 짧게 끝나겠지.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "가족에게 도움이 될 것 같아.",
+      "benefit": "big_help",
+      "intent": "probably",
+      "dissatisfaction": "not_much",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "가족과 이야기하기",
+      "주민센터에 가볼까 생각하기"
+     ],
+     "behavior_text": "잘 되길 바라지만, 좀 의심스럽기도 해.",
+     "behavior_tag": "신청할지도",
+     "behavior_class": "workaround"
+    },
+    {
+     "text": "음... 솔직히 별로 필요 없는 것 같아요. 10억 원도 좋긴 한데, 소득이나 재산 조건 없이 준다는 게 좀 찜찜하네요. 자격 요건 없이 다 주면, 나중에 세금으로 부담이 오지 않을까 싶고.",
+     "stance": "oppose",
+     "lean": "oppose",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "우리 집은 이 정책의 지원 대상에 해당되니, 신청하면 받을 수 있어요.",
+      "benefit": "some_help",
+      "intent": "probably",
+      "dissatisfaction": "somewhat",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "신청할 수 있는지 알아보기",
+      "가족과 이야기를 나눌 것"
+     ],
+     "behavior_text": "신청해볼까 하는데, 좀 걱정도 되네요.",
+     "behavior_tag": "신청 고려중",
+     "behavior_class": "comply"
+    },
+    {
+     "text": "이게 누리집에서 신청할 수 있다니까, 좀 뭔가 편할 것 같긴 하네. 근데 10억이라니, 진짜 별의별 생각이 다 드는 금액이네. 다른 사람들이 정말 필요로 하는지 모르겠다. 받으면 좋긴 한데, 10억씩 나눠주면 나중에 또 뭐가 문제가 생기지 않을까 싶기도 해.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "이건 집에 큰 도움이 될 것 같아. 아마 부모님께도 써드릴 수 있을지 모르겠네.",
+      "benefit": "big_help",
+      "intent": "probably",
+      "dissatisfaction": "not_much",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "신청할지 고민해 볼 것",
+      "친구들에게 이 이야기 전하기",
+      "부모님과 이야기 나눌 것"
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "10억 원씩 나눠준대? 이게 정말 가능한 일인지 의문이 드네요. 나도 받을 수 있다면 좋겠지만, 돈이 어디서 나오는지도 중요하고...",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "우리 집도 혜택을 받을 수 있으니 좋긴 하지만, 과연 이걸 어떻게 지급할지에 대한 의문이 있어요.",
+      "benefit": "some_help",
+      "intent": "probably",
+      "dissatisfaction": "somewhat",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "소득 상황 체크하기",
+      "주민센터에 가서 문의하기",
+      "가족과 상의하기"
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "10억 원이란 게 큰 돈이긴 한데, 솔직히 말하자면 그게 뭐 그렇게 도움 될 것 같진 않아. 우리 집도 한 달 생활비는 충분히 아는데, 애초에 이런 거에 의존하고 싶진 않아.",
+     "stance": "oppose",
+     "lean": "none",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "우리 집은 어머니랑 단둘이 사니까, 크게 영향을 안 받을 것 같음.",
+      "benefit": "no_effect",
+      "intent": "probably_not",
+      "dissatisfaction": "not_much",
+      "shareability": "rarely"
+     },
+     "actions": [
+      "그냥 일상처럼 지내기",
+      "친구들과 가볍게 이야기하기"
+     ],
+     "behavior_text": "그냥 크게 생각 안 할 듯. 그러면서도 친구들이 궁금해 할 것 같으니까 이야기해줄 수도 있고.",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "이 정책은 솔직히 너무 좋은 것 같은데... 10억 원이라는 돈이 전 국민에게 주어진다니 말이죠. 근데 실질적인 도움이 될지 잘 모르겠어요. 순식간에 소비될 것 같기도 하고. 그냥 큰 그림에서 생각해보면 참 좋은 정책이긴 한데, 시행 이후에 어떻게 되는지가 더 중요할 것 같아요.",
+     "stance": "mixed",
+     "lean": "support",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "우리 집도 받을 수 있어서 조금 더 여유로워질 것 같다.",
+      "benefit": "some_help",
+      "intent": "probably",
+      "dissatisfaction": "not_much",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "친구들에게 이야기할 것",
+      "뉴스 조금 더 찾아보기"
+     ],
+     "behavior_text": "최대한 아무것도 안 하고 지켜보는 게 좋을 것 같다.",
+     "behavior_tag": "신청은 고민 중",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "그냥 10억씩 주는 게 말이 되는건가? 뭐가 필요하다고 그렇게 다 주냐싶다까?",
+     "stance": "oppose",
+     "lean": "oppose",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "직접적인 혜택은 없지만, 경비에 조금 보탤 수 있을 것 같습니다.",
+      "benefit": "some_help",
+      "intent": "probably",
+      "dissatisfaction": "none",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "아마 신청할 것",
+      "신청하더라도 안 받을 확률이 높음"
+     ],
+     "behavior_text": "혹시나 해서 신청해볼까 생각이 들어요.",
+     "behavior_tag": "신청 생각",
+     "behavior_class": "comply"
+    },
+    {
+     "text": "그냥 정부에서 돈 준다고 하니까 신기하긴 하네. 근데 뭐 받을 수 있을지 모르겠네. 별로 기대는 안 해.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "unsure",
+      "understanding": "mostly",
+      "household_note": "우리 가족도 다 받을 수 있겠지만, 실제로 어떻게 되는지 좀 더 지켜봐야 할 것 같아.",
+      "benefit": "some_help",
+      "intent": "probably",
+      "dissatisfaction": "not_much",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "가족이랑 이 얘기할 것 같아",
+      "지켜봐야겠다고 생각하겠지"
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "10억 원 준다고 하니까 좋긴 한데, 진짜로 다 줄 수 있을까? 쓸데없는 것 같기도 하고, 그 돈이 우리 업계에 진짜 도움될지 증거가 없어서 자꾸 의구심이 드는 건 사실이야.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "우리도 받을 수 있는 거면, 집안 형편에 조금 도움이 될 것 같음.",
+      "benefit": "some_help",
+      "intent": "probably",
+      "dissatisfaction": "not_much",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "주변 사람들과 이야기할 것 같음",
+      "상황 지켜보기"
+     ],
+     "behavior_text": "원래는 저 같은 사람들은 별로 관심 없긴 한데, 남편이 어떻게 생각할지 여쭤볼 것 같아요.",
+     "behavior_tag": "가족과 상의",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "10억 원을 주다니, 좀 과한 것 같네요. 다들 배가 고프고 힘든데, 이런 돈이 진짜 필요할 사람도 있으니까 잘 써야겠죠.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "우리 집은 부족한 형편이라 도움이 될 것 같아요.",
+      "benefit": "big_help",
+      "intent": "surely",
+      "dissatisfaction": "not_much",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "주변 사람들과 이야기해보기",
+      "뉴스나 정보를 좀 더 찾아보겠다"
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "10억 원 주면 좋지. 뭐 딱히 반대할 이유는 없는데, 실제로 줄지는 모르겠어서.",
+     "stance": "support",
+     "lean": "support",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "우리 집에 도움이 될 것 같아요.",
+      "benefit": "some_help",
+      "intent": "probably",
+      "dissatisfaction": "not_much",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "신청해 볼 것 같다.",
+      "주위에 이야기해 볼 것 같다."
+     ],
+     "behavior_text": "신청해보려고 할 것 같아.",
+     "behavior_tag": "신청 계획",
+     "behavior_class": "comply"
+    }
+   ],
+   "B": [
+    {
+     "text": "음, 1인당 10억 원씩 지급한다니 너무 좋긴 한데, 솔직히 말하면 믿기 힘든데요? 실제로 잘 될지 좀 걱정이 되네. 이런 돈이 생기면 정말 도움은 될 것 같은데, 과연 누가 다 받을 수 있을까?",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "우리 집도 지원을 받을 수 있을 것 같아요.",
+      "benefit": "some_help",
+      "intent": "probably",
+      "dissatisfaction": "not_much",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "주변 사람들과 이야기해보기",
+      "기다려 보기"
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "전 국민 10억 원 지급한다고? 진짜로? 그거 소득 조건도 없고 그냥 다 주는 거면 사람들도 많이 신청할 것 같은데. 어떻게 할지 나도 잘 모르겠다.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "이 정책이 시행되면 부모님과 함께 쓸 수 있어서 도움이 될 것 같아요.",
+      "benefit": "some_help",
+      "intent": "probably",
+      "dissatisfaction": "not_much",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "대한민국 국민이니 신청할 것 같다",
+      "부모님께 이야기 할 것 같다"
+     ],
+     "behavior_text": "신청해볼까 하는 마음이 드는데, 어떻게 될지 궁금하긴 해.",
+     "behavior_tag": "신청 고민 중",
+     "behavior_class": "comply"
+    },
+    {
+     "text": "솔직히 이 정책이 과연 실행될지는 의문이네요. 10억 원이란 돈이 한 번에 지급된다니, 현실성이 좀 떨어지는 것 같아요. 그냥 듣자마자 \"아, 또 이런 얘기 나오네\" 싶은 기분이네요.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "우리 집도 혜택을 받을 수 있지만, 그 돈이 정말 들어올지는 모르겠어요.",
+      "benefit": "some_help",
+      "intent": "probably_not",
+      "dissatisfaction": "none",
+      "shareability": "rarely"
+     },
+     "actions": [
+      "그냥 지나칠 것 같다"
+     ],
+     "behavior_text": "지켜보면서 필요할 때 신청할지는 고민해볼 것 같아요.",
+     "behavior_tag": "관망",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "음, 10억 원을 준다니 좀 무리한 정책인 것 같아요. 사람들이 그렇게 쉽게 바뀌지 않을 것 같은데...",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "저희한테 큰 도움이 될 수 있어요.",
+      "benefit": "some_help",
+      "intent": "probably",
+      "dissatisfaction": "somewhat",
+      "shareability": "rarely"
+     },
+     "actions": [
+      "가족이나 친구들과 이야기는 해볼 것 같은데, 그 이상은 안 할 것 같아요."
+     ],
+     "behavior_text": "신청해보고 싶긴 한데, 잘 모르겠어요. 그냥 기다릴 수도 있을 것 같고요.",
+     "behavior_tag": "잘 지켜보기",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "음... 전 국민 1인당 10억 원 지급한다고 하니까 대단한 정책이네. 그래도 이게 쉽게 되겠어? 소문만큼 실현 가능성은 낮을 듯 한데. 그거 신청은 하겠지만, 좀 의심스러워.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "우리 가족 모두 받을 수 있는 정책이라서 기대감은 있어요.",
+      "benefit": "some_help",
+      "intent": "probably",
+      "dissatisfaction": "somewhat",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "지켜보며 상황을 살핀다.",
+      "가족과 이야기해 본다."
+     ],
+     "behavior_text": "정확히 어떻게 되는지 지켜볼 생각이야. 신청은 해볼 거고.",
+     "behavior_tag": "상황 관망",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "전 국민 1인당 10억 원 지급이라니, 그거 듣고 그냥 놀랐어요. 솔직히 나같은 사람한테 큰 도움이 될 것 같아?",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "우리 집도 지원 받을 수 있으면 좋겠어요.",
+      "benefit": "big_help",
+      "intent": "probably",
+      "dissatisfaction": "not_much",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "혹시 신청해볼까?",
+      "가족하고 이야기해볼 것",
+      "너무 기대는 안 해"
+     ],
+     "behavior_text": "여기서 좀 확인해보고, 부부랑 같이 결정해봐야겠어요.",
+     "behavior_tag": "신청 여부 고민",
+     "behavior_class": "workaround"
+    },
+    {
+     "text": "이거, 솔직히 큰 변화는 없을 것 같아. 이렇게 뚝딱 주는 정책, 그게 과연 잘 실현될까?",
+     "stance": "oppose",
+     "lean": "oppose",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "가족에게는 도움이 될 수도 있지만, 나한테는 별로 큰 의미 없을 것 같아.",
+      "benefit": "some_help",
+      "intent": "probably",
+      "dissatisfaction": "not_much",
+      "shareability": "rarely"
+     },
+     "actions": [
+      "지켜보기",
+      "주변 사람들과 이야기 해보기"
+     ],
+     "behavior_text": "그냥 특별히 할 생각은 없어. 두고 봐야 할 것 같아.",
+     "behavior_tag": "지켜보기",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "뭔가 다들 신나 하던데, 그게 정말 효과가 있을까? 일단 듣기는 했는데, 내 상황하고는 좀 떨어져서 관심이 크게 안 가.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "not_target",
+      "understanding": "partly",
+      "household_note": "내가 받지 못하는 정책이라 큰 상관은 없을 것 같아요.",
+      "benefit": "no_effect",
+      "intent": "no_need",
+      "dissatisfaction": "not_much",
+      "shareability": "rarely"
+     },
+     "actions": [
+      "관심 가지고 지켜보기",
+      "친구들한테 물어보기"
+     ],
+     "behavior_text": "별로 신경 쓰지 않을 것 같아요.",
+     "behavior_tag": "관심 없음",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "그냥 정부에서 돈 준다니 좋긴 하네. 하지만 10억이라니, 과연 쓰일지 의문이네. 그냥 대충 흘려 듣고 넘어갈 것 같아. 신청도 뭐 딱히 할 필요는 없을 것 같고.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "우리 집에도 도움 될 것 같지만, 한편으로는 좀 의심스러움.",
+      "benefit": "some_help",
+      "intent": "probably_not",
+      "dissatisfaction": "not_much",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "관심을 덜 가지기",
+      "지인들에게 물어보기",
+      "적극적으로 신청하지 않기"
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "전 국민 10억 원 지급이라니, 그런 정책이 가능할지 의문이네. 돈은 필요하지만, 정말 큰 도움이 될까?",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "우리 집도 지원받을 수 있어서, 살림에 도움이 될 것 같네.",
+      "benefit": "some_help",
+      "intent": "probably",
+      "dissatisfaction": "not_much",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "신청해볼까 생각해보기",
+      "가족과 이야기해보기"
+     ],
+     "behavior_text": "좀 더 알아보고, 필요하면 신청할 계획이야.",
+     "behavior_tag": "신청 고민 중",
+     "behavior_class": "workaround"
+    },
+    {
+     "text": "그냥 10억 주면 좋긴 한데, 뭔가 불안한 거 같아. 이런 게 제대로 돌아갈까?",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "우리 집도 혜택을 받을 수 있어.",
+      "benefit": "big_help",
+      "intent": "probably",
+      "dissatisfaction": "not_much",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "신청해 볼 거예요. 그냥 돈이 생기면 좋겠어요."
+     ],
+     "behavior_text": "그냥 신청해 보고, 혹시나 하는 마음으로 기다릴 것 같아.",
+     "behavior_tag": "가만히 기다리기",
+     "behavior_class": "comply"
+    },
+    {
+     "text": "정말 그런 일이 있나 모르겠네요. 솔직히 10억씩 준다니 믿기 어렵고, 또내가 받을 수 있을지도 잘 모르겠어요. 또 이렇게 큰 돈이 어떻게 돌아갈지 궁금하네요.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "unsure",
+      "understanding": "mostly",
+      "household_note": "이 정책이 우리 집에 영향을 줄지는 잘 모르겠어요. 받는다면 좋겠지만.",
+      "benefit": "some_help",
+      "intent": "probably",
+      "dissatisfaction": "not_much",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "뉴스 다시 확인하기",
+      "주변 사람들과 이야기해보기",
+      "주민센터 가보면 좋겠다"
+     ],
+     "behavior_text": "신청해볼까 생각 중이에요. 그래도 너무 큰돈이라서 잘 활용해야 할 것 같아요.",
+     "behavior_tag": "사실상 신청",
+     "behavior_class": "comply"
+    },
+    {
+     "text": "전국민한테 10억을 준다니, 믿는 사람도 있겠지만, 그냥 그런 이야기 같아. 우리 집에는 뭐 큰 도움은 안 될 것 같아. 사는 게 빠듯한데, 그런 돈이 나한테 올리도 말이지. 괜히 기대만 하게 할 것 같아.",
+     "stance": "oppose",
+     "lean": "oppose",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "이 정책이 시행되면 우리 집에서 할 수 있는 건 별로 없을 것 같아.",
+      "benefit": "no_effect",
+      "intent": "probably_not",
+      "dissatisfaction": "none",
+      "shareability": "rarely"
+     },
+     "actions": [
+      "친구에게 이야기하기",
+      "누리집 들어가 보기",
+      "신청할 준비 없이 그냥 보기"
+     ],
+     "behavior_text": "신청하기 귀찮기도 하고, 과연 받을 수 있을지도 모르겠네.",
+     "behavior_tag": "그냥 무시",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "이런 정책이 나온다고? 좀 의외네. 10억을 다들 준다고 하니 뭐.. 그저 그런 소식 같아. 진짜 마법처럼 다들 받을 수 있을진 모르겠어.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "우리가 분명히 지원 대상이 되니까 큰 도움이 될 것 같아요.",
+      "benefit": "some_help",
+      "intent": "probably",
+      "dissatisfaction": "not_much",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "주변에 이야기해보기",
+      "만약 신청한다면 필요한 서류 미리 챙기기"
+     ],
+     "behavior_text": "무조건 신청해보는 쪽이 좋겠지?",
+     "behavior_tag": "신청 의사",
+     "behavior_class": "comply"
+    },
+    {
+     "text": "정확히 무엇을 위한 정책인지 잘 모르겠네요. 10억 원을 주면 좋겠지만, 그 돈이 과연 어디서 오는 걸까요?",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "partly",
+      "household_note": "우리 가족도 받을 수 있는 정책이라 흥미는 있지만, 실체가 궁금합니다.",
+      "benefit": "some_help",
+      "intent": "probably",
+      "dissatisfaction": "not_much",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "가입 신청하기",
+      "주변 사람들하고 이야기해보기"
+     ],
+     "behavior_text": "뭔가 이득이 될까 싶지만, 좀 더 내용을 지켜보려고요.",
+     "behavior_tag": "상황 지켜보기",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "정부에서 10억 원 지급한대요? 그게 진짜 될리도 없고, 일단 신뢰가 가긴 해요. 그냥 소문 같은 느낌? 특별히 기대는 안 해요.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "우리 집에 직접적으로 큰 도움이 될 것 같진 않아요.",
+      "benefit": "some_help",
+      "intent": "probably",
+      "dissatisfaction": "not_much",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "뉴스 기사나 관련 정보 찾아보기"
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "10억 원이라? 좀 과한 것 같아요. 그게 정말 실현 가능한지 모르겠어요. 다들 신경 쓰겠지만, 얼마의 도움을 줄지는 잘 모르겠네요.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "우리도 지원받으면 좋겠지만, 뭐가 어떻게 되는지 헷갈려요.",
+      "benefit": "some_help",
+      "intent": "probably",
+      "dissatisfaction": "not_much",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "가족과 이야기해 보기",
+      "동네 친구들과 나눠서 이야기하기"
+     ],
+     "behavior_text": "일단 주변과 이야기하면서, 필요한 게 있는지 먼저 살펴볼 것 같아요. 신청은 해 볼까 싶기도 하고요.",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "갑자기 그런 정책을 내놓으면 솔직히 뭔가 의도하는 바가 있을 거 같은데, 뭘 얻으려는 걸까 싶기도 하네요. 10억이라니 너무 큰 돈이고, 솔직히 나 같은 사람한테는 별로 필요 없을 것 같아요. 반신반의하는 기분입니다.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "어머니와 저한테 큰 도움이 될 것 같아요, 하지만 실질적으로 어떻게 쓰일지는 모르겠네요.",
+      "benefit": "some_help",
+      "intent": "probably",
+      "dissatisfaction": "not_much",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "자세한 내용 확인하기",
+      "주변 사람들과 이야기해보기",
+      "신청 여부 고민하기"
+     ],
+     "behavior_text": "뭐, 필요하면 신청해볼까 하는 정도.",
+     "behavior_tag": "장애물 확인",
+     "behavior_class": "workaround"
+    },
+    {
+     "text": "좀 과한 정책 같네요. 진짜로 전 국민에게 10억을 주는 게 가능한 건지 의문이 듭니다.",
+     "stance": "oppose",
+     "lean": "oppose",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "우리 집에 들어오는 금액이 늘어날 수 있어서 좋습니다.",
+      "benefit": "some_help",
+      "intent": "probably",
+      "dissatisfaction": "somewhat",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "자세한 내용 확인해보기",
+      "친구나 직장 동료와 이야기해보기"
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "10억 원 지급 정책은 참 대단한 발표네요. 근데 과연 이게 실현 가능할까요? 조건 없이 지급한다고 하니 뭔가 의문이 드는데요. 당장 우리 집엔 큰 도움이 될 것 같진 않아요.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "우리 집도 혜택을 받을 수 있지만, 큰 변화를 기대하진 않아요.",
+      "benefit": "no_effect",
+      "intent": "probably_not",
+      "dissatisfaction": "somewhat",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "주변 사람들과 이 정책에 대해 이야기를 나누기",
+      "상황 지켜보기"
+     ],
+     "behavior_text": "신청할 필요성을 잘 모르겠어요. 그냥 지나칠 것 같아요.",
+     "behavior_tag": "관망",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "이 정책, 그냥 저냥 그런가 싶어요. 괜히 복잡하게 느껴지기도 하고. 우리 같은 평범한 사람들에겐 큰 도움이 될 수도 있겠지만, 그저 남의 일 같기도 하고요.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "우리 집도 전부 대상이니까 영향을 받을 수도 있다.",
+      "benefit": "some_help",
+      "intent": "probably",
+      "dissatisfaction": "not_much",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "아내랑 얘기해볼 계획",
+      "주민센터에 문의해볼 것"
+     ],
+     "behavior_text": "일단 신청 방법 알아보고, 아내랑 상의할 거예요.",
+     "behavior_tag": "신청 정보 탐색",
+     "behavior_class": "comply"
+    },
+    {
+     "text": "글쎄요, 보통 이렇게 큰 돈이 주어진다고 하니까 기대는 되는데, 그게 정말 가능한 건지 믿기 어려워요. 반신반의죠.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "이 정책으로 집안에 도움이 될 수 있을 것 같아요, 힘든 형편이라서요.",
+      "benefit": "some_help",
+      "intent": "probably",
+      "dissatisfaction": "not_much",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "주변 이웃과 이야기해보기",
+      "가족에게 물어보기"
+     ],
+     "behavior_text": "일단 정부에서 주는 거니까 신청해볼까 하는 생각이 들어요.",
+     "behavior_tag": "신청 고민",
+     "behavior_class": "comply"
+    },
+    {
+     "text": "이 정책, 진짜 별로 믿음이 안 가는데요. 확실히 받아야 한다는 보장이 없잖아요?",
+     "stance": "oppose",
+     "lean": "oppose",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "우리 집도 모두 받을 수 있긴 하지만, 그래도 이게 실현 가능할지 의문이에요.",
+      "benefit": "some_help",
+      "intent": "probably",
+      "dissatisfaction": "somewhat",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "주변에 얘기해보기",
+      "기회가 되면 신청해볼까 고민해보기"
+     ],
+     "behavior_text": "신청해볼까 고민 중이지만 잘 모르겠어요.",
+     "behavior_tag": "신청 검토",
+     "behavior_class": "workaround"
+    },
+    {
+     "text": "이게 진짜 시행되면 좋긴 하겠다. 10억 원이면 잘 쓰면 큰 도움이 될 거 같아. 근데 이런 정책이 실제로 잘 이뤄질지는 좀 회의적이긴 해.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "우리 집도 이 정책의 지원 대상이라서 이렇게 돈이 들어오면 좋을 것 같아.",
+      "benefit": "big_help",
+      "intent": "probably",
+      "dissatisfaction": "not_much",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "정확한 내용 확인하기",
+      "주변 사람들과 이야기 해보기",
+      "신청 방법 알아보기"
+     ],
+     "behavior_text": "기회가 되면 신청도 해볼 생각이야.",
+     "behavior_tag": "신청 고려",
+     "behavior_class": "comply"
+    }
+   ]
+  },
+  "청년월세(정상)": {
+   "A": [
+    {
+     "text": "청년층에 월세 지원하는 건 좋은 것 같아. 집하던 시절엔 그런 거 없었는데, 도움이 될 사람들한텐 유용할 듯.",
+     "stance": "support",
+     "lean": "support",
+     "survey": {
+      "eligibility": "not_target",
+      "understanding": "mostly",
+      "household_note": "이미 결혼해서 월세를 내지 않고 있어서 관련이 없어.",
+      "benefit": "no_effect",
+      "intent": "no_need",
+      "dissatisfaction": "none",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "이야기해보기",
+      "뉴스 체크하기"
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "이 정책은 특히 무주택 청년들한테는 도움이 될 것 같아요. 젊은 사람들 중에는 집세 부담이 크니까, 20만 원 지원 받으면 조금이나마 여유가 생길 것 같네요.",
+     "stance": "support",
+     "lean": "support",
+     "survey": {
+      "eligibility": "partial",
+      "understanding": "well",
+      "household_note": "현재는 부모님과 같이 사니까, 직접적인 혜택은 없지만, 제 주변 친구들에게는 도움이 될 수 있어요.",
+      "benefit": "some_help",
+      "intent": "probably",
+      "dissatisfaction": "not_much",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "친구들에게 이 정책 이야기하기",
+      "신청 요건 검토하기"
+     ],
+     "behavior_text": "주변 친구들 중에서 이 제도가 필요할 만한 사람들에게 정보를 공유해줄 생각이야.",
+     "behavior_tag": "정보 공유",
+     "behavior_class": "comply"
+    },
+    {
+     "text": "정말 청년들한테 필요한 지원 같아요. 20만 원이라도 월세에 보탬이 된다면 그건 큰 도움이 될 듯.",
+     "stance": "support",
+     "lean": "support",
+     "survey": {
+      "eligibility": "not_target",
+      "understanding": "well",
+      "household_note": "우리 집은 이미 안정적인 상황이라 해당이 안 돼요.",
+      "benefit": "no_effect",
+      "intent": "no_need",
+      "dissatisfaction": "none",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "뉴스 확인하기",
+      "주변 청년들에게 이 정책 얘기해주기"
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "청년 월세 지원은 주거 문제 해결에 도움될 것 같아서 좋다고 생각해요. 하지만 부적격자도 많을 것 같아서 그게 아쉬워요.",
+     "stance": "support",
+     "lean": "support",
+     "survey": {
+      "eligibility": "partial",
+      "understanding": "mostly",
+      "household_note": "제가 청년층 조건에 해당하긴 한데, 다른 소득 기준에 맞는지 확인이 필요해요.",
+      "benefit": "some_help",
+      "intent": "probably",
+      "dissatisfaction": "not_much",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "주변에 알리기",
+      "신청 조건 확인해보기"
+     ],
+     "behavior_text": "조건이 맞다면 신청해볼까 싶어요.",
+     "behavior_tag": "신청 검토 중",
+     "behavior_class": "workaround"
+    },
+    {
+     "text": "요즘 청년들이 힘들다니까 이 지원이 좀 도움이 될 것 같기도 하네. 근데, 내가 쓸 일이 없겠지. 애들은 아직 어리고, 그냥 두고 보기로 하자.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "not_target",
+      "understanding": "mostly",
+      "household_note": "청년 자녀가 없어서 관계없음.",
+      "benefit": "no_effect",
+      "intent": "no_need",
+      "dissatisfaction": "none",
+      "shareability": "rarely"
+     },
+     "actions": [
+      "지켜보기"
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "젊은 사람들을 위한 지원이니까 나한텐 상관없는 일이네. 그래도 월세가 저렴해지는 사람들이 좀 더 편하게 살았으면 좋겠다.",
+     "stance": "oppose",
+     "lean": "none",
+     "survey": {
+      "eligibility": "not_target",
+      "understanding": "mostly",
+      "household_note": "우리 집은 지원 대상이 아니라서 상관없다.",
+      "benefit": "no_effect",
+      "intent": "no_need",
+      "dissatisfaction": "none",
+      "shareability": "rarely"
+     },
+     "actions": [],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "요즘 청년들이 정말 힘든가 보네요. 이런 지원이 필요하긴 하지만, 제가 생각하기엔 좀 더 폭넓게 도와줬으면 좋겠어요.",
+     "stance": "support",
+     "lean": "support",
+     "survey": {
+      "eligibility": "not_target",
+      "understanding": "mostly",
+      "household_note": "제 가족은 청년이 아니라서 관계가 없어요.",
+      "benefit": "no_effect",
+      "intent": "no_need",
+      "dissatisfaction": "none",
+      "shareability": "rarely"
+     },
+     "actions": [
+      "그냥 지나칠 것 같다."
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "이거는 좀 다 난감하네. 나는 월세도 내고 혼자 살고 있으니까 거기엔 잘 맞지만, 소득 같은 조건이 좀 걸릴 것 같아.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "partial",
+      "understanding": "mostly",
+      "household_note": "혼자 살고 있지만 소득이 기준에 안 맞을 수도 있을 것 같음.",
+      "benefit": "some_help",
+      "intent": "probably",
+      "dissatisfaction": "not_much",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "정보 좀 더 찾아보기",
+      "주변 친구들에게 얘기해보기",
+      "신청할지 생각해보기"
+     ],
+     "behavior_text": "귀찮으니까 그냥 한번 조사를 해보고, 만약 신청할 정도면 하겠지.",
+     "behavior_tag": "정보 조사",
+     "behavior_class": "workaround"
+    },
+    {
+     "text": "그냥 주다니 좋긴 한데, 사실 나는 대상이 아니니까 별 상관은 없네. 청년들한테는 좀 도움이 될 듯한 정책이네.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "not_target",
+      "understanding": "mostly",
+      "household_note": "내 자녀들이 그것과는 거리가 멀어서 직접적인 상관은 없어요.",
+      "benefit": "no_effect",
+      "intent": "probably_not",
+      "dissatisfaction": "none",
+      "shareability": "rarely"
+     },
+     "actions": [
+      "아는 청년들한테 이야기해주기"
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "뭐랄까, 그런 지원이 있으면 좋겠지만, 내가 부모랑 같이 살고 있으니까 아무래도 나랑은 관계가 없겠지. 나도 나대로 힘든데, 이런 건 부모님이 좀 더 잘하셨으면 하는 마음이 크네.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "not_target",
+      "understanding": "mostly",
+      "household_note": "부모님과 같이 살아서 이 지원은 내게 해당되지 않음.",
+      "benefit": "no_effect",
+      "intent": "probably_not",
+      "dissatisfaction": "none",
+      "shareability": "rarely"
+     },
+     "actions": [
+      "그냥 지나침"
+     ],
+     "behavior_text": "이건 내 일이 아니니 그냥 무시할 것 같아.",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "주거 지원해주는 건 좋다고 생각해요. 아파트 세가 많이 오르는데, 월세 부담 덜어주는 방식은 괜찮네요. 그런데, 개인 소득이랑 가구 소득을 따지는 게 좀 까다로울 것 같네요.",
+     "stance": "support",
+     "lean": "support",
+     "survey": {
+      "eligibility": "partial",
+      "understanding": "mostly",
+      "household_note": "저는 아직 부모님과 살고 있어서 연관이 없지만 친구들은 해당될 수 있어요.",
+      "benefit": "some_help",
+      "intent": "probably",
+      "dissatisfaction": "not_much",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "정보 찾아볼 것",
+      "친구들과 이야기 나눌 것"
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "이런 지원 정책은 나이든 사람보다 젊은 청년들을 위한 거라서, 나와는 별로 관계가 없는 것 같아. 그런 것이 마련되어도 다른 사람들에게 도움이 될 것 같긴 해.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "not_target",
+      "understanding": "mostly",
+      "household_note": "나는 월세를 내고 있지 않아서 직접적인 관련은 없습니다.",
+      "benefit": "no_effect",
+      "intent": "no_need",
+      "dissatisfaction": "none",
+      "shareability": "rarely"
+     },
+     "actions": [
+      "뉴스로 듣고 끝내기"
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "아, 이렇게 지원이 생기는군요. 하지만 제가 요즘에 나이도 많고, 집안일이 많아서 청년 지원 같은 건 잘 모르겠어요. 젊은 사람들에게는 도움이 될 것 같은데… 저는 그렇게 필요하지 않을 것 같아요.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "not_target",
+      "understanding": "mostly",
+      "household_note": "우리 집은 부모님과 살고 있어서 청년 지원은 상관없어요.",
+      "benefit": "no_effect",
+      "intent": "no_need",
+      "dissatisfaction": "none",
+      "shareability": "rarely"
+     },
+     "actions": [
+      "딱히 할 건 없을 것 같다."
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "아, 그런 정책이 있네요? 청년들한테 도움이 될 것 같긴 한데, 우리 집에는 별로 관련이 없겠어요. 자녀들이 그렇게 나이가 어리진 않아서.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "not_target",
+      "understanding": "mostly",
+      "household_note": "우리 집은 청년이 없어서 관계가 별로 없다.",
+      "benefit": "no_effect",
+      "intent": "no_need",
+      "dissatisfaction": "none",
+      "shareability": "rarely"
+     },
+     "actions": [],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "이 정책이 청년들에게 도움을 줄 수는 있겠네요. 하지만 스스로 해당되지 않아서 큰 관심은 가지지 않아요.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "not_target",
+      "understanding": "well",
+      "household_note": "저는 청년이 아니라서 관련이 없습니다.",
+      "benefit": "no_effect",
+      "intent": "no_need",
+      "dissatisfaction": "none",
+      "shareability": "rarely"
+     },
+     "actions": [
+      "별로 생각하지 않음"
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "이거 괜찮은거 같아요. 청년들이 월세 지원 받으면 좀 더 부담이 덜할 것 같고, 경제적으로 여유가 생길 수 있을테니까요.",
+     "stance": "support",
+     "lean": "support",
+     "survey": {
+      "eligibility": "target",
+      "understanding": "mostly",
+      "household_note": "이 정책이 있으면 월세에 대한 부담이 줄어들어서 좋을 것 같아요.",
+      "benefit": "some_help",
+      "intent": "probably",
+      "dissatisfaction": "none",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "정확한 조건 확인하기",
+      "신청 방법 찾아보기",
+      "주변에 이야기해보기"
+     ],
+     "behavior_text": "기회가 된다면 신청해볼까 싶어요.",
+     "behavior_tag": "신청 고려",
+     "behavior_class": "comply"
+    },
+    {
+     "text": "이게 청년들한테는 좀 도움이 될 것 같네요. 부모랑 따로 사는 청년들에게 지원을 해서 월세 부담을 줄여주니까 좋죠. 다만, 우리 집에선 크게 상관은 없겠지만요.",
+     "stance": "support",
+     "lean": "support",
+     "survey": {
+      "eligibility": "not_target",
+      "understanding": "mostly",
+      "household_note": "우리 집은 청년 지원 대상이 아니라 큰 영향은 없습니다.",
+      "benefit": "no_effect",
+      "intent": "no_need",
+      "dissatisfaction": "none",
+      "shareability": "rarely"
+     },
+     "actions": [
+      "뉴스나 이야기로 공유할 것",
+      "관심 없어서 대화에 잘 안할 것"
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "이거, 지원이 되면 좋겠네요. 지금 월세가 부담인데 그나마 도움이 될 것 같습니다.",
+     "stance": "support",
+     "lean": "support",
+     "survey": {
+      "eligibility": "not_target",
+      "understanding": "mostly",
+      "household_note": "저는 무주택자인데 나이가 안 돼서 해당이 안 됩니다.",
+      "benefit": "no_effect",
+      "intent": "no_need",
+      "dissatisfaction": "none",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "뉴스 더 찾아보기",
+      "친구한테 이야기하기",
+      "신청하지 않기"
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "제 경험으론 부모하고 따로 사는 청년들이 많지는 않은 것 같아요. 이런 지원이 필요하긴 할 것 같긴 한데...",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "not_target",
+      "understanding": "mostly",
+      "household_note": "저는 부모와 같이 살지 않아서 해당되지 않습니다.",
+      "benefit": "no_effect",
+      "intent": "probably_not",
+      "dissatisfaction": "none",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "주변 사람과 얘기해 보기"
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "그 정책은 도움이 될 것 같은데요. 요즘 청년들이 힘든 것도 많으니까 지원이 중요하죠.",
+     "stance": "support",
+     "lean": "support",
+     "survey": {
+      "eligibility": "not_target",
+      "understanding": "mostly",
+      "household_note": "저와는 아무런 관련이 없습니다. 저는 청년이 아니니까요.",
+      "benefit": "no_effect",
+      "intent": "no_need",
+      "dissatisfaction": "none",
+      "shareability": "rarely"
+     },
+     "actions": [
+      "별다른 행동은 하지 않을 것 같다."
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "좋은 정책 같긴 한데, 내가 해당되는지는 잘 모르겠네. 미혼도 아니고, 아이들이 다 컸으니 별로 상관은 없지.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "not_target",
+      "understanding": "mostly",
+      "household_note": "나와는 해당 사항이 없는 정책이라 관심이 별로 없다.",
+      "benefit": "no_effect",
+      "intent": "no_need",
+      "dissatisfaction": "none",
+      "shareability": "rarely"
+     },
+     "actions": [
+      "무관심해할 것 같다.",
+      "별로 이야기를 나누지 않을 것 같다."
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "이런 정책이 있군요. 요즘 젊은 분들이 월세가 힘들다는데, 도움이 될 수도 있겠네요. 그래도 조건이 많아서, 과연 얼마나 많은 사람들이 신청할 수 있을지 의문이에요.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "not_target",
+      "understanding": "mostly",
+      "household_note": "우리는 집이 있고 월세를 내지 않으니까 저한테는 해당이 없어요.",
+      "benefit": "no_effect",
+      "intent": "probably_not",
+      "dissatisfaction": "none",
+      "shareability": "rarely"
+     },
+     "actions": [
+      "이 정책에 대해 아는 사람에게 전달하기",
+      "뉴스에서 다루는 정도로 이야기하기"
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "이게 만약 월세 부담을 줄여줄 수 있다면 좋겠네요. 하지만 지원 대상이 되려면 여러 조건이 있어서, 제가 해당하긴 힘든 것 같아요.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "partial",
+      "understanding": "mostly",
+      "household_note": "저희 집 월세는 부모님이 내고 계시니까 직접적인 영향은 없네요.",
+      "benefit": "no_effect",
+      "intent": "probably_not",
+      "dissatisfaction": "not_much",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "주변에 이야기해볼 수도 있을 것 같다. 한 번 알아보자."
+     ],
+     "behavior_text": "조건이 맞는지 한번 확인해볼까 싶긴 한데, 잘 모르겠네요.",
+     "behavior_tag": "조건 확인하기",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "이건 좀 도움될 것 같은데요. 요즘 월세도 비싸지고 그러니까. 지원해준다면 무주택 청년들한테는 괜찮을 것 같아요.",
+     "stance": "support",
+     "lean": "support",
+     "survey": {
+      "eligibility": "not_target",
+      "understanding": "mostly",
+      "household_note": "저는 부모님과 같이 살고 있어서 이 정책의 지원 대상이 안 됩니다.",
+      "benefit": "no_effect",
+      "intent": "no_need",
+      "dissatisfaction": "none",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "뉴스 통해서 더 알아보기",
+      "주변 친구들한테 이야기해보기"
+     ],
+     "behavior_text": "정확히 내 상황이 아닌 것 같아서 굳이 신청하지는 않을 것 같아요.",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    }
+   ],
+   "B": [
+    {
+     "text": "그거 나랑 상관 없는 얘기인데? 나는 청년 월세지원 받기 힘들 것 같고.",
+     "stance": "oppose",
+     "lean": "none",
+     "survey": {
+      "eligibility": "not_target",
+      "understanding": "mostly",
+      "household_note": "우리 집은 남편과 함께 아파트에 살고 있어요.",
+      "benefit": "no_effect",
+      "intent": "probably_not",
+      "dissatisfaction": "none",
+      "shareability": "rarely"
+     },
+     "actions": [
+      "그냥 지나칠 것 같다."
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "음… 이 정책이 무주택 청년을 지원해준다는 건 좋은 것 같긴 한데, 내가 신청할 수 있을지 모르겠네. 부모님하고 살고 있으니까 조건이 맞을지 애매해가지고. 그래도 청년들이 월세 부담을 줄일 수 있다면 긍정적이긴 하지.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "partial",
+      "understanding": "mostly",
+      "household_note": "부모님과 함께 살기 때문에 직접적으로 지원 대상이 아닐 수 있음.",
+      "benefit": "some_help",
+      "intent": "probably",
+      "dissatisfaction": "not_much",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "친구들한테 이 정책 이야기를 해볼까",
+      "복지로 사이트를 한번 둘러볼까"
+     ],
+     "behavior_text": "지원 조건을 좀 더 알아봐야겠어. 잘 모르면 신청을 못할 것 같아.",
+     "behavior_tag": "조건 확인",
+     "behavior_class": "workaround"
+    },
+    {
+     "text": "정책이 청년들에게는 도움이 될 수 있겠네요. 하지만 자세히 보진 않아서 우리 집과는 직접적인 관련이 없는 것 같아요.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "not_target",
+      "understanding": "mostly",
+      "household_note": "우리 집은 해당 지원 대상이 아니어서 상관없습니다.",
+      "benefit": "no_effect",
+      "intent": "no_need",
+      "dissatisfaction": "none",
+      "shareability": "rarely"
+     },
+     "actions": [
+      "특별히 신경 쓰지 않기",
+      "가족과 이야기해 보기"
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "일단 월세 지원이 필요할 것 같지만, 내가 해당되는지는 잘 모르겠어요. 돈이 없다 보니 힘든 청년들한테 도움이 될 수도 있겠네요.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "partial",
+      "understanding": "mostly",
+      "household_note": "저는 월세를 내고 있지만, 소득 기준이 애매할 것 같아요.",
+      "benefit": "some_help",
+      "intent": "probably",
+      "dissatisfaction": "not_much",
+      "shareability": "rarely"
+     },
+     "actions": [
+      "정보 확인 후 지원 신청",
+      "주변 친구들한테 이 정책 이야기하기"
+     ],
+     "behavior_text": "자격이나 요건을 좀 더 확인해봐야 할 것 같아요. 그 다음에 결정할 것 같아요.",
+     "behavior_tag": "신청 검토",
+     "behavior_class": "workaround"
+    },
+    {
+     "text": "청년들한테는 도움이 될 것 같긴 한데, 우리 집에는 별로 관계 없는 얘기네요. 잘 들여다봤자 무슨 소용이겠어요?",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "not_target",
+      "understanding": "mostly",
+      "household_note": "우리 집은 청년들이 없어서 관련이 없어요.",
+      "benefit": "no_effect",
+      "intent": "no_need",
+      "dissatisfaction": "none",
+      "shareability": "rarely"
+     },
+     "actions": [
+      "관심 없음",
+      "듣고 관심 없어서 얘기 안 함"
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "요즘 청년들에게 도움이 될 것 같긴 한데, 내가 어떤 영향이 있을지는 좀 애매하네요. 저한테는 별로 상관이 없을 것 같아요.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "not_target",
+      "understanding": "mostly",
+      "household_note": "내가 청년이 아니라서 해당 사항이 없어요.",
+      "benefit": "no_effect",
+      "intent": "no_need",
+      "dissatisfaction": "none",
+      "shareability": "rarely"
+     },
+     "actions": [
+      "뉴스나 기사에서 더 읽어보기"
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "어쩌면 도움이 될 수 있겠네요. 고생하시는 분들이라도 이렇게 조금이나마 지원받으면 좋겠어요.",
+     "stance": "support",
+     "lean": "support",
+     "survey": {
+      "eligibility": "not_target",
+      "understanding": "mostly",
+      "household_note": "우리 집은 참여 대상이 아님.",
+      "benefit": "no_effect",
+      "intent": "no_need",
+      "dissatisfaction": "none",
+      "shareability": "rarely"
+     },
+     "actions": [
+      "정확한 정보 찾아보기"
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "이번 정책은 청년들에게 도움이 될 수도 있을 것 같아요. 하지만 솔직히 저랑은 큰 연관이 없다보니 그렇게 크게 관심이 가질 것 같지는 않네요.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "not_target",
+      "understanding": "mostly",
+      "household_note": "저는 혼자 사는 사람이라 이 지원이 직접적으로는 필요하지 않네요.",
+      "benefit": "no_effect",
+      "intent": "probably_not",
+      "dissatisfaction": "not_much",
+      "shareability": "rarely"
+     },
+     "actions": [
+      "이 정책에 대해 더 이상 생각하지 않을 것 같다."
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "이 정책, 청년들한테는 꽤 도움이 될 것 같은데, 나한테는 별 상관이 없네. 난 청년도 아닌데 왜 내가 관심 가져야 하지?",
+     "stance": "oppose",
+     "lean": "none",
+     "survey": {
+      "eligibility": "not_target",
+      "understanding": "mostly",
+      "household_note": "우리 가족은 지원 대상이 아니에요.",
+      "benefit": "no_effect",
+      "intent": "no_need",
+      "dissatisfaction": "none",
+      "shareability": "rarely"
+     },
+     "actions": [
+      "정신대로 무시할 것",
+      "가족에게 이야기하지 않을 것"
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "정책이 청년들한테 조금은 도움 될 것 같긴 하네요. 하지만 뭘 어떻게 해야 하는지 복잡해 보여서 좀 귀찮아요.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "not_target",
+      "understanding": "partly",
+      "household_note": "나는 부모님과 함께 살고 있어서 해당 대상이 아님.",
+      "benefit": "no_effect",
+      "intent": "probably_not",
+      "dissatisfaction": "none",
+      "shareability": "rarely"
+     },
+     "actions": [
+      "지켜보기",
+      "친구들과 이야기하기"
+     ],
+     "behavior_text": "내가 꼭 신청할 필요는 없을 것 같아서 그냥 지켜봅니다.",
+     "behavior_tag": "아무것도 안 할 것",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "이거 나랑은 별로 상관없을 것 같은데. 내가 받을 수 있는 조건이 안 되니까.",
+     "stance": "oppose",
+     "lean": "none",
+     "survey": {
+      "eligibility": "not_target",
+      "understanding": "well",
+      "household_note": "우리 집은 지원 대상이 아니니까 상관없다.",
+      "benefit": "no_effect",
+      "intent": "no_need",
+      "dissatisfaction": "none",
+      "shareability": "rarely"
+     },
+     "actions": [
+      "그냥 지나칠 것 같다."
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "청년들을 도와주는 건 좋은 일 같아요. 월세도 부담이 크니까 도움이 필요한 사람들에게는 괜찮은 정책인 것 같아요.",
+     "stance": "support",
+     "lean": "support",
+     "survey": {
+      "eligibility": "not_target",
+      "understanding": "mostly",
+      "household_note": "저는 청년이 아니라서 해당되지 않아요.",
+      "benefit": "no_effect",
+      "intent": "no_need",
+      "dissatisfaction": "none",
+      "shareability": "rarely"
+     },
+     "actions": [
+      "아무것도 안 할 것 같다"
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "요즘 청년들이 많이 힘들다던데, 이런 지원이 있으면 좀 도움이 될 것 같긴 하네요. 하지만 저는 해당이 안 되니 딱히 신경은 안 쓰게 되네요.",
+     "stance": "oppose",
+     "lean": "none",
+     "survey": {
+      "eligibility": "not_target",
+      "understanding": "mostly",
+      "household_note": "이 정책은 저한테는 해당이 없어서 관계가 없어요.",
+      "benefit": "no_effect",
+      "intent": "no_need",
+      "dissatisfaction": "none",
+      "shareability": "rarely"
+     },
+     "actions": [
+      "이야기 안 할 것 같음"
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "이 정책이 청년들에게 집 구하는 데 도움 될 수 있겠네요. 요즘 월세도 너무 비싸니까 필요한 지원 같아요.",
+     "stance": "support",
+     "lean": "support",
+     "survey": {
+      "eligibility": "not_target",
+      "understanding": "mostly",
+      "household_note": "우리 집은 자녀가 있지만 다 같이 살지 않아서 해당이 안 돼요.",
+      "benefit": "no_effect",
+      "intent": "no_need",
+      "dissatisfaction": "none",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "정책 관련 이야기 나누기"
+     ],
+     "behavior_text": "특별히 신청할 생각은 없어요.",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "그거, 지원 받을 수 있는 조건에 맞는 사람들한테는 도움이 될 것 같아요. 특히 월세 부담이 큰 청년들한테는요.",
+     "stance": "support",
+     "lean": "support",
+     "survey": {
+      "eligibility": "not_target",
+      "understanding": "mostly",
+      "household_note": "우리 가족은 이미 집이 있어서 관련이 없어요.",
+      "benefit": "no_effect",
+      "intent": "no_need",
+      "dissatisfaction": "none",
+      "shareability": "rarely"
+     },
+     "actions": [
+      "이 정책에 대해 지나가다 이야기하기"
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "이 정책이 청년들에게 도움이 될 것 같긴 한데, 사실 나는 잘 안 될 것 같은 규정이 많아서 가망이 없지 않을까 싶어.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "not_target",
+      "understanding": "mostly",
+      "household_note": "내가 무주택이라서 별로 관계가 없어요.",
+      "benefit": "no_effect",
+      "intent": "probably_not",
+      "dissatisfaction": "not_much",
+      "shareability": "rarely"
+     },
+     "actions": [
+      "신청 안 할 것 같다"
+     ],
+     "behavior_text": "사실 별로 상관없어서 신청도 안 할 것 같고, 관심도 별로 없는 것 같아.",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "이건 청년들한테 도움이 되겠네요. 하지만 저랑은 아무 상관 없겠죠.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "not_target",
+      "understanding": "mostly",
+      "household_note": "저는 청년이 아니라서 해당되지 않아요.",
+      "benefit": "no_effect",
+      "intent": "no_need",
+      "dissatisfaction": "none",
+      "shareability": "rarely"
+     },
+     "actions": [
+      "아무것도 안 함"
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "이런 정책 나온 거 보니까 뭐 그래도 도움이 필요한 친구들에겐 좋긴 하겠네요. 하지만 내 상황은 별로 안 맞아서 큰 도움은 안 될 듯 싶네요.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "not_target",
+      "understanding": "mostly",
+      "household_note": "전세에 살고 있는 나는 지원 대상이 아니어서 상관없다.",
+      "benefit": "no_effect",
+      "intent": "probably_not",
+      "dissatisfaction": "not_much",
+      "shareability": "rarely"
+     },
+     "actions": [
+      "특별히 신청 안 할 것",
+      "주변에서 이 얘기 나오는 거 듣기"
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "좀 중간에 유용할 것 같긴 한데, 내 경우는 상관이 별로 없어서 그렇게 열심히 보는 건 아닐 것 같아.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "not_target",
+      "understanding": "mostly",
+      "household_note": "나는 만 34세가 넘어서 지원 대상이 아님.",
+      "benefit": "no_effect",
+      "intent": "no_need",
+      "dissatisfaction": "none",
+      "shareability": "rarely"
+     },
+     "actions": [
+      "그냥 넘길 것 같다"
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "음, 이 정책은 청년들을 위한 지원이니까 우리한테는 그다지 관계가 없죠. 사실 저는 청년이 아니고, 월세로 힘들어하는 사람도 아니니까. 들어봐도 딱히 실질적인 도움이 되는 것 같진 않네요.",
+     "stance": "mixed",
+     "lean": "none",
+     "survey": {
+      "eligibility": "not_target",
+      "understanding": "well",
+      "household_note": "저희 집은 청년이 아니라서 관련이 없어요.",
+      "benefit": "no_effect",
+      "intent": "no_need",
+      "dissatisfaction": "none",
+      "shareability": "rarely"
+     },
+     "actions": [
+      "대화에서 가볍게 언급하기"
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "정책은 좋은 것 같은데, 나한테는 안 맞는 것 같아. 내 아이들이 월세 지원을 받고 살아가는 게 더 나을 텐데, 우리 집은 안 될 듯.",
+     "stance": "oppose",
+     "lean": "none",
+     "survey": {
+      "eligibility": "not_target",
+      "understanding": "mostly",
+      "household_note": "우리 가구는 지원 조건에 해당하지 않아.",
+      "benefit": "no_effect",
+      "intent": "probably_not",
+      "dissatisfaction": "none",
+      "shareability": "rarely"
+     },
+     "actions": [
+      "아무것도 안 할 것 같다."
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "청년들한테 도움을 주는 정책이긴 한데, 우리 집과는 관계가 없지. 그런 나이대도 아니고, 소득 조건도 맞지 않아.",
+     "stance": "oppose",
+     "lean": "none",
+     "survey": {
+      "eligibility": "not_target",
+      "understanding": "mostly",
+      "household_note": "우리 가족은 이 지원과는 상관이 없다.",
+      "benefit": "no_effect",
+      "intent": "no_need",
+      "dissatisfaction": "none",
+      "shareability": "rarely"
+     },
+     "actions": [
+      "그냥 듣고 넘어가기"
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    },
+    {
+     "text": "음, 저한테는 필요한 지원 같은데 조건이 좀 까다롭네요. 소득 기준이 생각보다 엄격한 것 같고, 신청 방법도 복잡해 보이네요. 근데 만약에 나는 좀 도움이 될 것 같아.",
+     "stance": "support",
+     "lean": "support",
+     "survey": {
+      "eligibility": "partial",
+      "understanding": "mostly",
+      "household_note": "저희 가족도 지원 받으면 좋겠지만, 소득 기준이 안 될 것 같아요.",
+      "benefit": "some_help",
+      "intent": "probably",
+      "dissatisfaction": "somewhat",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "조건 확인하기",
+      "주변 사람들과 이 얘기 나눠보기"
+     ],
+     "behavior_text": "생각해보니까, 조건이 맞으면 신청해볼까 해요.",
+     "behavior_tag": "조건 확인 후 신청",
+     "behavior_class": "workaround"
+    },
+    {
+     "text": "꼭대는 모르겠지만, 조건 봐서는 도움이 될 것 같기도 하고, 복잡한 건 싫어서 잘 해볼 생각은 없어요.",
+     "stance": "mixed",
+     "lean": "support",
+     "survey": {
+      "eligibility": "partial",
+      "understanding": "mostly",
+      "household_note": "저는 부모와 같이 사니까 일부 조건이 맞는 것 같아요.",
+      "benefit": "some_help",
+      "intent": "probably_not",
+      "dissatisfaction": "not_much",
+      "shareability": "sometimes"
+     },
+     "actions": [
+      "정보 알아보기",
+      "주변 사람들과 이야기 해보기"
+     ],
+     "behavior_text": "",
+     "behavior_tag": "",
+     "behavior_class": "inaction"
+    }
+   ]
+  }
+ }
+}

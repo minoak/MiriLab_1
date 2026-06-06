@@ -1,0 +1,241 @@
+{
+  "n_runs": 5,
+  "threshold": 60,
+  "policy": "청년 월세(기본)",
+  "jaccard_mean": 0.738,
+  "n_ever_manifest": 6,
+  "n_stable_manifest": 4,
+  "n_borderline": 1,
+  "personas": [
+    {
+      "persona_id": "9eedde7feb8f4849a5c9fa13a2970a6e",
+      "name": "조유정",
+      "manifest_count": 5,
+      "n_runs": 5,
+      "score_mean": 63.0,
+      "score_std": 4.0,
+      "tags": [
+        "소득 축소 신고"
+      ]
+    },
+    {
+      "persona_id": "72197f63ec80468bb33f34165fe349d3",
+      "name": "장도형",
+      "manifest_count": 5,
+      "n_runs": 5,
+      "score_mean": 62.0,
+      "score_std": 4.0,
+      "tags": [
+        "민원 제기",
+        "소득 축소 신고"
+      ]
+    },
+    {
+      "persona_id": "825fe1ad2fb4429a900b27cbab6e16ae",
+      "name": "천명준",
+      "manifest_count": 5,
+      "n_runs": 5,
+      "score_mean": 66.0,
+      "score_std": 8.0,
+      "tags": [
+        "소득 축소 신고"
+      ]
+    },
+    {
+      "persona_id": "41e0f809f6984ee6a40e18654ea984be",
+      "name": "박보경",
+      "manifest_count": 4,
+      "n_runs": 5,
+      "score_mean": 58.0,
+      "score_std": 9.8,
+      "tags": [
+        "소득 축소 신고"
+      ]
+    },
+    {
+      "persona_id": "a436b26fcb24455587621f6263f82dbc",
+      "name": "반하늘",
+      "manifest_count": 3,
+      "n_runs": 5,
+      "score_mean": 54.0,
+      "score_std": 12.0,
+      "tags": [
+        "민원 제기",
+        "소득 축소 신고"
+      ]
+    },
+    {
+      "persona_id": "40e61b7943ae413b95723d237dbeb28d",
+      "name": "함재훈",
+      "manifest_count": 1,
+      "n_runs": 5,
+      "score_mean": 42.0,
+      "score_std": 9.8,
+      "tags": [
+        "소득 축소 신고"
+      ]
+    },
+    {
+      "persona_id": "3d49b5e5b9664958bca3dd8f5eebcc99",
+      "name": "김은서",
+      "manifest_count": 0,
+      "n_runs": 5,
+      "score_mean": 30.0,
+      "score_std": 8.9,
+      "tags": []
+    },
+    {
+      "persona_id": "6ba9217998384a8f8b1fac54e907d9cd",
+      "name": "신민재",
+      "manifest_count": 0,
+      "n_runs": 5,
+      "score_mean": 30.0,
+      "score_std": 8.9,
+      "tags": []
+    },
+    {
+      "persona_id": "72405b57dbd34325b141f50b432ab696",
+      "name": "이준영",
+      "manifest_count": 0,
+      "n_runs": 5,
+      "score_mean": 2.0,
+      "score_std": 4.0,
+      "tags": []
+    },
+    {
+      "persona_id": "e89543a75aef40d28744a681939ea81c",
+      "name": "박성인",
+      "manifest_count": 0,
+      "n_runs": 5,
+      "score_mean": 30.0,
+      "score_std": 8.9,
+      "tags": []
+    },
+    {
+      "persona_id": "f6d719eb00a642c9affdd76e851284a7",
+      "name": "정명숙",
+      "manifest_count": 0,
+      "n_runs": 5,
+      "score_mean": 36.0,
+      "score_std": 4.9,
+      "tags": []
+    },
+    {
+      "persona_id": "0eab51c0a392443599c2af8b8c7147f9",
+      "name": "장원주",
+      "manifest_count": 0,
+      "n_runs": 5,
+      "score_mean": 26.0,
+      "score_std": 4.9,
+      "tags": []
+    },
+    {
+      "persona_id": "31398b9c870c48958b913fe31621f19c",
+      "name": "심석현",
+      "manifest_count": 0,
+      "n_runs": 5,
+      "score_mean": 30.0,
+      "score_std": 8.9,
+      "tags": []
+    },
+    {
+      "persona_id": "67e25537ca064a3fa889c21ad4c8fd2f",
+      "name": "서현빈",
+      "manifest_count": 0,
+      "n_runs": 5,
+      "score_mean": 30.0,
+      "score_std": 8.9,
+      "tags": []
+    },
+    {
+      "persona_id": "a930366678d642cd89794a2239c37301",
+      "name": "신선옥",
+      "manifest_count": 0,
+      "n_runs": 5,
+      "score_mean": 34.0,
+      "score_std": 8.0,
+      "tags": []
+    },
+    {
+      "persona_id": "84127925a1414b3d953dc525ee2e47df",
+      "name": "조순점",
+      "manifest_count": 0,
+      "n_runs": 5,
+      "score_mean": 36.0,
+      "score_std": 4.9,
+      "tags": []
+    },
+    {
+      "persona_id": "d67dfc42d07c41189d3328b9dac3729e",
+      "name": "김춘영",
+      "manifest_count": 0,
+      "n_runs": 5,
+      "score_mean": 36.0,
+      "score_std": 4.9,
+      "tags": []
+    },
+    {
+      "persona_id": "6d8a8fdd04e34aefb96be1f2581d8dda",
+      "name": "강현일",
+      "manifest_count": 0,
+      "n_runs": 5,
+      "score_mean": 2.0,
+      "score_std": 4.0,
+      "tags": []
+    },
+    {
+      "persona_id": "86acfdcefc8744ec9fddefb57f4c148f",
+      "name": "이영희",
+      "manifest_count": 0,
+      "n_runs": 5,
+      "score_mean": 34.0,
+      "score_std": 8.0,
+      "tags": []
+    },
+    {
+      "persona_id": "fc200827d7524330970cef12b19c33cb",
+      "name": "이현근",
+      "manifest_count": 0,
+      "n_runs": 5,
+      "score_mean": 30.0,
+      "score_std": 8.9,
+      "tags": []
+    },
+    {
+      "persona_id": "7c04c2c157694de19db4215bb1b31a35",
+      "name": "박지선",
+      "manifest_count": 0,
+      "n_runs": 5,
+      "score_mean": 30.0,
+      "score_std": 8.9,
+      "tags": []
+    },
+    {
+      "persona_id": "a3f8d20cbd584c27b99e6250f15b16d8",
+      "name": "오성철",
+      "manifest_count": 0,
+      "n_runs": 5,
+      "score_mean": 30.0,
+      "score_std": 8.9,
+      "tags": []
+    },
+    {
+      "persona_id": "aad81ac85ed94226832513545969a56f",
+      "name": "이수현",
+      "manifest_count": 0,
+      "n_runs": 5,
+      "score_mean": 36.0,
+      "score_std": 4.9,
+      "tags": []
+    },
+    {
+      "persona_id": "92628b222daa4ee383f49c6a774ddbac",
+      "name": "배태완",
+      "manifest_count": 0,
+      "n_runs": 5,
+      "score_mean": 30.0,
+      "score_std": 8.9,
+      "tags": []
+    }
+  ]
+}

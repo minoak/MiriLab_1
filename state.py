@@ -27,7 +27,7 @@ class Persona(TypedDict):
     demographics: dict # sex/age/marital_status/family_type/housing_type/education_level/occupation/district/province
     persona_text: str  # HF 페르소나 텍스트 1~2개 필드를 합친 것 (프롬프트 주입용)
     signals: dict      # digital_literacy(float) / income_level(str) / government_trust(float) / social_network(list)
-    meta: dict         # 프롬프트엔 안 넣는 나머지 HF 컬럼 (확장/툴팁용)
+    meta: dict         # 나머지 HF 컬럼(상세 서사) — 인물 카드(prompts)가 주입 (2026-06-06부터)
 
 
 class Reaction(TypedDict):
@@ -40,6 +40,19 @@ class Reaction(TypedDict):
     scores: Scores     # 5축 점수
     actions: list      # 예상 행동: ['신청 시도','가족 공유','주민센터 문의','포기' ...]
     grounded: bool     # True=페르소나 grounding / False=ablation(일반 시민)
+    # 여론조사식 강제선택 기울기 'support'|'oppose'|'none' — 실측 여론(강제선택
+    # 문항)과 같은 단위의 찬성률 산출용 보조 측정 (additive, 2026-06-06).
+    lean: NotRequired[str]
+    # 여론조사 설문 응답 원본(선택지 토큰: {'understanding':'well', ...}).
+    # scores 는 이 토큰의 결정론 매핑(prompts.SURVEY_SCORE_MAP) — LLM 은 숫자를
+    # 만지지 않는다. 실측 여론조사와 문항 단위 비교용 (additive, 2026-06-06).
+    survey: NotRequired[dict]
+    # --- 일탈 행동 축(DESIGN §9, additive, 2026-06-06) ---
+    # '속내 행동' — 공식 절차(신청/무시) 밖에서 실제로 어떻게 움직일지.
+    # 설문(survey) 뒤에 생성되므로 5축 측정을 오염시키지 않는다.
+    behavior_class: NotRequired[str]  # 'comply'|'workaround'|'exploit'|'complain'|'inaction' ('' = 미측정)
+    behavior_tag: NotRequired[str]    # 자유 태그 (예: '위장 전입 검토'). 없으면 ''
+    behavior_text: NotRequired[str]   # 속내 한두 문장(의향 수준 — 실행 매뉴얼 아님). 없으면 ''
 
 
 class Interaction(TypedDict):
@@ -109,3 +122,7 @@ class SimState(TypedDict):
     selection: dict                      # contrast.select_trio_from_outcomes 결과 {specs, trio, outcomes, notes}. (구 select_contrast_trio 매트릭스 선별은 dormant.)
     # --- 정책 태그(사이드바 직접 지정): 결정론 명세 + 분류 라벨 ---
     policy_spec: dict                    # policy_spec.spec_from_tags 결과 {name,text,age,income,family_kw,channel,category,support_type}. 매칭/프롬프트/미래 RAG 라벨용.
+    # --- 일탈 행동 캐스팅(DESIGN §9, additive) ---
+    # react 전 LLM 캐스팅 1회 결과. {'threshold': int, 'members': {persona_id:
+    # {'score':0~100,'tag':str,'rationale':str,'manifest':bool}}}. 실패/비grounded 시 {}.
+    casting: dict

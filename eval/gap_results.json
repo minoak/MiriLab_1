@@ -1,0 +1,3754 @@
+{
+ "config": {
+  "n": 24,
+  "runs": 3,
+  "model": "(dry)",
+  "score_scale": "survey_v1"
+ },
+ "rows": [
+  {
+   "policy": "disaster_relief",
+   "persona_id": "3d49b5e5b9664958bca3dd8f5eebcc99",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 19
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "6ba9217998384a8f8b1fac54e907d9cd",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 6
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "72405b57dbd34325b141f50b432ab696",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 68
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "9eedde7feb8f4849a5c9fa13a2970a6e",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 74
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "e89543a75aef40d28744a681939ea81c",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 64
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "f6d719eb00a642c9affdd76e851284a7",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 11
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "0eab51c0a392443599c2af8b8c7147f9",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 8
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "31398b9c870c48958b913fe31621f19c",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 70
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "72197f63ec80468bb33f34165fe349d3",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 72
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "825fe1ad2fb4429a900b27cbab6e16ae",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 28
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "67e25537ca064a3fa889c21ad4c8fd2f",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 74
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "a930366678d642cd89794a2239c37301",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "(합성)",
+   "scores": {
+    "intent": 74
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "84127925a1414b3d953dc525ee2e47df",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 28
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "d67dfc42d07c41189d3328b9dac3729e",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 17
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "6d8a8fdd04e34aefb96be1f2581d8dda",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 18
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "a436b26fcb24455587621f6263f82dbc",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 73
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "86acfdcefc8744ec9fddefb57f4c148f",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 87
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "fc200827d7524330970cef12b19c33cb",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 74
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "7c04c2c157694de19db4215bb1b31a35",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 24
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "40e61b7943ae413b95723d237dbeb28d",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 70
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "a3f8d20cbd584c27b99e6250f15b16d8",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 72
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "aad81ac85ed94226832513545969a56f",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 26
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "41e0f809f6984ee6a40e18654ea984be",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 68
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "92628b222daa4ee383f49c6a774ddbac",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 40
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "3d49b5e5b9664958bca3dd8f5eebcc99",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 58
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "6ba9217998384a8f8b1fac54e907d9cd",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 31
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "72405b57dbd34325b141f50b432ab696",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 89
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "9eedde7feb8f4849a5c9fa13a2970a6e",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 10
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "e89543a75aef40d28744a681939ea81c",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 67
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "f6d719eb00a642c9affdd76e851284a7",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 43
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "0eab51c0a392443599c2af8b8c7147f9",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 36
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "31398b9c870c48958b913fe31621f19c",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 9
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "72197f63ec80468bb33f34165fe349d3",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 53
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "825fe1ad2fb4429a900b27cbab6e16ae",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 43
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "67e25537ca064a3fa889c21ad4c8fd2f",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 62
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "a930366678d642cd89794a2239c37301",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 85
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "84127925a1414b3d953dc525ee2e47df",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 71
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "d67dfc42d07c41189d3328b9dac3729e",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 40
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "6d8a8fdd04e34aefb96be1f2581d8dda",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 44
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "a436b26fcb24455587621f6263f82dbc",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 74
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "86acfdcefc8744ec9fddefb57f4c148f",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 8
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "fc200827d7524330970cef12b19c33cb",
+   "run": 1,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 34
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "7c04c2c157694de19db4215bb1b31a35",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 85
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "40e61b7943ae413b95723d237dbeb28d",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 93
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "a3f8d20cbd584c27b99e6250f15b16d8",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 82
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "aad81ac85ed94226832513545969a56f",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 87
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "41e0f809f6984ee6a40e18654ea984be",
+   "run": 1,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 36
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "92628b222daa4ee383f49c6a774ddbac",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 85
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "3d49b5e5b9664958bca3dd8f5eebcc99",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 59
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "6ba9217998384a8f8b1fac54e907d9cd",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 78
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "72405b57dbd34325b141f50b432ab696",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 7
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "9eedde7feb8f4849a5c9fa13a2970a6e",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 36
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "e89543a75aef40d28744a681939ea81c",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 31
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "f6d719eb00a642c9affdd76e851284a7",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 63
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "0eab51c0a392443599c2af8b8c7147f9",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 57
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "31398b9c870c48958b913fe31621f19c",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 35
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "72197f63ec80468bb33f34165fe349d3",
+   "run": 2,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 55
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "825fe1ad2fb4429a900b27cbab6e16ae",
+   "run": 2,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 35
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "67e25537ca064a3fa889c21ad4c8fd2f",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 45
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "a930366678d642cd89794a2239c37301",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 48
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "84127925a1414b3d953dc525ee2e47df",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 10
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "d67dfc42d07c41189d3328b9dac3729e",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 29
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "6d8a8fdd04e34aefb96be1f2581d8dda",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 1
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "a436b26fcb24455587621f6263f82dbc",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 75
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "86acfdcefc8744ec9fddefb57f4c148f",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 36
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "fc200827d7524330970cef12b19c33cb",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 53
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "7c04c2c157694de19db4215bb1b31a35",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 78
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "40e61b7943ae413b95723d237dbeb28d",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 16
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "a3f8d20cbd584c27b99e6250f15b16d8",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 65
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "aad81ac85ed94226832513545969a56f",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "(합성)",
+   "scores": {
+    "intent": 86
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "41e0f809f6984ee6a40e18654ea984be",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 58
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "disaster_relief",
+   "persona_id": "92628b222daa4ee383f49c6a774ddbac",
+   "run": 2,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 99
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "3d49b5e5b9664958bca3dd8f5eebcc99",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "(합성)",
+   "scores": {
+    "intent": 71
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "6ba9217998384a8f8b1fac54e907d9cd",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 51
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "72405b57dbd34325b141f50b432ab696",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 61
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "9eedde7feb8f4849a5c9fa13a2970a6e",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 24
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "e89543a75aef40d28744a681939ea81c",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 26
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "f6d719eb00a642c9affdd76e851284a7",
+   "run": 0,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 14
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "0eab51c0a392443599c2af8b8c7147f9",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 6
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "31398b9c870c48958b913fe31621f19c",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 72
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "72197f63ec80468bb33f34165fe349d3",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 12
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "825fe1ad2fb4429a900b27cbab6e16ae",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "(합성)",
+   "scores": {
+    "intent": 3
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "67e25537ca064a3fa889c21ad4c8fd2f",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 26
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "a930366678d642cd89794a2239c37301",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 81
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "84127925a1414b3d953dc525ee2e47df",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 44
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "d67dfc42d07c41189d3328b9dac3729e",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 15
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "6d8a8fdd04e34aefb96be1f2581d8dda",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 62
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "a436b26fcb24455587621f6263f82dbc",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 61
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "86acfdcefc8744ec9fddefb57f4c148f",
+   "run": 0,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 10
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "fc200827d7524330970cef12b19c33cb",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 95
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "7c04c2c157694de19db4215bb1b31a35",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 33
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "40e61b7943ae413b95723d237dbeb28d",
+   "run": 0,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 88
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "a3f8d20cbd584c27b99e6250f15b16d8",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 2
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "aad81ac85ed94226832513545969a56f",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 67
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "41e0f809f6984ee6a40e18654ea984be",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 88
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "92628b222daa4ee383f49c6a774ddbac",
+   "run": 0,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 3
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "3d49b5e5b9664958bca3dd8f5eebcc99",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 82
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "6ba9217998384a8f8b1fac54e907d9cd",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "(합성)",
+   "scores": {
+    "intent": 33
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "72405b57dbd34325b141f50b432ab696",
+   "run": 1,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 21
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "9eedde7feb8f4849a5c9fa13a2970a6e",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 28
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "e89543a75aef40d28744a681939ea81c",
+   "run": 1,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 99
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "f6d719eb00a642c9affdd76e851284a7",
+   "run": 1,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 81
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "0eab51c0a392443599c2af8b8c7147f9",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 100
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "31398b9c870c48958b913fe31621f19c",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 30
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "72197f63ec80468bb33f34165fe349d3",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "(합성)",
+   "scores": {
+    "intent": 29
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "825fe1ad2fb4429a900b27cbab6e16ae",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 63
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "67e25537ca064a3fa889c21ad4c8fd2f",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 3
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "a930366678d642cd89794a2239c37301",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 60
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "84127925a1414b3d953dc525ee2e47df",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 88
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "d67dfc42d07c41189d3328b9dac3729e",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 57
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "6d8a8fdd04e34aefb96be1f2581d8dda",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "(합성)",
+   "scores": {
+    "intent": 44
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "a436b26fcb24455587621f6263f82dbc",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 10
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "86acfdcefc8744ec9fddefb57f4c148f",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 29
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "fc200827d7524330970cef12b19c33cb",
+   "run": 1,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 43
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "7c04c2c157694de19db4215bb1b31a35",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 79
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "40e61b7943ae413b95723d237dbeb28d",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "(합성)",
+   "scores": {
+    "intent": 0
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "a3f8d20cbd584c27b99e6250f15b16d8",
+   "run": 1,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 83
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "aad81ac85ed94226832513545969a56f",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 82
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "41e0f809f6984ee6a40e18654ea984be",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 84
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "92628b222daa4ee383f49c6a774ddbac",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 49
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "3d49b5e5b9664958bca3dd8f5eebcc99",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 61
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "6ba9217998384a8f8b1fac54e907d9cd",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 81
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "72405b57dbd34325b141f50b432ab696",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 92
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "9eedde7feb8f4849a5c9fa13a2970a6e",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 51
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "e89543a75aef40d28744a681939ea81c",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 92
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "f6d719eb00a642c9affdd76e851284a7",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 16
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "0eab51c0a392443599c2af8b8c7147f9",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 75
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "31398b9c870c48958b913fe31621f19c",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "(합성)",
+   "scores": {
+    "intent": 18
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "72197f63ec80468bb33f34165fe349d3",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "(합성)",
+   "scores": {
+    "intent": 60
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "825fe1ad2fb4429a900b27cbab6e16ae",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 19
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "67e25537ca064a3fa889c21ad4c8fd2f",
+   "run": 2,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 16
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "a930366678d642cd89794a2239c37301",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 92
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "84127925a1414b3d953dc525ee2e47df",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "(합성)",
+   "scores": {
+    "intent": 95
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "d67dfc42d07c41189d3328b9dac3729e",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 24
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "6d8a8fdd04e34aefb96be1f2581d8dda",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 3
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "a436b26fcb24455587621f6263f82dbc",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 37
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "86acfdcefc8744ec9fddefb57f4c148f",
+   "run": 2,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 97
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "fc200827d7524330970cef12b19c33cb",
+   "run": 2,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 33
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "7c04c2c157694de19db4215bb1b31a35",
+   "run": 2,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 16
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "40e61b7943ae413b95723d237dbeb28d",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 94
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "a3f8d20cbd584c27b99e6250f15b16d8",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 58
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "aad81ac85ed94226832513545969a56f",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "(합성)",
+   "scores": {
+    "intent": 53
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "41e0f809f6984ee6a40e18654ea984be",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "(합성)",
+   "scores": {
+    "intent": 16
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "youth_rent",
+   "persona_id": "92628b222daa4ee383f49c6a774ddbac",
+   "run": 2,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 67
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "3d49b5e5b9664958bca3dd8f5eebcc99",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 56
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "6ba9217998384a8f8b1fac54e907d9cd",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "(합성)",
+   "scores": {
+    "intent": 0
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "72405b57dbd34325b141f50b432ab696",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 22
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "9eedde7feb8f4849a5c9fa13a2970a6e",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 79
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "e89543a75aef40d28744a681939ea81c",
+   "run": 0,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 71
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "f6d719eb00a642c9affdd76e851284a7",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 87
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "0eab51c0a392443599c2af8b8c7147f9",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 71
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "31398b9c870c48958b913fe31621f19c",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 99
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "72197f63ec80468bb33f34165fe349d3",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 71
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "825fe1ad2fb4429a900b27cbab6e16ae",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 24
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "67e25537ca064a3fa889c21ad4c8fd2f",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 98
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "a930366678d642cd89794a2239c37301",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 57
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "84127925a1414b3d953dc525ee2e47df",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 97
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "d67dfc42d07c41189d3328b9dac3729e",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 56
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "6d8a8fdd04e34aefb96be1f2581d8dda",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 64
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "a436b26fcb24455587621f6263f82dbc",
+   "run": 0,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 25
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "86acfdcefc8744ec9fddefb57f4c148f",
+   "run": 0,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 57
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "fc200827d7524330970cef12b19c33cb",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 61
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "7c04c2c157694de19db4215bb1b31a35",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 31
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "40e61b7943ae413b95723d237dbeb28d",
+   "run": 0,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 33
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "a3f8d20cbd584c27b99e6250f15b16d8",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 57
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "aad81ac85ed94226832513545969a56f",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 15
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "41e0f809f6984ee6a40e18654ea984be",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 40
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "92628b222daa4ee383f49c6a774ddbac",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 30
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "3d49b5e5b9664958bca3dd8f5eebcc99",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 27
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "6ba9217998384a8f8b1fac54e907d9cd",
+   "run": 1,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 100
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "72405b57dbd34325b141f50b432ab696",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 99
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "9eedde7feb8f4849a5c9fa13a2970a6e",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 91
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "e89543a75aef40d28744a681939ea81c",
+   "run": 1,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 46
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "f6d719eb00a642c9affdd76e851284a7",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 17
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "0eab51c0a392443599c2af8b8c7147f9",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 95
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "31398b9c870c48958b913fe31621f19c",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 62
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "72197f63ec80468bb33f34165fe349d3",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 85
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "825fe1ad2fb4429a900b27cbab6e16ae",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 90
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "67e25537ca064a3fa889c21ad4c8fd2f",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 65
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "a930366678d642cd89794a2239c37301",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 53
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "84127925a1414b3d953dc525ee2e47df",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 40
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "d67dfc42d07c41189d3328b9dac3729e",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 46
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "6d8a8fdd04e34aefb96be1f2581d8dda",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 70
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "a436b26fcb24455587621f6263f82dbc",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 90
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "86acfdcefc8744ec9fddefb57f4c148f",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 42
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "fc200827d7524330970cef12b19c33cb",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 37
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "7c04c2c157694de19db4215bb1b31a35",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 8
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "40e61b7943ae413b95723d237dbeb28d",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 100
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "a3f8d20cbd584c27b99e6250f15b16d8",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 13
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "aad81ac85ed94226832513545969a56f",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 34
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "41e0f809f6984ee6a40e18654ea984be",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 99
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "92628b222daa4ee383f49c6a774ddbac",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 96
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "3d49b5e5b9664958bca3dd8f5eebcc99",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 54
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "6ba9217998384a8f8b1fac54e907d9cd",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "(합성)",
+   "scores": {
+    "intent": 33
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "72405b57dbd34325b141f50b432ab696",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 68
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "9eedde7feb8f4849a5c9fa13a2970a6e",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "(합성)",
+   "scores": {
+    "intent": 63
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "e89543a75aef40d28744a681939ea81c",
+   "run": 2,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 11
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "f6d719eb00a642c9affdd76e851284a7",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 88
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "0eab51c0a392443599c2af8b8c7147f9",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 9
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "31398b9c870c48958b913fe31621f19c",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 2
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "72197f63ec80468bb33f34165fe349d3",
+   "run": 2,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 33
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "825fe1ad2fb4429a900b27cbab6e16ae",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 28
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "67e25537ca064a3fa889c21ad4c8fd2f",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 15
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "a930366678d642cd89794a2239c37301",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 43
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "84127925a1414b3d953dc525ee2e47df",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 34
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "d67dfc42d07c41189d3328b9dac3729e",
+   "run": 2,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 5
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "6d8a8fdd04e34aefb96be1f2581d8dda",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 30
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "a436b26fcb24455587621f6263f82dbc",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 33
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "86acfdcefc8744ec9fddefb57f4c148f",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 25
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "fc200827d7524330970cef12b19c33cb",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "(합성)",
+   "scores": {
+    "intent": 39
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "7c04c2c157694de19db4215bb1b31a35",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 26
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "40e61b7943ae413b95723d237dbeb28d",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 64
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "a3f8d20cbd584c27b99e6250f15b16d8",
+   "run": 2,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 34
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "aad81ac85ed94226832513545969a56f",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 2
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "41e0f809f6984ee6a40e18654ea984be",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 1
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "age_unification",
+   "persona_id": "92628b222daa4ee383f49c6a774ddbac",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 64
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "3d49b5e5b9664958bca3dd8f5eebcc99",
+   "run": 0,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 24
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "6ba9217998384a8f8b1fac54e907d9cd",
+   "run": 0,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 31
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "72405b57dbd34325b141f50b432ab696",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 84
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "9eedde7feb8f4849a5c9fa13a2970a6e",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 84
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "e89543a75aef40d28744a681939ea81c",
+   "run": 0,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 50
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "f6d719eb00a642c9affdd76e851284a7",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 88
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "0eab51c0a392443599c2af8b8c7147f9",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 29
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "31398b9c870c48958b913fe31621f19c",
+   "run": 0,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 90
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "72197f63ec80468bb33f34165fe349d3",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 51
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "825fe1ad2fb4429a900b27cbab6e16ae",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 16
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "67e25537ca064a3fa889c21ad4c8fd2f",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 80
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "a930366678d642cd89794a2239c37301",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 55
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "84127925a1414b3d953dc525ee2e47df",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 10
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "d67dfc42d07c41189d3328b9dac3729e",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 64
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "6d8a8fdd04e34aefb96be1f2581d8dda",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 76
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "a436b26fcb24455587621f6263f82dbc",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 37
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "86acfdcefc8744ec9fddefb57f4c148f",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 23
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "fc200827d7524330970cef12b19c33cb",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 57
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "7c04c2c157694de19db4215bb1b31a35",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 46
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "40e61b7943ae413b95723d237dbeb28d",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "(합성)",
+   "scores": {
+    "intent": 41
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "a3f8d20cbd584c27b99e6250f15b16d8",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 39
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "aad81ac85ed94226832513545969a56f",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 23
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "41e0f809f6984ee6a40e18654ea984be",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 48
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "92628b222daa4ee383f49c6a774ddbac",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 35
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "3d49b5e5b9664958bca3dd8f5eebcc99",
+   "run": 1,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 25
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "6ba9217998384a8f8b1fac54e907d9cd",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 99
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "72405b57dbd34325b141f50b432ab696",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 33
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "9eedde7feb8f4849a5c9fa13a2970a6e",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 51
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "e89543a75aef40d28744a681939ea81c",
+   "run": 1,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 50
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "f6d719eb00a642c9affdd76e851284a7",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 38
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "0eab51c0a392443599c2af8b8c7147f9",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 74
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "31398b9c870c48958b913fe31621f19c",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 84
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "72197f63ec80468bb33f34165fe349d3",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "(합성)",
+   "scores": {
+    "intent": 49
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "825fe1ad2fb4429a900b27cbab6e16ae",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "(합성)",
+   "scores": {
+    "intent": 63
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "67e25537ca064a3fa889c21ad4c8fd2f",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 92
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "a930366678d642cd89794a2239c37301",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 5
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "84127925a1414b3d953dc525ee2e47df",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "(합성)",
+   "scores": {
+    "intent": 65
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "d67dfc42d07c41189d3328b9dac3729e",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "(합성)",
+   "scores": {
+    "intent": 89
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "6d8a8fdd04e34aefb96be1f2581d8dda",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 67
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "a436b26fcb24455587621f6263f82dbc",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "(합성)",
+   "scores": {
+    "intent": 2
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "86acfdcefc8744ec9fddefb57f4c148f",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "(합성)",
+   "scores": {
+    "intent": 91
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "fc200827d7524330970cef12b19c33cb",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "(합성)",
+   "scores": {
+    "intent": 82
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "7c04c2c157694de19db4215bb1b31a35",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 3
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "40e61b7943ae413b95723d237dbeb28d",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 81
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "a3f8d20cbd584c27b99e6250f15b16d8",
+   "run": 1,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 13
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "aad81ac85ed94226832513545969a56f",
+   "run": 1,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 57
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "41e0f809f6984ee6a40e18654ea984be",
+   "run": 1,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 80
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "92628b222daa4ee383f49c6a774ddbac",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 68
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "3d49b5e5b9664958bca3dd8f5eebcc99",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 33
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "6ba9217998384a8f8b1fac54e907d9cd",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 8
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "72405b57dbd34325b141f50b432ab696",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "(합성)",
+   "scores": {
+    "intent": 68
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "9eedde7feb8f4849a5c9fa13a2970a6e",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 67
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "e89543a75aef40d28744a681939ea81c",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 94
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "f6d719eb00a642c9affdd76e851284a7",
+   "run": 2,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 9
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "0eab51c0a392443599c2af8b8c7147f9",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 93
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "31398b9c870c48958b913fe31621f19c",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 94
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "72197f63ec80468bb33f34165fe349d3",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 63
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "825fe1ad2fb4429a900b27cbab6e16ae",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 61
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "67e25537ca064a3fa889c21ad4c8fd2f",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 98
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "a930366678d642cd89794a2239c37301",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 80
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "84127925a1414b3d953dc525ee2e47df",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 76
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "d67dfc42d07c41189d3328b9dac3729e",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 32
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "6d8a8fdd04e34aefb96be1f2581d8dda",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "(합성)",
+   "scores": {
+    "intent": 38
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "a436b26fcb24455587621f6263f82dbc",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 1
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "86acfdcefc8744ec9fddefb57f4c148f",
+   "run": 2,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 62
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "fc200827d7524330970cef12b19c33cb",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 86
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "7c04c2c157694de19db4215bb1b31a35",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 27
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "40e61b7943ae413b95723d237dbeb28d",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 90
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "a3f8d20cbd584c27b99e6250f15b16d8",
+   "run": 2,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 59
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "aad81ac85ed94226832513545969a56f",
+   "run": 2,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "(합성)",
+   "scores": {
+    "intent": 98
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "41e0f809f6984ee6a40e18654ea984be",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 70
+   },
+   "survey": {},
+   "ok": true
+  },
+  {
+   "policy": "property_tax",
+   "persona_id": "92628b222daa4ee383f49c6a774ddbac",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "(합성)",
+   "scores": {
+    "intent": 10
+   },
+   "survey": {},
+   "ok": true
+  }
+ ]
+}

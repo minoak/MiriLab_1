@@ -281,735 +281,531 @@ const SCHEDULES = {
   "minsu": [
     {
       "start_time": "08:00",
-      "end_time": "08:30",
-      "location_key": "houses",
-      "action": "집에서 휴식"
-    },
-    {
-      "start_time": "08:30",
       "end_time": "09:00",
       "location_key": "houses",
-      "action": "민수는 알람에 맞춰 일어나 커피를 한 잔 내린 후 아침을 간단히 먹는다."
+      "action": "잠에서 깨어나 간단한 아침 식사를 준비하며 하루를 시작한다."
     },
     {
       "start_time": "09:00",
-      "end_time": "10:30",
-      "location_key": "houses",
-      "action": "민수는 구직 사이트를 통해 새로운 일자리를 검색하고 이력서를 업데이트한다."
-    },
-    {
-      "start_time": "10:30",
       "end_time": "11:30",
-      "location_key": "cafe",
-      "action": "민수는 카페에 가서 박사장에게 인사하며 아르바이트 준비를 시작한다."
+      "location_key": "houses",
+      "action": "노트북을 켜고 최신 채용 공고를 확인하며 자기소개서를 정성껏 수정한다."
     },
     {
       "start_time": "11:30",
-      "end_time": "12:30",
-      "location_key": "cafe",
-      "action": "민수는 카페에서 고객을 응대하며 아르바이트를 한다."
+      "end_time": "13:00",
+      "location_key": "park_pond",
+      "action": "마을공원 산책로를 걸으며 머리를 식히고 벤치에 앉아 이웃들과 가벼운 인사를 나눈다."
     },
     {
-      "start_time": "12:30",
-      "end_time": "13:30",
-      "location_key": "fountain_plaza",
-      "action": "민수는 점심시간에 분수광장으로 나가 미영과 함께 점심을 먹으며 이야기를 나눈다."
+      "start_time": "13:00",
+      "end_time": "14:00",
+      "location_key": "policy_center",
+      "action": "청년 구직 활동 지원 프로그램에 대한 상담을 받기 위해 센터를 방문하여 서류를 확인한다."
     },
     {
-      "start_time": "13:30",
-      "end_time": "15:30",
-      "location_key": "cafe",
-      "action": "민수는 카페로 돌아와 오후 아르바이트를 계속한다."
-    },
-    {
-      "start_time": "15:30",
-      "end_time": "18:00",
-      "location_key": "cafe",
-      "action": "민수는 아르바이트를 마치고 박사장과 오늘 있었던 일에 대해 이야기하며 잠시 더 머무른다."
-    },
-    {
-      "start_time": "18:00",
+      "start_time": "14:00",
       "end_time": "19:00",
-      "location_key": "houses",
-      "action": "민수는 집으로 돌아와 간단히 저녁을 준비한다."
+      "location_key": "cafe",
+      "action": "박사장님을 도와 카페 카운터 업무를 보고 단골 손님인 수아와 반갑게 인사를 나눈다."
     },
     {
       "start_time": "19:00",
       "end_time": "20:30",
-      "location_key": "houses",
-      "action": "민수는 저녁을 먹으며 수아와 함께 TV 프로그램을 시청한다."
+      "location_key": "fountain_plaza",
+      "action": "아르바이트를 마친 후 분수대 근처에서 이웃들과 담소를 나누며 저녁 바람을 쐰다."
     },
     {
       "start_time": "20:30",
       "end_time": "22:30",
-      "location_key": "cafe",
-      "action": "민수는 친구들과 카페에서 만나 이야기를 나누며 휴식을 취한다."
+      "location_key": "town_hall",
+      "action": "마을회관 휴게실에서 동네 친구들을 만나 소소한 고민을 나누며 시간을 보낸다."
     },
     {
       "start_time": "22:30",
-      "end_time": "23:30",
-      "location_key": "houses",
-      "action": "민수는 집으로 돌아와 내일 계획을 세우고 간단히 정리한다."
-    },
-    {
-      "start_time": "23:30",
       "end_time": "24:00",
       "location_key": "houses",
-      "action": "집에서 휴식"
+      "action": "집으로 돌아와 오늘 하루를 정리하고 내일의 구직 계획을 세운 뒤 잠자리에 든다."
     }
   ],
   "staff": [
     {
       "start_time": "08:00",
-      "end_time": "08:30",
-      "location_key": "community_center",
-      "action": "주민센터에 도착한 영희는 같은 팀 동료들과 인사를 나누고 하루 업무를 시작한다."
+      "end_time": "09:00",
+      "location_key": "houses",
+      "action": "집에서 출근 준비를 마치고 마을의 아침 상태를 살피며 주민센터로 걸어간다."
     },
     {
-      "start_time": "08:30",
-      "end_time": "10:30",
-      "location_key": "community_center",
-      "action": "영희는 민원인들의 요청을 꼼꼼히 처리하며 필요한 서류를 정리한다."
-    },
-    {
-      "start_time": "10:30",
-      "end_time": "11:00",
-      "location_key": "community_center",
-      "action": "영희는 복지 지원에 대한 상담을 위해 김할머니와 만나 차 한 잔을 나누며 이야기를 나눈다."
-    },
-    {
-      "start_time": "11:00",
+      "start_time": "09:00",
       "end_time": "12:00",
       "location_key": "community_center",
-      "action": "영희는 민원 상담을 계속 진행하며 주민들의 목소리를 귀담아 듣는다."
+      "action": "오전 민원 서류를 검토하고 방문하는 주민들의 복지 관련 상담을 꼼꼼하게 진행한다."
     },
     {
       "start_time": "12:00",
       "end_time": "13:00",
       "location_key": "cafe",
-      "action": "영희는 인근 카페에서 동료들과 함께 점심을 먹으며 일상적인 이야기를 나눈다."
+      "action": "박사장의 카페에서 점심 식사 대용 샌드위치를 먹으며 이웃들과 짧은 대화를 나눈다."
     },
     {
       "start_time": "13:00",
-      "end_time": "15:30",
-      "location_key": "community_center",
-      "action": "영희는 오후 민원 처리를 위해 서류를 정리하고 필요한 자료를 준비한다."
+      "end_time": "15:00",
+      "location_key": "welfare_center",
+      "action": "복지관을 방문하여 김할머니의 건강 상태를 확인하고 시설 이용에 불편함이 없는지 살핀다."
     },
     {
-      "start_time": "15:30",
-      "end_time": "16:30",
-      "location_key": "community_center",
-      "action": "영희는 지역 주민들과의 회의에 참석하여 복지 정책에 대해 의견을 나눈다."
+      "start_time": "15:00",
+      "end_time": "17:00",
+      "location_key": "town_hall",
+      "action": "마을회관에서 자원봉사자 미영과 함께 지역 사회 봉사 프로그램 일정에 대해 논의한다."
     },
     {
-      "start_time": "16:30",
-      "end_time": "17:30",
-      "location_key": "community_center",
-      "action": "영희는 현장 조사를 위해 복지관에 방문하여 이용자들과 소통한다."
-    },
-    {
-      "start_time": "17:30",
-      "end_time": "18:00",
-      "location_key": "community_center",
-      "action": "영희는 하루 업무를 정리하고 내일의 계획을 세운다."
-    },
-    {
-      "start_time": "18:00",
+      "start_time": "17:00",
       "end_time": "18:30",
-      "location_key": "houses",
-      "action": "영희는 집으로 돌아가는 길에 김할머니의 집에 들러 안부를 물어본다."
+      "location_key": "community_center",
+      "action": "사무실로 복귀하여 오늘 현장에서 파악한 민원 사항을 시스템에 기록하고 서류를 정리한다."
     },
     {
       "start_time": "18:30",
       "end_time": "19:30",
-      "location_key": "houses",
-      "action": "영희는 집에서 저녁을 준비하며 하루의 피로를 푼다."
+      "location_key": "fountain_plaza",
+      "action": "퇴근 후 분수광장을 한 바퀴 돌며 산책하는 주민들과 가벼운 인사를 나누고 휴식을 취한다."
     },
     {
       "start_time": "19:30",
-      "end_time": "20:30",
-      "location_key": "houses",
-      "action": "영희는 저녁을 먹고, 가족과 함께 TV를 보며 시간을 보낸다."
-    },
-    {
-      "start_time": "20:30",
-      "end_time": "22:00",
-      "location_key": "houses",
-      "action": "영희는 내일 할 업무를 위해 서류를 정리하고 필요한 자료를 준비한다."
-    },
-    {
-      "start_time": "22:00",
-      "end_time": "23:30",
-      "location_key": "houses",
-      "action": "영희는 하루를 마무리하며 독서로 편안한 시간을 가지다가 취침 준비를 한다."
-    },
-    {
-      "start_time": "23:30",
       "end_time": "24:00",
       "location_key": "houses",
-      "action": "집에서 휴식"
+      "action": "집으로 돌아와 저녁 식사를 하고 조용히 독서를 하며 하루를 마무리한 뒤 잠자리에 든다."
     }
   ],
   "owner": [
     {
       "start_time": "08:00",
-      "end_time": "10:00",
-      "location_key": "cafe",
-      "action": "첫 손님들과 대화를 나누며 커피를 서빙하고, 동네 소식을 듣는다."
-    },
-    {
-      "start_time": "10:00",
-      "end_time": "11:00",
-      "location_key": "cafe",
-      "action": "근처의 고등학생 수아가 카페에 들러 공부하는 모습을 보며 격려해준다."
-    },
-    {
-      "start_time": "11:00",
-      "end_time": "12:30",
-      "location_key": "community_center",
-      "action": "주민센터에서 이웃들과 만나 소소한 이야기를 나누고, 지역 행사에 대한 의견을 나눈다."
-    },
-    {
-      "start_time": "12:30",
-      "end_time": "13:30",
-      "location_key": "cafe",
-      "action": "점심시간에 맞춰 카페로 돌아와 간단한 점심을 먹으며 직원 민수와 담소를 나눈다."
-    },
-    {
-      "start_time": "13:30",
-      "end_time": "15:30",
-      "location_key": "cafe",
-      "action": "오후 손님들을 맞이하며, 커피와 디저트를 서빙하고 이웃들과 소통한다."
-    },
-    {
-      "start_time": "15:30",
-      "end_time": "16:00",
-      "location_key": "fountain_plaza",
-      "action": "분수광장에 나가 잠시 산책하며 동네 사람들과 반갑게 인사를 나눈다."
-    },
-    {
-      "start_time": "16:00",
-      "end_time": "18:30",
-      "location_key": "cafe",
-      "action": "카페로 돌아와 저녁 손님들을 맞이하며 바쁜 오후 시간을 보낸다."
-    },
-    {
-      "start_time": "18:30",
-      "end_time": "20:00",
-      "location_key": "cafe",
-      "action": "저녁 시간이 되어 마감 준비를 하며 직원들과 오늘의 소감을 나눈다."
-    },
-    {
-      "start_time": "20:00",
-      "end_time": "21:00",
-      "location_key": "cafe",
-      "action": "카페를 닫고 마지막 손님을 배웅하며 오늘의 매출을 정리한다."
-    },
-    {
-      "start_time": "21:00",
-      "end_time": "22:30",
+      "end_time": "08:30",
       "location_key": "houses",
-      "action": "귀가 후 저녁을 간단히 먹고 하루 동안 있었던 일들을 생각하며 휴식을 취한다."
+      "action": "아침 식사를 간단히 마치고 오늘 카페에서 사용할 원두와 비품 목록을 점검한다."
+    },
+    {
+      "start_time": "08:30",
+      "end_time": "12:00",
+      "location_key": "cafe",
+      "action": "카페 문을 열고 단골 손님인 다은과 인사를 나누며 신선한 커피를 내린다."
+    },
+    {
+      "start_time": "12:00",
+      "end_time": "13:00",
+      "location_key": "fountain_plaza",
+      "action": "점심 식사 후 분수광장을 산책하며 이웃 주민들과 만나 마을의 새로운 소식을 공유한다."
+    },
+    {
+      "start_time": "13:00",
+      "end_time": "18:00",
+      "location_key": "cafe",
+      "action": "아르바이트생 민수와 함께 몰려드는 오후 손님들을 응대하며 바쁘게 카페를 운영한다."
+    },
+    {
+      "start_time": "18:00",
+      "end_time": "19:00",
+      "location_key": "town_hall",
+      "action": "마을회관에 들러 어르신들께 인사를 드리고 마을 잔치 일정에 대해 의논한다."
+    },
+    {
+      "start_time": "19:00",
+      "end_time": "21:30",
+      "location_key": "cafe",
+      "action": "조용한 저녁 분위기에 맞춰 음악을 바꾸고 카페 내부를 정돈하며 마감 준비를 한다."
+    },
+    {
+      "start_time": "21:30",
+      "end_time": "22:30",
+      "location_key": "cafe",
+      "action": "민수와 함께 주방 집기를 청소하고 오늘 하루의 매출을 정산하며 마감 작업을 마무리한다."
     },
     {
       "start_time": "22:30",
-      "end_time": "23:00",
-      "location_key": "houses",
-      "action": "하루를 마감하며 잠자리에 들기 전에 책을 읽으며 편안한 시간을 보낸다."
-    },
-    {
-      "start_time": "23:00",
       "end_time": "24:00",
       "location_key": "houses",
-      "action": "집에서 휴식"
+      "action": "집으로 귀가하여 따뜻한 물로 샤워를 하고 내일 영업을 위해 일찍 잠자리에 든다."
     }
   ],
   "grandma": [
     {
       "start_time": "08:00",
       "end_time": "09:00",
-      "location_key": "welfare_center",
-      "action": "복지관으로 가는 길에 주변 공원을 산책하며 기분 좋게 하루를 시작한다."
+      "location_key": "garden",
+      "action": "마을텃밭에서 상추와 고추가 잘 자랐는지 살피며 잡초를 정성껏 뽑는다."
     },
     {
       "start_time": "09:00",
+      "end_time": "10:00",
+      "location_key": "bus_stop",
+      "action": "복지관 셔틀버스를 기다리며 정류장에 모인 이웃 주민들과 반갑게 인사를 나눈다."
+    },
+    {
+      "start_time": "10:00",
       "end_time": "12:00",
       "location_key": "welfare_center",
-      "action": "복지관에서 친구들과 프로그램에 참여하고 수다를 나눈다."
+      "action": "복지관 노래 교실 수업에 참여하여 친구들과 함께 즐겁게 노래를 따라 부른다."
     },
     {
       "start_time": "12:00",
-      "end_time": "13:00",
+      "end_time": "13:30",
       "location_key": "welfare_center",
-      "action": "복지관에서 제공하는 점심을 친구들과 함께 나누어 먹는다."
+      "action": "복지관 식당에서 친한 할머니들과 모여 앉아 수다를 떨며 점심 식사를 한다."
     },
     {
-      "start_time": "13:00",
-      "end_time": "14:00",
-      "location_key": "welfare_center",
-      "action": "점심 후 친구들과 함께 카드 게임을 하며 즐거운 시간을 보낸다."
-    },
-    {
-      "start_time": "14:00",
-      "end_time": "15:30",
-      "location_key": "park_pond",
-      "action": "복지관을 나와 마을 공원에서 자연을 감상하며 한가롭게 산책한다."
-    },
-    {
-      "start_time": "15:30",
-      "end_time": "17:00",
+      "start_time": "13:30",
+      "end_time": "15:00",
       "location_key": "fountain_plaza",
-      "action": "분수광장에 앉아 지나가는 사람들을 구경하며 가벼운 담소를 나눈다."
+      "action": "분수광장 벤치에 앉아 아이들이 노는 모습을 구경하며 시원한 바람을 쐰다."
     },
     {
-      "start_time": "17:00",
+      "start_time": "15:00",
+      "end_time": "16:30",
+      "location_key": "community_center",
+      "action": "주민센터에 직접 방문하여 담당 공무원 영희에게 궁금한 행정 절차를 물어본다."
+    },
+    {
+      "start_time": "16:30",
       "end_time": "18:00",
-      "location_key": "welfare_center",
-      "action": "복지관으로 돌아와 친구들과 저녁 모임을 준비한다."
+      "location_key": "park_pond",
+      "action": "마을공원 연못가를 천천히 산책하던 중 박어르신을 만나 건강에 대한 이야기를 나눈다."
     },
     {
       "start_time": "18:00",
-      "end_time": "19:00",
-      "location_key": "welfare_center",
-      "action": "복지관에서 저녁을 먹고, 친구들과 이야기를 나눈다."
-    },
-    {
-      "start_time": "19:00",
-      "end_time": "20:00",
-      "location_key": "welfare_center",
-      "action": "저녁 후 복지관에서 진행되는 음악 프로그램에 참석한다."
-    },
-    {
-      "start_time": "20:00",
-      "end_time": "21:00",
+      "end_time": "19:30",
       "location_key": "houses",
-      "action": "집으로 돌아와 오늘 하루를 정리하고 간단한 개인 시간을 갖는다."
+      "action": "집으로 돌아와 텃밭에서 따온 채소들로 간단하게 저녁 식사를 챙겨 먹는다."
     },
     {
-      "start_time": "21:00",
+      "start_time": "19:30",
       "end_time": "21:30",
       "location_key": "houses",
-      "action": "잠자기 전 책을 읽고 편안한 마음으로 하루를 마무리한다."
+      "action": "거실에서 연속극을 시청하며 하루를 마무리하고 잠자리에 들 준비를 한다."
     },
     {
       "start_time": "21:30",
       "end_time": "24:00",
       "location_key": "houses",
-      "action": "집에서 휴식"
+      "action": "내일 아침 일찍 일어날 수 있도록 일찍 불을 끄고 깊은 잠에 든다."
     }
   ],
   "sua": [
     {
       "start_time": "08:00",
-      "end_time": "12:00",
-      "location_key": "school",
-      "action": "학교에서 수업을 들으며 시험 준비와 진로에 대한 고민을 했다."
-    },
-    {
-      "start_time": "12:00",
-      "end_time": "13:00",
-      "location_key": "school",
-      "action": "점심시간에 친구들과 함께 급식실에서 점심을 먹으며 소소한 이야기를 나눴다."
-    },
-    {
-      "start_time": "13:00",
-      "end_time": "15:30",
-      "location_key": "school",
-      "action": "오후 수업에 참석하며 과목별로 공부 내용을 정리했다."
-    },
-    {
-      "start_time": "15:30",
-      "end_time": "16:00",
+      "end_time": "08:30",
       "location_key": "bus_stop",
-      "action": "학교에서 버스를 타고 카페로 가기 위해 버스정류장에서 기다렸다."
+      "action": "버스정류장에서 등교 버스를 기다리며 우연히 마주친 준호와 짧게 인사를 나눈다."
     },
     {
-      "start_time": "16:00",
-      "end_time": "18:00",
+      "start_time": "08:30",
+      "end_time": "16:30",
+      "location_key": "school",
+      "action": "학교에서 정규 수업을 듣고 쉬는 시간마다 친구들과 진로에 대한 고민을 나눈다."
+    },
+    {
+      "start_time": "16:30",
+      "end_time": "18:30",
       "location_key": "cafe",
-      "action": "카페에서 친구 민수와 함께 수다를 떨며 스트레스를 풀었다."
+      "action": "단골 카페에서 아르바이트 중인 민수 오빠에게 주문을 하고 친구들과 수다를 떨며 스트레스를 푼다."
     },
     {
-      "start_time": "18:00",
-      "end_time": "19:00",
+      "start_time": "18:30",
+      "end_time": "19:30",
+      "location_key": "fountain_plaza",
+      "action": "집으로 돌아가는 길에 분수광장에 잠시 앉아 시원한 물소리를 들으며 복잡한 머릿속을 정리한다."
+    },
+    {
+      "start_time": "19:30",
+      "end_time": "21:00",
       "location_key": "houses",
-      "action": "집에 돌아와 간단한 저녁을 먹고 공부할 준비를 했다."
+      "action": "집에 도착해 가족들과 함께 저녁 식사를 하며 학교에서 있었던 일들을 이야기한다."
     },
     {
-      "start_time": "19:00",
-      "end_time": "22:00",
-      "location_key": "houses",
-      "action": "집에서 진로와 과목 공부를 하며 방과후 시간을 보냈다."
-    },
-    {
-      "start_time": "22:00",
-      "end_time": "23:00",
-      "location_key": "houses",
-      "action": "부모님과 함께 저녁 식사를 하며 일상 이야기를 나누었다."
-    },
-    {
-      "start_time": "23:00",
+      "start_time": "21:00",
       "end_time": "24:00",
       "location_key": "houses",
-      "action": "집에서 휴식"
+      "action": "자신의 방 책상에 앉아 부족한 과목 인터넷 강의를 듣고 자정 무렵 취침을 준비한다."
     }
   ],
   "junho": [
     {
       "start_time": "08:00",
-      "end_time": "12:30",
-      "location_key": "school",
-      "action": "학교에서 수업을 듣는다."
+      "end_time": "08:30",
+      "location_key": "houses",
+      "action": "아침 식사를 마친 뒤 교복을 입고 가방을 챙기며 등교 준비를 한다."
     },
     {
-      "start_time": "12:30",
-      "end_time": "13:00",
-      "location_key": "school",
-      "action": "학교 식당에서 친구들과 점심을 먹는다."
+      "start_time": "08:30",
+      "end_time": "09:00",
+      "location_key": "bus_stop",
+      "action": "학교로 가는 버스를 기다리며 스마트폰으로 친구들과 오늘 계획을 이야기한다."
     },
     {
-      "start_time": "13:00",
-      "end_time": "15:30",
-      "location_key": "school",
-      "action": "오후 수업을 듣는다."
-    },
-    {
-      "start_time": "15:30",
+      "start_time": "09:00",
       "end_time": "16:00",
-      "location_key": "playground",
-      "action": "학교가 끝나고 놀이터로 가서 친구 수아와 지민을 만난다."
+      "location_key": "school",
+      "action": "학교에서 정규 수업을 듣고 쉬는 시간과 점심 시간에 친구들과 어울린다."
     },
     {
       "start_time": "16:00",
-      "end_time": "18:00",
+      "end_time": "17:30",
       "location_key": "playground",
-      "action": "놀이터에서 친구들과 함께 축구를 하며 놀고 시간을 보낸다."
+      "action": "어린이놀이터에서 지민이와 술래잡기를 하며 동생들과 활동적으로 뛰어논다."
     },
     {
-      "start_time": "18:00",
+      "start_time": "17:30",
       "end_time": "18:30",
-      "location_key": "houses",
-      "action": "집으로 돌아와서 저녁 준비를 돕는다."
+      "location_key": "fountain_plaza",
+      "action": "분수광장 벤치에서 수아 누나를 만나 학교 생활에 대한 고민을 나누며 간식을 먹는다."
     },
     {
       "start_time": "18:30",
-      "end_time": "19:00",
+      "end_time": "19:30",
       "location_key": "houses",
-      "action": "가족과 함께 저녁을 먹는다."
+      "action": "집으로 돌아와 가족들과 함께 저녁 식사를 하며 하루 일과를 공유한다."
     },
     {
-      "start_time": "19:00",
-      "end_time": "20:00",
-      "location_key": "houses",
-      "action": "숙제를 하면서 자유로운 시간을 보낸다."
-    },
-    {
-      "start_time": "20:00",
+      "start_time": "19:30",
       "end_time": "21:00",
-      "location_key": "park_pond",
-      "action": "저녁 산책 겸 마을 공원으로 나가서 동네 친구들과 또 놀고 이야기를 나눈다."
+      "location_key": "houses",
+      "action": "방에서 오늘 배운 내용을 복습하고 학교 숙제를 차근차근 마무리한다."
     },
     {
       "start_time": "21:00",
-      "end_time": "22:00",
-      "location_key": "houses",
-      "action": "집에 돌아와서 샤워하고, 휴대폰으로 게임을 하며 시간을 보낸다."
-    },
-    {
-      "start_time": "22:00",
       "end_time": "22:30",
       "location_key": "houses",
-      "action": "잠자기 전 책을 읽고 취침 준비를 한다."
+      "action": "세면을 마친 뒤 좋아하는 음악을 들으며 내일 등교를 위해 가방을 정리한다."
     },
     {
       "start_time": "22:30",
       "end_time": "24:00",
       "location_key": "houses",
-      "action": "집에서 휴식"
+      "action": "침대에 누워 다음 날을 위해 일찍 잠을 청한다."
     }
   ],
   "miyoung": [
     {
       "start_time": "08:00",
       "end_time": "09:00",
-      "location_key": "bus_stop",
-      "action": "버스를 타고 마을회관으로 이동한다."
+      "location_key": "houses",
+      "action": "아이의 아침 식사를 챙겨주고 옷을 입히며 등원 준비를 한다."
     },
     {
       "start_time": "09:00",
-      "end_time": "12:00",
+      "end_time": "09:30",
+      "location_key": "daycare",
+      "action": "아이를 마을공동육아 시설에 맡기며 다른 학부모들과 짧게 인사를 나눈다."
+    },
+    {
+      "start_time": "09:30",
+      "end_time": "12:30",
       "location_key": "town_hall",
-      "action": "마을회관에서 자원봉사 활동으로 행사 준비를 돕는다."
+      "action": "마을회관에서 어르신들을 위한 다과를 준비하고 시설 내부를 정리하는 자원봉사를 한다."
     },
     {
-      "start_time": "12:00",
-      "end_time": "13:00",
+      "start_time": "12:30",
+      "end_time": "13:30",
       "location_key": "cafe",
-      "action": "근처 카페에서 점심을 먹으며 영희와 대화한다."
+      "action": "카페에서 다은을 만나 시원한 음료를 마시며 육아와 마을 일에 대해 수다를 떤다."
     },
     {
-      "start_time": "13:00",
+      "start_time": "13:30",
       "end_time": "15:00",
-      "location_key": "garden",
-      "action": "마을텃밭에서 채소를 기르며 다은과 소통한다."
+      "location_key": "community_center",
+      "action": "주민센터에 들러 담당 공무원 영희와 다음 달 마을 봉사 일정에 대해 논의한다."
     },
     {
       "start_time": "15:00",
-      "end_time": "16:00",
-      "location_key": "fountain_plaza",
-      "action": "분수광장에서 이웃들과 함께 아이를 기다린다."
+      "end_time": "16:30",
+      "location_key": "garden",
+      "action": "마을텃밭에서 저녁 식재료로 쓸 상추와 고추를 수확하고 흙을 고른다."
     },
     {
-      "start_time": "16:00",
-      "end_time": "17:00",
+      "start_time": "16:30",
+      "end_time": "17:30",
       "location_key": "daycare",
-      "action": "아이를 어린이집에서 데리러 간다."
+      "action": "어린이집에서 아이를 하원시키며 선생님으로부터 아이의 하루 일과를 듣는다."
     },
     {
-      "start_time": "17:00",
-      "end_time": "18:00",
+      "start_time": "17:30",
+      "end_time": "18:30",
+      "location_key": "playground",
+      "action": "아이가 친구들과 놀이터에서 노는 동안 다른 주민들과 마을 소식을 공유한다."
+    },
+    {
+      "start_time": "18:30",
+      "end_time": "20:30",
       "location_key": "houses",
-      "action": "집에 돌아와 저녁 준비를 시작한다."
+      "action": "텃밭에서 가져온 채소로 저녁 식사를 준비하여 가족과 함께 먹는다."
     },
     {
-      "start_time": "18:00",
-      "end_time": "19:00",
+      "start_time": "20:30",
+      "end_time": "22:00",
       "location_key": "houses",
-      "action": "가족과 함께 저녁을 먹으며 하루 이야기를 나눈다."
+      "action": "아이를 씻기고 동화책을 읽어주며 잠자리에 들 준비를 돕는다."
     },
     {
-      "start_time": "19:00",
-      "end_time": "21:00",
-      "location_key": "houses",
-      "action": "아이와 함께 놀아주고 책을 읽어준다."
-    },
-    {
-      "start_time": "21:00",
-      "end_time": "22:30",
-      "location_key": "houses",
-      "action": "아이를 재우고 하루의 일과를 정리하며 쉴 시간을 갖는다."
-    },
-    {
-      "start_time": "22:30",
-      "end_time": "23:00",
-      "location_key": "houses",
-      "action": "잠자리에 들기 전 잠시 책을 읽고 하루를 마무리한다."
-    },
-    {
-      "start_time": "23:00",
+      "start_time": "22:00",
       "end_time": "24:00",
       "location_key": "houses",
-      "action": "집에서 휴식"
+      "action": "밀린 집안일을 마무리하고 조용히 차를 마시며 하루를 정리한 뒤 취침한다."
     }
   ],
   "oldman": [
     {
       "start_time": "08:00",
       "end_time": "09:00",
-      "location_key": "welfare_center",
-      "action": "복지관에서 진행하는 커뮤니티 모임에 참석해 이웃들과 담소를 나눈다."
+      "location_key": "houses",
+      "action": "집에서 아침 식사를 하고 가벼운 스트레칭을 하며 하루를 시작한다."
     },
     {
       "start_time": "09:00",
-      "end_time": "10:00",
+      "end_time": "11:00",
+      "location_key": "park_pond",
+      "action": "마을 공원 연못가를 천천히 산책하며 지나가는 이웃들과 반갑게 인사를 나눈다."
+    },
+    {
+      "start_time": "11:00",
+      "end_time": "12:30",
+      "location_key": "welfare_center",
+      "action": "복지관에서 운영하는 서예 프로그램에 참여하여 붓글씨 쓰기에 집중한다."
+    },
+    {
+      "start_time": "12:30",
+      "end_time": "13:30",
+      "location_key": "welfare_center",
+      "action": "복지관 식당에서 김할머니를 만나 함께 점심 식사를 하며 안부를 묻는다."
+    },
+    {
+      "start_time": "13:30",
+      "end_time": "16:30",
+      "location_key": "park_pond",
+      "action": "공원 정자에 앉아 이웃 어르신들과 장기를 두며 즐거운 시간을 보낸다."
+    },
+    {
+      "start_time": "16:30",
+      "end_time": "17:30",
       "location_key": "cafe",
-      "action": "마을 카페에서 박사장과 함께 커피를 마시며 지난 주의 이야기를 나눈다."
+      "action": "박사장의 카페에 들러 따뜻한 차 한 잔을 마시며 잠시 휴식을 취한다."
     },
     {
-      "start_time": "10:00",
-      "end_time": "12:00",
-      "location_key": "park_pond",
-      "action": "공원으로 돌아가 장기를 두기 위해 이웃 어르신들을 기다린다."
-    },
-    {
-      "start_time": "12:00",
-      "end_time": "13:00",
-      "location_key": "park_pond",
-      "action": "공원에서 장기를 두며 점심시간을 보내고, 이웃들과 간단한 도시락을 나눈다."
-    },
-    {
-      "start_time": "13:00",
-      "end_time": "14:00",
-      "location_key": "houses",
-      "action": "집으로 돌아와 잠시 쉬며 책을 읽고 여유로운 오후를 보낸다."
-    },
-    {
-      "start_time": "14:00",
-      "end_time": "16:00",
-      "location_key": "park_pond",
-      "action": "다시 공원으로 나가 장기를 두고 있는 이웃들과 즐거운 시간을 보낸다."
-    },
-    {
-      "start_time": "16:00",
-      "end_time": "17:00",
-      "location_key": "community_center",
-      "action": "주민센터에서 열리는 취미 클래스에 참여해 새로운 친구들을 사귄다."
-    },
-    {
-      "start_time": "17:00",
-      "end_time": "18:00",
-      "location_key": "houses",
-      "action": "집으로 돌아와 저녁 준비를 하며 김할머니와 전화로 이야기를 나눈다."
-    },
-    {
-      "start_time": "18:00",
+      "start_time": "17:30",
       "end_time": "19:00",
       "location_key": "houses",
-      "action": "저녁을 먹고 TV를 보며 하루의 피로를 푼다."
+      "action": "집으로 돌아와 직접 간단한 저녁 식사를 차려 먹는다."
     },
     {
       "start_time": "19:00",
-      "end_time": "20:00",
-      "location_key": "park_pond",
-      "action": "저녁 산책을 겸해 공원으로 나가 주변 이웃들과 인사를 나눈다."
-    },
-    {
-      "start_time": "20:00",
       "end_time": "21:00",
       "location_key": "houses",
-      "action": "집에 돌아와 하루를 정리하며 편안한 마음으로 취침 준비를 한다."
+      "action": "거실에서 텔레비전 뉴스를 시청하며 편안하게 휴식한다."
     },
     {
       "start_time": "21:00",
       "end_time": "24:00",
       "location_key": "houses",
-      "action": "집에서 휴식"
+      "action": "내일의 일과를 위해 일찍 잠자리에 들어 깊은 잠을 청한다."
     }
   ],
   "jimin": [
     {
       "start_time": "08:00",
-      "end_time": "08:30",
-      "location_key": "bus_stop",
-      "action": "지민은 어린이집에 가기 위해 버스를 기다리며 놀이터에서 잠깐 놀았다."
+      "end_time": "09:00",
+      "location_key": "houses",
+      "action": "엄마 미영과 함께 아침밥을 먹고 어린이집에 갈 준비를 하며 가방을 챙긴다."
     },
     {
-      "start_time": "08:30",
-      "end_time": "12:00",
-      "location_key": "daycare",
-      "action": "지민은 어린이집에서 친구들과 함께 다양한 놀이를 하며 즐거운 시간을 보냈다."
-    },
-    {
-      "start_time": "12:00",
+      "start_time": "09:00",
       "end_time": "13:00",
       "location_key": "daycare",
-      "action": "지민은 어린이집에서 점심을 먹고, 친구들과 이야기를 나누었다."
+      "action": "어린이집에서 친구들과 함께 장난감을 가지고 놀며 신나는 오전 활동에 참여한다."
     },
     {
       "start_time": "13:00",
       "end_time": "15:00",
       "location_key": "daycare",
-      "action": "지민은 어린이집에서 미술 활동을 하며 창의력을 발휘했다."
+      "action": "점심 식사를 마친 후 선생님이 읽어주시는 동화책 소리를 들으며 낮잠을 잔다."
     },
     {
       "start_time": "15:00",
-      "end_time": "15:30",
-      "location_key": "bus_stop",
-      "action": "어린이집에서 나와 버스를 기다리며 친구인 준호를 만났다."
+      "end_time": "16:30",
+      "location_key": "daycare",
+      "action": "낮잠에서 깨어나 맛있는 오후 간식을 먹고 친구들과 블록 쌓기 놀이를 한다."
     },
     {
-      "start_time": "15:30",
-      "end_time": "17:30",
-      "location_key": "playground",
-      "action": "지민과 준호는 놀이터에서 함께 그네를 타고 미끄럼틀을 타며 놀았다."
-    },
-    {
-      "start_time": "17:30",
+      "start_time": "16:30",
       "end_time": "18:00",
-      "location_key": "houses",
-      "action": "지민은 집으로 돌아와 엄마와 함께 저녁 준비를 도왔다."
+      "location_key": "playground",
+      "action": "놀이터에서 형 준호를 만나 함께 미끄럼틀을 타고 모래놀이를 하며 즐겁게 뛰어논다."
     },
     {
       "start_time": "18:00",
       "end_time": "19:00",
-      "location_key": "houses",
-      "action": "지민은 가족과 함께 저녁을 먹으며 하루의 이야기를 나눴다."
+      "location_key": "fountain_plaza",
+      "action": "분수광장에서 물줄기를 구경하며 산책 나온 마을 이웃들에게 반갑게 인사한다."
     },
     {
       "start_time": "19:00",
-      "end_time": "20:30",
-      "location_key": "park_pond",
-      "action": "저녁 식사 후, 지민은 가족과 함께 마을공원에서 산책을 하며 자연을 관찰했다."
-    },
-    {
-      "start_time": "20:30",
       "end_time": "21:00",
       "location_key": "houses",
-      "action": "지민은 집에 돌아와서 목욕을 하고 잠자리에 들 준비를 했다."
+      "action": "집으로 돌아와 가족들과 저녁을 먹고 자기 전까지 좋아하는 만화 영화를 본다."
     },
     {
       "start_time": "21:00",
       "end_time": "24:00",
       "location_key": "houses",
-      "action": "집에서 휴식"
+      "action": "오늘 하루의 즐거웠던 기억을 뒤로하고 침대에 누워 깊은 잠에 든다."
     }
   ],
   "daeun": [
     {
       "start_time": "08:00",
-      "end_time": "09:00",
+      "end_time": "09:30",
       "location_key": "houses",
-      "action": "다은은 아침에 일어나 커피를 마시며 하루 일정을 계획했다."
+      "action": "집에서 간단히 아침을 먹고 이메일을 확인하며 프리랜서 업무를 시작한다."
     },
     {
-      "start_time": "09:00",
-      "end_time": "11:00",
+      "start_time": "09:30",
+      "end_time": "12:30",
       "location_key": "cafe",
-      "action": "다은은 카페에 가서 노트북을 열고 프리랜서 작업을 시작했다."
+      "action": "카페의 창가 자리에 앉아 박사장과 인사를 나누고 집중해서 프로젝트 작업을 진행한다."
     },
     {
-      "start_time": "11:00",
-      "end_time": "12:00",
+      "start_time": "12:30",
+      "end_time": "13:30",
+      "location_key": "houses",
+      "action": "집으로 돌아와 직접 차린 간단한 점심 식사를 하며 휴식을 취한다."
+    },
+    {
+      "start_time": "13:30",
+      "end_time": "15:30",
       "location_key": "garden",
-      "action": "다은은 집 근처 텃밭에 가서 식물을 돌보고 잡초를 뽑았다."
+      "action": "마을 텃밭에서 키우는 채소들에 물을 주고 잡초를 뽑으며 이웃들과 가벼운 대화를 나눈다."
     },
     {
-      "start_time": "12:00",
-      "end_time": "13:00",
-      "location_key": "cafe",
-      "action": "다은은 근처 카페로 돌아와 점심을 먹고 잠시 휴식을 취했다."
-    },
-    {
-      "start_time": "13:00",
-      "end_time": "15:00",
-      "location_key": "garden",
-      "action": "다은은 점심 후 텃밭에 다시 가서 새로운 씨앗을 심고 물을 주었다."
-    },
-    {
-      "start_time": "15:00",
-      "end_time": "17:00",
-      "location_key": "cafe",
-      "action": "다은은 카페로 돌아와 작업을 계속하며 주위의 분위기를 즐겼다."
-    },
-    {
-      "start_time": "17:00",
+      "start_time": "15:30",
       "end_time": "18:00",
-      "location_key": "fountain_plaza",
-      "action": "다은은 분수광장에서 잠깐 쉬며 이웃들과 담소를 나누었다."
+      "location_key": "cafe",
+      "action": "다시 카페로 이동해 오후 마감 업무를 처리하며 박사장이 추천해준 신메뉴 음료를 마신다."
     },
     {
       "start_time": "18:00",
-      "end_time": "19:00",
+      "end_time": "19:30",
       "location_key": "houses",
-      "action": "다은은 집으로 돌아와 간단한 저녁을 준비했다."
+      "action": "집에서 저녁 식사를 준비해 먹고 편안한 옷으로 갈아입는다."
     },
     {
-      "start_time": "19:00",
-      "end_time": "20:00",
-      "location_key": "park_pond",
-      "action": "다은은 저녁 식사 후 마을 공원에서 산책하며 하루를 정리했다."
+      "start_time": "19:30",
+      "end_time": "21:00",
+      "location_key": "fountain_plaza",
+      "action": "분수광장을 산책하며 미영을 만나 마을 소식과 육아 고민에 대해 다정하게 이야기를 나눈다."
     },
     {
-      "start_time": "20:00",
-      "end_time": "22:00",
-      "location_key": "houses",
-      "action": "다은은 집에 돌아와 편안한 옷으로 갈아입고 작업을 계속했다."
-    },
-    {
-      "start_time": "22:00",
+      "start_time": "21:00",
       "end_time": "24:00",
       "location_key": "houses",
-      "action": "다은은 작업을 마치고 소설을 읽으며 저녁 시간을 보냈다."
+      "action": "집에서 오늘 작업한 결과물을 최종 검토한 뒤 독서를 하며 차분하게 하루를 마무리한다."
     }
   ]
 };

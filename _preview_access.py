@@ -35,11 +35,11 @@ def main():
     a = AA.analyze(view)
     fixes = (view.get("improvements") or {}).get("policy_fixes") or []
 
-    # 요약 카드 3개 (개선폭은 A/B 실행 후 채워지므로 예시 표기)
+    # 요약 카드 3개 (사각지대는 인생극장 실행 후 채워지므로 예시 표기)
     cards = (
         "<div style='display:flex;gap:12px;'>"
         + "<div style='flex:1;'>" + _card_html("주요 병목", a["main_bottleneck"] or "없음", "#C0392B") + "</div>"
-        + "<div style='flex:1;'>" + _card_html("도움창구 개선폭", "+20.9%p", "#27AE60", "수정안 신청의향 변화") + "</div>"
+        + "<div style='flex:1;'>" + _card_html("정책 사각지대", "2명", "#C0392B", "막힘·못 닿음 (인생극장 결과)") + "</div>"
         + "<div style='flex:1;'>" + _card_html("우선 지원 시민", f"{a['priority']['count']}명", "#2D7DD2",
                                                f"접근 가능성 {a['priority']['threshold_pct']}% 미만") + "</div>"
         + "</div>"

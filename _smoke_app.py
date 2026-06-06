@@ -9,6 +9,10 @@ sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
 
 from streamlit.testing.v1 import AppTest
 
+# 데모 녹화 스냅샷 우회 — 이 스모크는 합성 mock 경로의 인생극장 배선을 검증한다.
+import ui.state_helpers as _sh
+_sh.DEMO_SNAPSHOT_DIR = _sh.DEMO_SNAPSHOT_DIR / "_disabled_for_tests"
+
 at = AppTest.from_file("app.py", default_timeout=60)
 at.run()
 assert not at.exception, f"초기 로드 예외: {at.exception}"

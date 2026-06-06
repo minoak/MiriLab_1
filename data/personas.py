@@ -254,13 +254,25 @@ def _row_to_persona(row, idx: int) -> dict:
     # --- signals (결정론적 파생) ---
     signals = _derive_signals(row, pid)
 
-    # --- meta: 프롬프트엔 안 넣는 부가 컬럼 중 있는 것만 ---
+    # --- meta: 인물 카드(prompts._persona_card)가 주입하는 상세 서사 컬럼 ---
+    # 2026-06-06 react 재설계: "판단은 페르소나 데이터에서" — 데이터셋이 가진
+    # 서사를 전부 꺼내 쓴다(있는 것만 저장). persona/professional 은 persona_text
+    # (600자 컷)와 달리 원문 그대로 보존한다.
     meta = {}
     for key in (
+        "persona",
+        "professional_persona",
         "cultural_background",
         "hobbies_and_interests",
         "career_goals_and_ambitions",
         "family_persona",
+        "sports_persona",
+        "arts_persona",
+        "travel_persona",
+        "culinary_persona",
+        "skills_and_expertise",
+        "bachelors_field",
+        "military_status",
     ):
         v = _to_str(_g(row, key))
         if v:

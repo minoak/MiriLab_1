@@ -21,9 +21,14 @@ st.set_page_config(page_title="미리랩 - 정책 반응 시뮬레이터", layou
 st.title("미리랩 — 정책 반응 시뮬레이터")
 
 # --- 나머지 import (계약상 정해진 공개 API만 사용) ---
-from sample_policies import SAMPLES, DEFAULT_POLICY, SPECS
-from ui.state_helpers import run_simulation
-from ui.model import build_view
+from urllib.parse import urlparse
+
+from sample_policies import SAMPLES, DEFAULT_POLICY, SPECS, SOURCES
+from ui.state_helpers import (
+    run_full_pipeline, PIPELINE_CKPT_KEY,
+    has_demo_snapshot, load_demo_snapshot,
+)
+from graph import llm as llm_mod
 from graph.llm import has_real_key
 from graph.spaces import PLACES
 from policy_spec import spec_from_tags, prompt_with_tags
@@ -101,6 +106,17 @@ def _render_sidebar() -> None:
             help="샘플을 고르면 원문이 채워집니다. '직접 입력'을 고르면 직접 작성하세요.",
         )
 
+        # 원문 출처 — 샘플 정책이면 모델이 된 실존 정책의 공식 사이트를
+        # 원문 바로 아래에 같이 적어 준다(직접 입력은 출처 없음).
+        if choice != "직접 입력":
+            src = SOURCES.get(choice) or {}
+            urls = src.get("urls") or []
+            if urls:
+                links = " · ".join(
+                    f"[{urlparse(u).netloc or u}]({u})" for u in urls
+                )
+                st.caption(f"📚 원문 출처: {links}")
+
         # 3) 시민 수 -----------------------------------------------------
         n = st.number_input(
             "시민 수",
@@ -111,17 +127,40 @@ def _render_sidebar() -> None:
             help="시뮬레이션에 참여할 가상 시민(페르소나) 수입니다.",
         )
 
+        # 3.5) 시민 모델(LLM 선택) ---------------------------------------
+        # 키가 설정된 프로바이더만 선택지로. 선택 즉시 set_provider 로 전환돼
+        # 이후 모든 시민 시뮬 호출(반응/전파/집계/인생극장/리포트)이 이 모델로
+        # 나가고, 미리마을 생성도 따라간다(tab_minivillage 가 동기화).
+        # 게시판 RAG 는 별도(OpenAI 고정). 기본 선택 = .env 의 MIRILAB_LLM.
+        providers = llm_mod.available_providers()
+        if providers:
+            _prov_org = {"openai": "OpenAI", "gemini": "Google"}
+            default_provider = (llm_mod.PROVIDER if llm_mod.PROVIDER in providers
+                                else providers[0])
+            sel_provider = st.selectbox(
+                "시민 모델",
+                providers,
+                index=providers.index(default_provider),
+                format_func=lambda p: (
+                    f"{llm_mod.PROVIDER_MODELS[p]} ({_prov_org.get(p, p)})"
+                ),
+                key="llm_provider",
+                help="시민 반응을 생성할 LLM 입니다. .env 에 키가 있는 모델만 보입니다. "
+                     "모델이 다르면 점수 분포도 달라지므로, 결과 비교는 같은 모델끼리만.",
+            )
+            llm_mod.set_provider(sel_provider)
+
         # 4) 데모 모드 ---------------------------------------------------
         real_key = has_real_key()
         demo = st.checkbox(
             "데모 모드(키 없이 모의 데이터)",
             value=not real_key,
-            help="체크하면 OpenAI 호출 없이 모의 데이터로 화면을 채웁니다.",
+            help="체크하면 LLM 호출 없이 모의 데이터로 화면을 채웁니다.",
         )
         if not real_key:
             st.caption(
-                "OpenAI 키가 설정되지 않아 데모 모드를 권장합니다. "
-                "실제 LLM 반응을 보려면 .env 에 OPENAI_API_KEY 를 설정하세요."
+                "LLM 키가 설정되지 않아 데모 모드를 권장합니다. 실제 시민 반응을 "
+                "보려면 .env 에 OPENAI_API_KEY 또는 GEMINI_API_KEY 를 설정하세요."
             )
 
         # 4.5) 정책 태그(선택) ------------------------------------------
@@ -224,6 +263,26 @@ def _render_sidebar() -> None:
             st.warning("정책 원문이 비어 있습니다. 샘플을 선택하거나 직접 입력해 주세요.")
             return
 
+        # 데모 + 샘플 원문 그대로 + 녹화본 있음 → 실 LLM 녹화 스냅샷 재생(호출 0).
+        # 원문을 고쳤거나 직접 입력이면 녹화본이 그 정책이 아니므로 아래 합성 mock
+        # 경로로 흘러간다(녹화본 = _record_demo.py 가 만든 data/demo_snapshots/).
+        if (demo and choice != "직접 입력"
+                and policy == SAMPLES.get(choice, "").strip()
+                and has_demo_snapshot(choice)):
+            loaded = load_demo_snapshot(choice)
+            if loaded:
+                _sim, _view = loaded
+                # 새 정책으로 갈아탔으니 이전 A/B·리포트 무효화(아래 본 경로와 동일).
+                st.session_state.pop("view_b", None)
+                st.session_state.pop("abtest_policy_b", None)
+                st.session_state.pop("improve_report", None)
+                st.success(
+                    "녹화된 실제 시뮬 결과를 재생했습니다 — LLM 호출 0 · "
+                    f"시민 {len(_view.get('personas') or [])}명 · "
+                    f"생성 모델: {_sim.get('llm_model', '')}"
+                )
+                return
+
         # 사용자 태그 → 결정론 spec(LLM/네트워크 0). 모델엔 '태그 + 원문'을 보낸다.
         income_codes = [_INCOME_OPTIONS[l] for l in inc_sel if l in _INCOME_OPTIONS]
         spec = spec_from_tags(
@@ -241,34 +300,39 @@ def _render_sidebar() -> None:
         spinner_msg = (
             "모의 데이터를 생성하는 중입니다..."
             if demo
-            else "가상 시민들이 정책을 읽고 반응하는 중입니다..."
+            else "시민 반응(축1) → 인생극장(축2) → 집계(축3)를 한 번에 실행 중입니다..."
         )
         with st.spinner(spinner_msg):
             try:
-                sim = run_simulation(model_policy, mock=demo, n=int(n))
-                # 표시는 깨끗하게: state.policy 를 원문으로 복원(태그 접두 제거),
-                # spec 은 additive 로 저장(정책 입력 탭 표시 + 슬라이스 2 인생극장이 사용).
-                sim["policy"] = policy
-                sim["policy_spec"] = spec
-                st.session_state["sim"] = sim
-                st.session_state["view"] = build_view(sim)
-                # 새 정책으로 다시 시뮬했으니 이전 A/B 비교/후보를 무효화한다
-                # (정책이 바뀌면 view_b·수정안 후보가 옛 정책 기준이라 비교가 착시가 됨).
+                # 한 버튼 = 축1→축2→축3 완주(설계방향서 §8-2). 단계 표시는
+                # run_simulation/run_contrast_sim 안의 st.status 가 담당하고,
+                # sim/view/층1 체크포인트 저장은 run_full_pipeline 이 한다.
+                run_full_pipeline(
+                    model_policy, policy=policy, spec=spec, mock=demo, n=int(n)
+                )
+                # 새 정책으로 다시 시뮬했으니 이전 A/B 비교/후보와 종합 리포트를
+                # 무효화한다(정책이 바뀌면 옛 정책 기준이라 표시가 착시가 됨).
                 st.session_state.pop("view_b", None)
                 st.session_state.pop("abtest_policy_b", None)
+                st.session_state.pop("improve_report", None)
             except Exception as e:  # 실행 실패 시 화면을 깨뜨리지 않고 예외 표시.
                 st.session_state["sim"] = None
                 st.session_state["view"] = None
+                st.session_state.pop(PIPELINE_CKPT_KEY, None)
                 st.session_state.pop("view_b", None)
                 st.session_state.pop("abtest_policy_b", None)
+                st.session_state.pop("improve_report", None)
                 st.error("시뮬레이션 실행 중 오류가 발생했습니다.")
                 st.exception(e)
                 return
 
         if demo:
-            st.success("모의 데이터로 시뮬레이션을 완료했습니다. 아래 탭에서 확인하세요.")
+            st.success("모의 데이터로 전체 파이프라인을 완료했습니다. 아래 탭에서 확인하세요.")
         else:
-            st.success("시뮬레이션을 완료했습니다. 아래 탭에서 결과를 확인하세요.")
+            st.success(
+                "축1(시민 반응)→축2(인생극장)→축3(집계)를 완료했습니다. "
+                "아래 탭에서 결과를 확인하세요."
+            )
 
 
 # =====================================================================

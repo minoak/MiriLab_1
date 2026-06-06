@@ -29,7 +29,7 @@ _STATUS_META = {
     "received": ("✅", "수령", "#27AE60"),    # 정책에 닿아 혜택 받음
     "applied":  ("📨", "신청", "#2980B9"),    # 신청까지 진행
     "aware":    ("👀", "알게 됨", "#F39C12"),  # 알았지만 아직 신청 전
-    "blocked":  ("⛔", "막힘", "#E74C3C"),     # 시도했으나 막힘 = 도움 필요
+    "blocked":  ("⛔", "막힘", "#E74C3C"),     # 막힘 — 사유(요건/절차)는 barrier 인용이 말함
     "unaware":  ("🚫", "모름", "#9E9E9E"),     # 존재조차 닿지 못함
 }
 
@@ -100,26 +100,29 @@ def _front_access_chip(resident: dict) -> str:
 # 실행 — 사이드바 단일 정책(+태그)으로 (슬라이스 2: 프롬프트 통일)
 # ---------------------------------------------------------------------------
 def _render_runner(view):
-    """사이드바에서 입력한 단일 정책 원문 + policy_spec(태그)으로 대조 시뮬을 돌린다.
+    """인생극장 재실행(축2부터) — 사이드바 한 버튼의 축1 결과를 재사용한다(§8-2).
 
-    인생극장은 자체 정책 선택기를 두지 않는다. 사이드바 입력을 그대로 모델에 전달해
-    SNS축과 같은 정책·같은 태그를 보게 한다(프롬프트 통일). spec 의 태그는
-    package_text 를 거쳐 시뮬 프롬프트에 함께 실린다.
+    사이드바 '시뮬레이션 실행'이 축1→축2→축3를 이미 완주하므로, 이 버튼은
+    같은 t0 기록 위에서 축2(시간 전개)만 다시 굴리는 **재실행**이다.
+    축1 전수 react 호출이 통째로 절약된다(층1 체크포인트 — 설계방향서 §6).
     """
     from policy_spec import tag_line
-    from graph.llm import has_real_key
-    from ui.state_helpers import run_contrast_sim
+    from ui.state_helpers import rerun_from_axis2
 
     personas = view.get("personas") or []
     policy = (view.get("policy") or "").strip()
     spec = dict(view.get("policy_spec") or {})
 
-    st.markdown("#### 🎬 인생극장 실행 — 사이드바에서 입력한 정책으로")
+    st.markdown("#### 🔁 인생극장 재실행 (축2부터)")
+    st.caption(
+        "사이드바 실행이 만든 시민 반응(t0 기록)은 그대로 두고, "
+        "시간 전개(인생극장)만 다시 굴립니다 — 축1 호출 없음."
+    )
 
     if not policy:
         st.warning(
             "먼저 좌측 사이드바에서 정책을 입력하고 **시뮬레이션 실행**을 누르세요. "
-            "그 정책이 인생극장에도 그대로 쓰입니다."
+            "인생극장은 그 실행에 포함되어 자동으로 채워집니다."
         )
         return
 
@@ -135,24 +138,17 @@ def _render_runner(view):
         )
 
     can_run = bool(policy and personas)
-    if st.button("▶ 인생극장 실행", type="primary", disabled=not can_run,
+    if st.button("🔁 재실행 (축2부터 — 축1 재사용)", disabled=not can_run,
                  key="village_run_contrast"):
-        # spec 에 원문/이름을 방어적으로 보강(사이드바에서 이미 채워지지만 안전망).
-        if spec:
-            spec.setdefault("text", policy)
-            spec.setdefault("name", name)
-        mock = not has_real_key()
-        result = run_contrast_sim(
-            [policy], personas, grounded=True, mock=mock,
-            specs=[spec] if spec else None,   # 사이드바 태그 명세 직접 주입(재추출 X)
-            reactions_by_id=view.get("reactions_by_id"),  # A-2: 1차 반응으로 grounding
-        )
-        view["selection"] = result.get("selection") or {}
-        view["village"] = result.get("village") or {}
-        view["policies"] = [policy]
-        st.session_state["view"] = view
-        st.session_state[_OPEN_KEY] = None   # 새 시뮬 → 펼친 카드 초기화
-        rerun_fragment()
+        out = rerun_from_axis2()
+        if out is None:
+            st.warning(
+                "재사용할 축1 체크포인트가 없습니다. "
+                "좌측 사이드바에서 **시뮬레이션 실행**을 먼저 눌러 주세요."
+            )
+        else:
+            st.session_state[_OPEN_KEY] = None   # 새 시뮬 → 펼친 카드 초기화
+            rerun_fragment()
 
     if not personas:
         st.warning("페르소나가 없습니다. 먼저 좌측 사이드바에서 시뮬레이션을 실행하세요.")
@@ -376,43 +372,46 @@ def _render_journey_strip(events: list):
 
 
 def _outcome_callout_html(events: list) -> str:
-    """접근의 '결론' 콜아웃 HTML(순수) — 닿았나 / 막혔나 / 도움이 필요했나.
+    """접근의 '결론' 콜아웃 HTML(순수) — 상태 라벨 + LLM 인용만.
 
     결론은 전적으로 시뮬 '결과'(events)에서 나온다 — 사전 역할 라벨에 의존하지 않는다.
+    코드는 문장을 짓지 않는다: 상태 토큰의 사전적 의미(라벨)와 인용(barrier/
+    reached_via)까지가 코드의 몫, '왜·어떻게'는 위 여정·산문이 말한다.
+    (구 템플릿의 '신청을 시도했지만'·'자격을 갖추고도'는 데이터에 없는 주장이었다.)
     """
     final = events[-1]["status"] if events else "unaware"
     ever_received = any(e["status"] == "received" for e in events)
     blocked = any(e["status"] == "blocked" for e in events)
 
-    # 막힌 사건의 구체적 막힌 지점(barrier)을 결론에 끌어올린다.
-    barrier = ""
-    for e in events:
-        if e["status"] == "blocked":
-            barrier = next(
-                (s["barrier"].strip() for s in e["steps"] if (s.get("barrier") or "").strip()),
+    def _first(status_key: str, field: str) -> str:
+        """해당 상태 사건들에서 field(LLM 자유텍스트)의 첫 비어있지 않은 값."""
+        for e in events:
+            if e["status"] != status_key:
+                continue
+            val = next(
+                (s[field].strip() for s in e["steps"] if (s.get(field) or "").strip()),
                 "",
             )
-            if barrier:
-                break
+            if val:
+                return val
+        return ""
 
     # 우선순위 = 결과(받음 > 막힘 > 진행 중 > 못 닿음). dist_key/역할과 같은 기준이라
     # 콜아웃·배지·결과표가 한 결과에서 일관되게 나온다(받았다 중간에 막힌 사람도 '수혜').
     if ever_received:
-        icon, msg, color = "✅", "정책에 닿아 실제 혜택을 받았어요.", "#27AE60"
+        via = _first("received", "reached_via")
+        quote = f" — {escape(via)}" if via else ""
+        icon, msg, color = "✅", f"<b>수령</b>{quote}", "#27AE60"
     elif blocked or final == "blocked":
-        where = f" — {escape(barrier)}" if barrier else ""
-        icon, msg, color = (
-            "⛔",
-            f"신청을 시도했지만 막혔어요{where}. "
-            "<b>자격을 갖추고도 닿지 못한, 도움이 필요했던 지점이에요.</b>",
-            "#E74C3C",
-        )
+        barrier = _first("blocked", "barrier")
+        quote = f" — {escape(barrier)}" if barrier else ""
+        icon, msg, color = "⛔", f"<b>막힘</b>{quote}", "#E74C3C"
     elif final == "applied":
-        icon, msg, color = "📨", "신청까지 했지만 아직 결과를 기다리는 중이에요.", "#2980B9"
+        icon, msg, color = "📨", "<b>신청</b> — 결과 대기", "#2980B9"
     elif final == "aware":
-        icon, msg, color = "👀", "정책을 알게 됐지만 신청까지는 가지 못했어요.", "#F39C12"
+        icon, msg, color = "👀", "<b>알게 됨</b> — 신청까지는 안 감", "#F39C12"
     else:  # unaware
-        icon, msg, color = "🚫", "정책의 존재조차 끝내 닿지 못했어요.", "#9E9E9E"
+        icon, msg, color = "🚫", "<b>끝내 모름</b>", "#9E9E9E"
 
     return (
         f"<div style='border-left:4px solid {color};background:{color}14;"
@@ -706,7 +705,10 @@ def render_village_tab(view):
 
     selection = view.get("selection") or {}
     if not selection.get("outcomes"):
-        st.info("위에서 **▶ 인생극장 실행**을 누르세요. (사이드바에서 입력한 정책이 쓰입니다.)")
+        st.info(
+            "좌측 사이드바에서 **시뮬레이션 실행**을 누르면 인생극장까지 자동으로 "
+            "채워집니다. (위 재실행 버튼은 시간 전개만 다시 굴릴 때 쓰세요.)"
+        )
         return
 
     st.divider()

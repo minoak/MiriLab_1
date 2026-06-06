@@ -84,3 +84,22 @@ demo_given = {"정책수용도": 88.0, "사회혼란도": 42.0, "신청의향지
 md = _merge_metrics(demo_given, mk(3, 50))
 assert md["사회혼란도"] == 42.0 and md["정책수용도"] == 88.0, md
 print("✅ 데모(mock 한글 키 직접) 우선 — 회귀 없음")
+
+# v1.2(§8-12): 수용도·의향지수도 공식 단일 소스 — 집계노드 == metrics_common
+from metrics_common import policy_acceptance, application_index
+for name, rx in SCENARIOS:
+    nm = nodes_metrics(rx, [])
+    assert abs(nm["policy_acceptance"] - policy_acceptance(rx)) < 1e-6, name
+    assert abs(nm["application_index"] - application_index(rx)) < 1e-6, name
+print("✅ v1.2 공식 단일 소스: 집계노드 == metrics_common (수용도·의향지수)")
+
+# 값 불변(공식 '이전'이지 재정의 아님) — 손계산 고정값으로 박음
+fixed = mk(10, dissat=10, understanding=50, intent=50)
+m_fixed = nodes_metrics(fixed, [])
+assert m_fixed["policy_acceptance"] == 60.0, m_fixed["policy_acceptance"]  # 0.45·50+0.30·50+0.25·90
+assert m_fixed["application_index"] == 30.0, m_fixed["application_index"]  # 0.6·50+0.4·0 (50<60)
+hot = mk(10, dissat=10, understanding=80, intent=80)
+m_hot = nodes_metrics(hot, [])
+assert m_hot["policy_acceptance"] == 82.5, m_hot["policy_acceptance"]      # 36+24+22.5
+assert m_hot["application_index"] == 88.0, m_hot["application_index"]      # 0.6·80+0.4·100
+print("✅ v1.2 값 불변: 손계산 고정값 일치 (60.0/30.0, 82.5/88.0)")

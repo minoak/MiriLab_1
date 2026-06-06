@@ -5,7 +5,7 @@
 그 시점까지 각자 한 일 + 관계를 LLM 에 줘서 그날 서사가 묻어나는 대화를 생성한다.
 하루치 만남+대화를 통째로 미리 생성(녹화)해 저장 -> index.html 이 시각·장소 기반으로 재생.
 
-gen_schedules.py 와 같은 독립 실행 패턴(graph/ 의존 X, 자체 OpenAI, .env 는 부모 미리랩 것 읽기만).
+gen_schedules.py 와 같은 독립 실행 패턴(graph/ 의존 X, 자체 LLM 클라이언트, .env 는 부모 미리랩 것 읽기만).
 
 [만남 추출]  schedules.json 의 두 캐릭터 블록을 비교해 '같은 시간 + 같은 공용장소' 겹침을 찾는다.
   - 집(houses)은 각자 다른 집이라 제외, 공용장소(카페/복지관/공원 등)만.
@@ -48,12 +48,22 @@ except Exception:
 from openai import OpenAI  # noqa: E402
 from pydantic import BaseModel  # noqa: E402
 
-MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+# LLM 프로바이더: openai(기본) / gemini — graph/llm.py 와 같은 분기의 독립 복제
+# (gen_schedules 와 동일). 메인 앱에선 tab_minivillage 가 set_provider() 로 전파.
+GEMINI_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/openai/"
+PROVIDER_MODELS = {
+    "openai": os.getenv("OPENAI_MODEL", "gpt-4o-mini"),
+    "gemini": os.getenv("MIRILAB_GEMINI_MODEL", "gemini-3-flash-preview"),
+}
+PROVIDER = (os.getenv("MIRILAB_LLM") or "openai").strip().lower()
+if PROVIDER not in PROVIDER_MODELS:
+    PROVIDER = "openai"
+MODEL = PROVIDER_MODELS[PROVIDER]
 
 # 만남 추출 파라미터
 MIN_OVERLAP = 12      # 최소 공존(분) — 짧아도 짧은 대화는 가능(전파 통로 확보 위해 20→12 완화)
 MERGE_GAP = 40        # 같은 쌍·장소가 이 간격(분) 이내로 다시 겹치면 한 만남으로 병합
-MAX_PER_PAIR = 3      # 한 쌍의 하루 최대 만남 수(가장 긴 공존 우선, 2→3 완화)
+MAX_PER_PAIR = 1      # 한 쌍은 하루 1회만(가장 긴 겹침). 카페 등에서 같은 쌍 대화 반복 제거.
 ROUTE_FACTOR = 0.8    # 직선거리 -> 도로 우회 근사 계수. 이동시간을 덜 흐르게(1.5→0.8):
 #   맵이 커서 도보 ~1시간이 걸려 같은 장소(특히 어르신↔카페)서도 엇갈려 만남이 끊겼다.
 #   0.8 이면 어르신이 이웃과 연결되고, 전파가 며칠에 걸쳐 점진적으로 퍼진다(관측 목적).
@@ -63,21 +73,38 @@ SPEED_BASE = 26       # index.html createAgent 의 speed=26+((i%5)*3) 와 정합
 
 
 # --------------------------------------------------------------------------
-# OpenAI (gen_schedules 와 동일 독립 패턴)
+# LLM 클라이언트 (gen_schedules 와 동일 독립 패턴)
 # --------------------------------------------------------------------------
-_client = None
+_clients = {}  # 프로바이더별 클라이언트 캐시(전환 왕복에도 재생성 없음)
+
+
+def set_provider(name):
+    """프로바이더 런타임 전환(메인 앱 '시민 모델' 선택기 → tab_minivillage 가 호출)."""
+    global PROVIDER, MODEL
+    name = (name or "").strip().lower()
+    if name not in PROVIDER_MODELS:
+        raise ValueError(f"알 수 없는 프로바이더: {name!r}")
+    PROVIDER = name
+    MODEL = PROVIDER_MODELS[name]
 
 
 def has_real_key() -> bool:
+    if PROVIDER == "gemini":
+        return bool(os.getenv("GEMINI_API_KEY"))
     key = os.getenv("OPENAI_API_KEY")
     return bool(key) and not key.startswith("sk-your-key")
 
 
 def get_client() -> OpenAI:
-    global _client
-    if _client is None:
-        _client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"), max_retries=3)
-    return _client
+    client = _clients.get(PROVIDER)
+    if client is None:
+        if PROVIDER == "gemini":
+            client = OpenAI(api_key=os.getenv("GEMINI_API_KEY"),
+                            base_url=GEMINI_BASE_URL, max_retries=3)
+        else:
+            client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"), max_retries=3)
+        _clients[PROVIDER] = client
+    return client
 
 
 def structured_call(messages, schema, temperature=0.8):
@@ -156,30 +183,36 @@ def _arrival_times(vid, schedule, home, parr, spd):
 def extract_meetings(schedules, villagers, locations, anchors):
     public = {l["key"] for l in locations if l["key"] != "houses"}
     by_id = {v["id"]: v for v in villagers}
-    parr = {k: v["arrival"] for k, v in anchors.get("places", {}).items()}
-    home = {r: h["pos"] for h in anchors.get("houses", []) for r in h.get("residents", [])}
-    spd = {v["id"]: (SPEED_BASE + (i % 5) * 3) / 3.2 for i, v in enumerate(villagers)}
-
-    # 관계(아는 사이) 집합 — 이제 만남을 '막는 게이트'가 아니라 대화 친밀도 플래그로만 쓴다.
+    # 관계(아는 사이) — 만남 게이트가 아니라 대화 친밀도 플래그로만 쓴다.
     rels = set()
     for v in villagers:
         for r in v.get("relationships", []):
             if r in by_id:
                 rels.add(tuple(sorted([v["id"], r])))
 
-    # 각 캐릭터의 블록별 '실제 도착 시각' 추정
-    arr = {vid: _arrival_times(vid, schedules.get(vid, []), home, parr, spd[vid]) for vid in by_id}
+    # 각 캐릭터의 '스케줄 블록' = (장소, 시작분, 끝분). **이동시간은 무시**한다 — iframe 이
+    # 도착을 기다리며 시간을 멈추므로(ⓐ), '스케줄상 같은 장소·시간'이면 만남으로 충분하다.
+    # (도착시뮬 ROUTE_FACTOR 근사는 폐기: 스케줄은 겹치는데 도보로 엇갈려 끊기던 만남
+    #  — 특히 어르신↔카페 — 이 살아나고, gen 의 만남이 재생과 정확히 일치한다.)
+    sched = {}
+    for vid in by_id:
+        blocks = []
+        for b in schedules.get(vid, []):
+            s, e = parse_hm(b["start_time"]), parse_hm(b["end_time"])
+            if s is not None and e is not None and e > s:
+                blocks.append((b["location_key"], s, e))
+        sched[vid] = blocks
 
-    # 1) 두 캐릭터가 같은 공용장소에 '함께 도착해 머무는' 공존 구간(도착 시각 기준).
-    #    전파를 보려면 통로가 많아야 한다 → 아는 사이로 제한하지 않고 '같은 장소면 만남'.
     ids = [v["id"] for v in villagers]
     idx = {vid: i for i, vid in enumerate(ids)}
-    raw = defaultdict(list)  # (a,b,place) -> [(공존시작, 공존끝), ...]
+    raw = defaultdict(list)  # (a,b,place) -> [(겹침시작, 겹침끝), ...]
+
+    # 1) 공용장소 스케줄 겹침(모든 쌍 — 같은 장소·시간이면 대화)
     for a, b in combinations(ids, 2):
-        for ka, arra, ea in arr[a]:
-            for kb, arrb, eb in arr[b]:
+        for ka, sa, ea in sched[a]:
+            for kb, sb, eb in sched[b]:
                 if ka == kb and ka in public:
-                    s, e = max(arra, arrb), min(ea, eb)  # 둘 다 도착한 시각 ~ 먼저 떠나는 시각
+                    s, e = max(sa, sb), min(ea, eb)
                     if e - s >= MIN_OVERLAP:
                         raw[(a, b, ka)].append((s, e))
 
@@ -191,13 +224,13 @@ def extract_meetings(schedules, villagers, locations, anchors):
         for ha, hb in combinations(res, 2):
             housemates.add(tuple(sorted([ha, hb], key=lambda x: idx[x])))  # ids 순서 유지
     for a, b in housemates:
-        for ka, arra, ea in arr[a]:
+        for ka, sa, ea in sched[a]:
             if ka != "houses":
                 continue
-            for kb, arrb, eb in arr[b]:
+            for kb, sb, eb in sched[b]:
                 if kb != "houses":
                     continue
-                s, e = max(arra, arrb), min(ea, eb)
+                s, e = max(sa, sb), min(ea, eb)
                 if e - s >= MIN_OVERLAP:
                     raw[(a, b, "houses")].append((s, e))
 
@@ -310,13 +343,13 @@ def generate(force_fallback=False):
 
     use_llm = has_real_key() and not force_fallback
     if not use_llm:
-        why = "강제 폴백" if force_fallback else "OpenAI 키 없음"
+        why = "강제 폴백" if force_fallback else "LLM 키 없음"
         print(f"[gen_dialogues] {why} -> 결정론 폴백 대화")
         for m in meetings:
             m["turns"] = fallback_dialogue(m, by_id, loc_label)
         generated_with = "fallback"
     else:
-        print(f"[gen_dialogues] OpenAI({MODEL}) -> 맥락 대화 생성 ({len(meetings)}콜)")
+        print(f"[gen_dialogues] {PROVIDER}({MODEL}) -> 맥락 대화 생성 ({len(meetings)}콜)")
         system = build_dialogue_system(villagers, locations)
 
         def gen_one(m):
@@ -439,26 +472,27 @@ def build_meeting_system(villagers, locations, policy):
         f"- {v['name']}({v['id']}): {v['age']}세 {v['occupation']}, {v['personality']}"
         for v in villagers
     )
+    # 2026-06-06 재설계: 같은 억제문("여러 화제 중 하나")을 4회 반복하던
+    # 패치타워 철거 — 세계 사실은 한 번씩만, 중립으로. 대화에 정책이 나올지는
+    # 두 사람의 사이·상황·관심이 정한다. 전파 게이트는 코드(_apply_delta)가 보증.
     if (policy or "").strip():
         situation = (
-            "[오늘 마을의 정책 상황]\n"
-            "최근 다음 정책이 발표되어 마을에 '퍼지는 중'입니다:\n"
+            "[동네 사정]\n"
+            "최근 이런 정책이 발표됐고, 아는 사람들 사이에서 가끔 화제에 오릅니다 — "
+            "일·가족·날씨·건강·동네 소식 같은 여느 화제들 중 하나로.\n"
             f'"""\n{policy.strip()}\n"""\n'
-            "- 각 인물은 이 정책을 이미 알 수도, 전혀 모를 수도 있습니다(만남 정보에 현재 인지 상태가 주어집니다).\n"
-            "- 한 사람만 알고 상대는 모르면, 대화에서 자연스럽게 알려줄 수도(또는 화제가 안 될 수도) 있습니다.\n"
-            "- 둘 다 모르면 정책 이야기는 나오지 않습니다(평범한 잡담).\n"
-            "- 아는 사람은 자기 처지(나이·직업·형편)에 맞는 생각·감정(관심/찬성/반대/불안/무관심)을 드러냅니다.\n"
+            "- 정책 얘기가 나올지는 두 사람의 사이·상황·관심에 달렸습니다. 안 나와도 됩니다.\n"
+            "- 한쪽만 알 때 정책 얘기가 나오면, 모르던 쪽이 그 자리에서 알게 될 수 있습니다.\n"
+            "- 둘 다 모르면 정책 이야기는 나오지 않습니다.\n"
         )
     else:
-        situation = "[상황] 특별한 정책 없이 평범한 동네 일상입니다.\n"
+        situation = "[동네 사정] 특별한 정책 없이 평범한 일상입니다.\n"
     return (
-        "당신은 사회 시뮬레이션의 작가입니다. 미리마을 두 주민이 같은 장소에서 마주친 순간, "
-        "그 자리에서 실제로 나눌 법한 자연스러운 한국어 대화를 쓰고, 대화 뒤 각자의 변화를 보고합니다.\n\n"
+        "당신은 미리마을의 기록자입니다. 두 주민이 같은 장소에서 마주친 순간 "
+        "실제로 나눌 법한 대화를 쓰고, 대화 뒤 각자의 변화를 보고합니다.\n\n"
         + situation +
         "\n규칙:\n"
-        "- 짧고 일상적인 구어체. 한 사람당 한두 문장, 전체 3~5턴.\n"
-        "- 두 사람의 '오늘 한 일'·성격·관계가 자연스럽게 묻어나야 한다.\n"
-        "- 친한 사이면 편하게, 잘 모르는 사이면 가볍고 예의 있게.\n"
+        "- 각자의 말은 그 사람이 평소 하는 말 그대로. 짧은 구어체, 한 사람당 한두 문장, 전체 3~5턴.\n"
         "- speaker_id 는 반드시 주어진 두 참가자 id 중 하나.\n"
         "- 변화 보고(a_delta=[A], b_delta=[B]): villager_id, "
         "learned_policy(이 대화로 정책을 '처음' 알게 됐으면 true), "
@@ -477,14 +511,15 @@ def build_meeting_user(m, by_id, loc_label, schedules, today, close):
     ta, tb = today[m["a"]], today[m["b"]]
     a_aw, b_aw = ta["awareness"] in AWARE_SET, tb["awareness"] in AWARE_SET
     if not a_aw and not b_aw:
-        rule = ("⚠️ 두 사람 다 이 정책을 '전혀 모릅니다' → 대화에 정책 이야기가 "
-                "절대 나오면 안 됩니다(그냥 평범한 동네 잡담). 둘 다 learned_policy=false, awareness=unaware.")
+        rule = ("두 사람 다 이 정책을 전혀 모릅니다 → 정책 이야기는 나오지 않습니다. "
+                "둘 다 learned_policy=false, awareness=unaware.")
     elif a_aw != b_aw:
         knower = a["name"] if a_aw else b["name"]
-        rule = (f"한 사람({knower})만 정책을 압니다 → 아는 쪽이 자연스럽게 알려줄 수도(또는 화제가 "
-                "안 될 수도) 있습니다. 모르던 쪽이 이 대화로 알게 되면 그쪽만 learned_policy=true.")
+        rule = (f"한 사람({knower})만 정책을 압니다. 꺼낼지는 {knower}에게 달렸습니다 — "
+                "꺼내서 모르던 쪽이 들으면 그쪽만 learned_policy=true, "
+                "안 나오면 둘 다 false(awareness 그대로).")
     else:
-        rule = "두 사람 다 정책을 압니다 → 정책에 대한 서로의 생각·감정을 나눌 수 있습니다."
+        rule = "두 사람 다 정책을 압니다. 얘기할 수도, 안 할 수도 있습니다."
     return (
         f"[만남] {fmt_hm(m['start'])}, {place}에서 {a['name']}과(와) {b['name']}이 마주쳤습니다. ({rel})\n\n"
         f"[A] {a['name']}({a['id']}) {a['age']}세 {a['occupation']}. {a['personality']}\n"
@@ -515,7 +550,8 @@ def build_diary_messages(v, today, schedule, loc_label, policy):
     return [
         {"role": "system", "content": (
             "당신은 미리마을 주민이 하루를 마치고 집에서 쓰는 1인칭 일기를 대신 써 줍니다. "
-            "그날 있었던 일을 짧게 압축하되, 정책에 대해 알게 됐거나 느낀 게 있으면 솔직히 담습니다.")},
+            "그날 있었던 일을 그 사람의 평소 말로 짧게 압축합니다. 무엇을 적을 만했는지는 "
+            "그 사람의 하루가 정합니다.")},
         {"role": "user", "content": (
             f"[{v['name']}({v['id']})] {v['age']}세 {v['occupation']}. {v['personality']}\n"
             f"어제 일기: {today['diary'] or '(없음)'}\n"

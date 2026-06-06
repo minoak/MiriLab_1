@@ -153,20 +153,37 @@ def _gen_sig() -> tuple:
         return ()
 
 
+def _sync_llm_provider(*mods) -> None:
+    """메인 앱 '시민 모델' 선택기의 선택을 gen 모듈에 전파.
+
+    gen 스크립트는 graph.llm 미의존(독립)이 설계라, 다리는 이쪽(메인 UI)에서 놓는다.
+    CLI 단독 실행(python 미리마을/gen_*.py)은 .env 의 MIRILAB_LLM 을 그대로 따른다.
+    """
+    try:
+        from graph import llm as _llm
+        for m in mods:
+            if hasattr(m, "set_provider"):
+                m.set_provider(_llm.PROVIDER)
+    except Exception:
+        pass  # 동기화 실패 시 gen 은 .env 기본값으로 동작(생성 자체는 무해)
+
+
 def _load_gen():
     """미리마을 gen_schedules·gen_dialogues 를 importlib 로 로드(파일 변경 시 재로드)."""
     sig = _gen_sig()
-    if "gs" in _GEN_MODULES and _GEN_MODULES.get("_sig") == sig:
-        return _GEN_MODULES["gs"], _GEN_MODULES["gd"]
-    for key, fname, modname in (("gs", "gen_schedules.py", "_miri_gen_schedules"),
-                                ("gd", "gen_dialogues.py", "_miri_gen_dialogues")):
-        spec = importlib.util.spec_from_file_location(modname, str(MINIVILLAGE_ROOT / fname))
-        mod = importlib.util.module_from_spec(spec)
-        sys.modules[modname] = mod
-        spec.loader.exec_module(mod)
-        _GEN_MODULES[key] = mod
-    _GEN_MODULES["_sig"] = sig
-    return _GEN_MODULES["gs"], _GEN_MODULES["gd"]
+    if not ("gs" in _GEN_MODULES and _GEN_MODULES.get("_sig") == sig):
+        for key, fname, modname in (("gs", "gen_schedules.py", "_miri_gen_schedules"),
+                                    ("gd", "gen_dialogues.py", "_miri_gen_dialogues")):
+            spec = importlib.util.spec_from_file_location(modname, str(MINIVILLAGE_ROOT / fname))
+            mod = importlib.util.module_from_spec(spec)
+            sys.modules[modname] = mod
+            spec.loader.exec_module(mod)
+            _GEN_MODULES[key] = mod
+        _GEN_MODULES["_sig"] = sig
+    gs, gd = _GEN_MODULES["gs"], _GEN_MODULES["gd"]
+    # 캐시 적중이어도 매번 동기화 — 사용자가 사이드바에서 모델을 바꿨을 수 있다.
+    _sync_llm_provider(gs, gd)
+    return gs, gd
 
 
 def _load_sim_state():
@@ -219,6 +236,15 @@ def _has_real_key() -> bool:
 _POLICY_KEY = "minivillage_policy"
 
 
+def _pull_main_policy(text: str) -> None:
+    """[메인 정책 가져오기] on_click 콜백.
+
+    text_area(key=_POLICY_KEY) 가 이미 그려진 뒤 본문에서 같은 키를 수정하면
+    StreamlitAPIException — 콜백은 다음 rerun 의 위젯 생성 *전*에 실행돼 합법.
+    """
+    st.session_state[_POLICY_KEY] = text
+
+
 def _run_and_refresh(policy: str, fresh: bool, spinner_msg: str) -> None:
     """생성을 실행하고 성공 시에만 fragment 재실행. 실패는 friendly 에러로 격리.
 
@@ -253,11 +279,10 @@ def _render_control_panel(view) -> None:
             )
         with col_b:
             main_policy = (view or {}).get("policy") if isinstance(view, dict) else None
-            if st.button("⬇ 메인 정책\n가져오기", use_container_width=True,
-                         disabled=not main_policy,
-                         help="사이드바 '정책 입력'의 정책 내용을 가져옵니다(프롬프트는 미리마을 전용)."):
-                st.session_state[_POLICY_KEY] = main_policy or ""
-                rerun_fragment()
+            st.button("⬇ 메인 정책\n가져오기", use_container_width=True,
+                      disabled=not main_policy,
+                      help="사이드바 '정책 입력'의 정책 내용을 가져옵니다(프롬프트는 미리마을 전용).",
+                      on_click=_pull_main_policy, args=(main_policy or "",))
 
         if _has_real_key():
             st.caption("🔑 OpenAI 키 감지됨 — 실제 LLM 으로 생성합니다. "

@@ -34,7 +34,9 @@ STYLE = {
     # 5축 점수 한글 라벨 (Scores 키 → 표시 이름)
     "score_labels": {
         "understanding": "이해도",
-        "benefit": "수혜가능성",
+        # 설문 전환 후 benefit = 본인이 느끼는 살림 영향(자기 인식) — 객관적 수혜
+        # 확률이 아니다. 구 라벨 '수혜가능성'은 그 오독을 유발해 교체(설계방향서 §10).
+        "benefit": "기대 수혜(자기 인식)",
         "intent": "신청의향",
         "dissatisfaction": "불만도",
         "shareability": "공유가능성",

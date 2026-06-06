@@ -16,6 +16,9 @@ from prompts import (
     build_react_messages,
     build_interact_messages,
     build_aggregate_messages,
+    build_casting_messages,
+    SURVEY_ITEMS,
+    SURVEY_SCORE_MAP,
 )
 from state import SimState
 
@@ -23,21 +26,96 @@ from state import SimState
 # ──────────────────────────────────────────────────────────────────────────
 # pydantic 응답 스키마 (OpenAI 구조화 출력용)
 # ──────────────────────────────────────────────────────────────────────────
-class ScoresModel(BaseModel):
-    """시민 1명의 5축 점수. 모두 0~100 정수."""
-    understanding: int = Field(ge=0, le=100, description="이해도")
-    benefit: int = Field(ge=0, le=100, description="수혜 가능성")
-    intent: int = Field(ge=0, le=100, description="신청 의향")
-    dissatisfaction: int = Field(ge=0, le=100, description="불만도")
-    shareability: int = Field(ge=0, le=100, description="공유 가능성")
+def _survey_q(field: str) -> str:
+    """SURVEY_ITEMS(단일 소스)에서 문항+선택지 설명문을 만든다(스키마 description)."""
+    it = next(i for i in SURVEY_ITEMS if i["field"] == field)
+    if not it["options"]:  # 주관식
+        return it["question"]
+    opts = " / ".join(f"{tok}({label})" for tok, label, _score in it["options"])
+    return f"{it['question']} — {opts}"
+
+
+class SurveyModel(BaseModel):
+    """여론조사 설문 응답 — LLM 은 선택지 토큰만 고른다.
+
+    0~100 점수 변환은 survey_to_scores()가 prompts.SURVEY_SCORE_MAP 으로
+    결정론 수행한다('판단=LLM, 단위·경로=코드'). 구버전(0~100 자유 정수)은
+    LLM 캘리브레이션 한계(70/80 뭉침) + 정서 후광(반응문 분위기가 전 축에
+    번짐)으로 비대상자 benefit/intent 가 부풀었다 — 설문 전환으로 구조 차단
+    (2026-06-06). 문항·선택지의 단일 소스 = prompts.SURVEY_ITEMS.
+    """
+    # 응답 분기 — 효과 문항보다 먼저 생성돼야 함(필드 순서 = 생성 순서).
+    eligibility: Literal["target", "partial", "not_target", "unsure"] = Field(
+        description=_survey_q("eligibility"))
+    understanding: Literal["well", "mostly", "partly", "barely"] = Field(
+        description=_survey_q("understanding"))
+    # 주관식 프로브 — benefit/intent 직전에 '우리 집 기준'을 말로 먼저 쓰게 한다.
+    household_note: str = Field(description=_survey_q("household_note"))
+    benefit: Literal["big_help", "some_help", "no_effect", "some_harm", "big_harm"] = Field(
+        description=_survey_q("benefit"))
+    intent: Literal["surely", "probably", "unsure", "probably_not", "no_need"] = Field(
+        description=_survey_q("intent"))
+    dissatisfaction: Literal["very", "somewhat", "not_much", "none"] = Field(
+        description=_survey_q("dissatisfaction"))
+    shareability: Literal["often", "sometimes", "rarely", "never"] = Field(
+        description=_survey_q("shareability"))
+
+
+def survey_to_scores(survey: "SurveyModel") -> dict:
+    """설문 응답(선택지 토큰) → state.Scores(0~100 정수). 결정론 변환.
+
+    SURVEY_SCORE_MAP 의 5축만 변환한다(eligibility 등 보조 문항은 제외 —
+    원본 토큰은 Reaction['survey'] 에 그대로 남는다).
+    다운스트림(게이지·퍼널·히트맵)은 기존 Scores 계약을 그대로 읽는다.
+    """
+    data = survey.model_dump()
+    return {
+        field: mapping[data[field]]
+        for field, mapping in SURVEY_SCORE_MAP.items()
+    }
 
 
 class ReactionOut(BaseModel):
-    """react 노드의 시민 반응 구조화 출력."""
-    stance: Literal["support", "oppose", "mixed"]
+    """react 노드의 시민 반응 구조화 출력.
+
+    필드 순서 = 생성 순서: 반응문(text)을 먼저 말하게 하고 입장(stance)은
+    거기서 도출되게 한다 — 입장을 먼저 찍으면 반응문이 사후 합리화가 되는
+    결함 교정 (2026-06-06). lean 은 여론조사식 강제선택 기울기로, 실측
+    여론조사(강제선택 문항)와 같은 단위의 찬성률을 만들기 위한 보조 측정.
+    scores(자유 정수) → survey(설문 선택지)로 교체 — 점수는 코드가 변환.
+
+    behavior_* (일탈 행동 축, DESIGN §9)는 **survey 뒤**에 둔다 — 생성 순서상
+    설문 응답이 먼저 확정된 뒤에 속내가 나오므로, 행동 채널이 5축 측정을
+    오염시키지 못한다(구조적 차단). 말이 먼저(text), 분류는 그 말에서(class).
+    """
     text: str
-    scores: ScoresModel
+    stance: Literal["support", "oppose", "mixed"]
+    lean: Literal["support", "oppose", "none"] = "none"
+    survey: SurveyModel
     actions: list[str] = Field(default_factory=list)
+    behavior_text: str = Field(
+        default="",
+        description="속내 한두 문장 — 공식 절차 밖에서 실제로 어떻게 움직일지. 특별한 속내가 없으면 빈 문자열.")
+    behavior_tag: str = Field(
+        default="",
+        description="속내 행동의 짧은 이름표(자유 — 예: 위장 전입 검토, 집단 민원). 없으면 빈 문자열.")
+    behavior_class: Literal["comply", "workaround", "exploit", "complain", "inaction"] = Field(
+        default="comply",
+        description="속내 행동 대분류: comply(그대로 신청·이용)/workaround(합법적 틈새·편법)/"
+                    "exploit(자격·서류를 꾸미는 부정수급 시도)/complain(민원·항의·공론화)/inaction(아무것도 안 함)")
+
+
+class CastMember(BaseModel):
+    """캐스팅 패스의 인물 1명 평가(DESIGN §9). index 는 명단 번호(1부터)."""
+    index: int = Field(description="인물 명단의 번호(1부터, 명단 그대로)")
+    score: int = Field(description="일탈 성향 0~100 — 대부분의 인물은 60 미만이 자연스럽다")
+    tag: str = Field(default="", description="60점 이상만: 할 법한 행동의 짧은 이름표(자유). 미만이면 빈 문자열")
+    rationale: str = Field(default="", description="점수의 근거 한 줄 — 이 인물의 처지 어디에서 나오는가")
+
+
+class CastingOut(BaseModel):
+    """캐스팅 패스 구조화 출력 — 명단 전체에 대한 평가 목록."""
+    members: list[CastMember] = Field(default_factory=list)
 
 
 class InteractOut(BaseModel):
@@ -111,10 +189,52 @@ def _persona_index(personas: list) -> tuple:
 
 
 # ──────────────────────────────────────────────────────────────────────────
-# 1) react 노드 — 시민별 1차 반응 생성
+# 1) react 노드 — (캐스팅 1회 →) 시민별 1차 반응 생성
 # ──────────────────────────────────────────────────────────────────────────
+# 일탈 성향 발현 임계값(DESIGN §9). 고정 비율이 아니라 임계값 자연 발생 —
+# 정책에 따라 발현 인물이 0명일 수도, 여럿일 수도 있다.
+DEVIANCE_THRESHOLD = 60
+
+
+def run_casting(personas: list, policy: str) -> dict:
+    """react 전 캐스팅 1회(DESIGN §9) — LLM 이 인물별 일탈 성향을 평가한다.
+
+    반환: {'threshold': int, 'members': {persona_id: {'score','tag','rationale',
+    'manifest'}}}. manifest(발현) 판정은 코드가 한다(score >= 임계값).
+    실패하면 {} — react 는 힌트 없이 평소처럼 돈다(우아한 강등).
+    """
+    if not personas:
+        return {}
+    try:
+        msgs = build_casting_messages(personas, policy)
+        # 판단 과제 — 안정성을 위해 낮은 temperature.
+        out: CastingOut = structured_call(msgs, CastingOut, temperature=0.4)
+        members: dict = {}
+        for m in out.members or []:
+            # 명단 번호(1부터) → persona 역매핑. 범위 밖 번호는 버린다.
+            if not (1 <= int(m.index) <= len(personas)):
+                continue
+            pid = personas[int(m.index) - 1].get("id")
+            if not pid:
+                continue
+            score = max(0, min(100, int(m.score)))
+            members[pid] = {
+                "score": score,
+                "tag": (m.tag or "").strip(),
+                "rationale": (m.rationale or "").strip(),
+                "manifest": score >= DEVIANCE_THRESHOLD,
+            }
+        return {"threshold": DEVIANCE_THRESHOLD, "members": members}
+    except Exception:
+        return {}
+
+
 def react_node(state: SimState) -> dict:
     """각 페르소나마다 정책에 대한 1차 반응을 LLM 으로 생성한다(동시 호출).
+
+    grounded 일 때는 먼저 캐스팅 1회로 일탈 성향을 평가하고, 임계값 이상
+    발현 인물의 프롬프트에만 [속사정] 힌트를 주입한다(DESIGN §9).
+    ablation(grounded=False)은 캐스팅을 건너뛴다 — 단일 변인(카드 유무) 유지.
 
     개별 호출이 실패하면 그 시민은 중립(mixed, 점수 50) 폴백 Reaction 으로 채운다.
     """
@@ -122,35 +242,58 @@ def react_node(state: SimState) -> dict:
     personas = state.get("personas", []) or []
     grounded = state.get("grounded", True)
 
+    casting = run_casting(personas, policy) if grounded else {}
+    cast_members = casting.get("members", {}) if casting else {}
+
     def _one(persona: dict) -> dict:
         # 페르소나 1명에 대한 반응 생성 + Reaction dict 변환.
         pid = persona.get("id")
         try:
-            msgs = build_react_messages(persona, policy, grounded=grounded)
-            out: ReactionOut = structured_call(msgs, ReactionOut, temperature=0.8)
+            entry = cast_members.get(pid) or {}
+            cast = (
+                {"tag": entry.get("tag", ""), "rationale": entry.get("rationale", "")}
+                if entry.get("manifest")
+                else None
+            )
+            msgs = build_react_messages(persona, policy, grounded=grounded, cast=cast)
+            # temperature 1.0: T<1 은 최빈 응답을 수학적으로 더 뾰족하게 만들어
+            # 만장일치 쏠림을 강화한다 — 분포 복원 목적의 상향 (2026-06-06).
+            out: ReactionOut = structured_call(msgs, ReactionOut, temperature=1.0)
             return {
                 "persona_id": pid,
                 "stance": out.stance,
+                "lean": out.lean,
                 "text": out.text,
                 "evidence": [],
-                "scores": out.scores.model_dump(),
+                "scores": survey_to_scores(out.survey),
+                "survey": out.survey.model_dump(),
                 "actions": list(out.actions or []),
                 "grounded": grounded,
+                # 일탈 행동 축(DESIGN §9) — survey 뒤에 생성돼 5축 무오염.
+                "behavior_class": out.behavior_class,
+                "behavior_tag": (out.behavior_tag or "").strip(),
+                "behavior_text": (out.behavior_text or "").strip(),
             }
         except Exception:
             # 개별 시민 실패 → 시뮬레이션 전체를 멈추지 않고 중립 폴백.
             return {
                 "persona_id": pid,
                 "stance": "mixed",
+                "lean": "none",
                 "text": "(응답 생성 실패)",
                 "evidence": [],
                 "scores": dict(_NEUTRAL_SCORES),
+                "survey": {},
                 "actions": [],
                 "grounded": grounded,
+                # 폴백은 미측정('') — 집계(behavior_counts)에서 제외된다.
+                "behavior_class": "",
+                "behavior_tag": "",
+                "behavior_text": "",
             }
 
     reactions = run_threaded(personas, _one, max_workers=8)
-    return {"reactions": reactions}
+    return {"reactions": reactions, "casting": casting}
 
 
 # ──────────────────────────────────────────────────────────────────────────
@@ -250,6 +393,14 @@ def interact_node(state: SimState) -> dict:
     stance_now = {
         r.get("persona_id"): r.get("stance", "mixed") for r in reactions
     }
+    # 자기 1차 반응문 — interact 프롬프트의 자기 일관성 grounding 재료.
+    react_text = {
+        r.get("persona_id"): r.get("text", "") for r in reactions
+    }
+    # 자기 속내(일탈 행동 축) — 댓글에서 꺼낼지 감출지는 그 사람이 정한다(DESIGN §9).
+    react_behavior = {
+        r.get("persona_id"): r.get("behavior_text", "") for r in reactions
+    }
 
     # 누적 대화 피드: 1차 react 반응을 시드로 시작. 라운드마다 reply 가 쌓인다.
     feed: list = []
@@ -274,7 +425,13 @@ def interact_node(state: SimState) -> dict:
             # 페르소나 1명의 이번 라운드 상호작용 생성.
             pid = persona.get("id")
             try:
-                msgs = build_interact_messages(persona, policy, cur_digest)
+                # own = 현재 입장(라운드마다 갱신) + 1차 반응문 — 자기 일관성.
+                own = {
+                    "stance": stance_now.get(pid),
+                    "text": react_text.get(pid, ""),
+                    "behavior_text": react_behavior.get(pid, ""),
+                }
+                msgs = build_interact_messages(persona, policy, cur_digest, own=own)
                 out: InteractOut = structured_call(msgs, InteractOut, temperature=0.7)
                 target = _resolve_target(out.references, persona, by_id, by_name)
                 return {
@@ -370,20 +527,19 @@ def _compute_metrics(reactions: list, personas: list) -> dict:
     # 신청의향 적극층(intent>=60) 비율.
     high_intent_ratio = _ratio([i >= 60 for i in intent])
 
-    # 정책수용도: 신청의향·이해도 ↑, 불만 ↓ 가중 블렌드(0~100).
-    acceptance = (
-        0.45 * m_intent
-        + 0.30 * m_understanding
-        + 0.25 * (100.0 - m_dissat)
+    # 핵심 3지표(0~100): 공식은 metrics_common 단일 소스(설계방향서 v1.2 §8-12) —
+    # 집계 노드와 화면(축3 t0 지표)이 같은 함수로 같은 값을 본다.
+    from metrics_common import (
+        application_index as _application_index,
+        policy_acceptance as _policy_acceptance,
+        social_unrest as _social_unrest,
     )
-
-    # 사회혼란도(0~100): 반발 강도 = 시민 불만 평균.
-    # metrics_common 으로 통일(real/demo/fallback 동일).
-    from metrics_common import social_unrest as _social_unrest
+    # 정책수용도: 신청의향·이해도 ↑, 불만 ↓ 가중 블렌드.
+    acceptance = _policy_acceptance(reactions)
+    # 사회혼란도: 반발 강도 = 시민 불만 평균.
     social_unrest = _social_unrest(reactions)
-
-    # 신청의향지수: 평균 의향과 적극층 비율의 블렌드(0~100).
-    application_index = 0.6 * m_intent + 0.4 * (high_intent_ratio * 100.0)
+    # 신청의향지수: 평균 의향과 적극층 비율(intent≥60)의 블렌드.
+    application_index = _application_index(reactions)
 
     # 감성 평균: 텍스트 + 점수 기반 [-1, 1].
     sentiments = []
@@ -410,6 +566,19 @@ def _compute_metrics(reactions: list, personas: list) -> dict:
     seg_income_mean = {k: round(_mean(v), 1) for k, v in seg_income.items()}
     seg_age_mean = {k: round(_mean(v), 1) for k, v in seg_age.items()}
 
+    # 일탈 행동 분포(DESIGN §9) — behavior_class 집계. stance 분포와 같은 패턴:
+    # LLM 이 고른 enum 을 코드가 센다. ''(미측정: 폴백/구버전 데이터)은 분모에서 제외.
+    behavior_counts: dict = {}
+    for r in reactions:
+        bc = (r.get("behavior_class") or "").strip()
+        if bc:
+            behavior_counts[bc] = behavior_counts.get(bc, 0) + 1
+    measured = sum(behavior_counts.values())
+    n_deviant = behavior_counts.get("workaround", 0) + behavior_counts.get("exploit", 0)
+    n_complain = behavior_counts.get("complain", 0)
+    deviance_rate = (n_deviant / measured) if measured else 0.0      # 편법+부정수급 시도율
+    complaint_rate = (n_complain / measured) if measured else 0.0    # 민원·행동화율
+
     return {
         # 핵심 3지표(0~100).
         "policy_acceptance": round(acceptance, 1),   # 정책수용도
@@ -429,6 +598,10 @@ def _compute_metrics(reactions: list, personas: list) -> dict:
         "low_understanding_ratio": round(low_understand_ratio, 3),
         "high_intent_ratio": round(high_intent_ratio, 3),
         "sentiment_mean": round(m_sentiment, 3),
+        # 일탈 행동 축(DESIGN §9).
+        "behavior_counts": behavior_counts,
+        "deviance_rate": round(deviance_rate, 3),
+        "complaint_rate": round(complaint_rate, 3),
         # 세그먼트.
         "segments": {
             "by_income": seg_income_mean,
@@ -460,6 +633,33 @@ def _metrics_digest(metrics: dict) -> str:
     return "\n".join(lines)
 
 
+def _behavior_digest(reactions: list, personas: list, k: int = 8) -> str:
+    """관측된 일탈 속내(behavior)를 분석가 프롬프트용 블록으로(DESIGN §9).
+
+    편법·부정수급 시도·민원 예고가 있으면 개선안(policy_fixes)이 그 허점에
+    직접 답할 수 있게 한다. 없으면 빈 문자열(블록 생략). 최대 k건으로 상한.
+    """
+    by_id, _ = _persona_index(personas)
+    label = {"workaround": "편법", "exploit": "부정수급 시도", "complain": "민원·행동화"}
+    lines = []
+    for r in reactions:
+        bc = (r.get("behavior_class") or "").strip()
+        txt = (r.get("behavior_text") or "").strip().replace("\n", " ")
+        if bc not in label or not txt:
+            continue
+        persona = by_id.get(r.get("persona_id")) or {}
+        name = persona.get("name") or r.get("persona_id") or "익명"
+        tag = (r.get("behavior_tag") or "").strip() or label[bc]
+        if len(txt) > 120:
+            txt = txt[:120].rstrip() + "…"
+        lines.append(f"- {name} [{label[bc]} · {tag}]: {txt}")
+        if len(lines) >= k:
+            break
+    if not lines:
+        return ""
+    return "관측된 속내 행동(편법·부정수급 시도·민원 예고) — 개선안이 이 허점에 답해야 함:\n" + "\n".join(lines)
+
+
 def aggregate_node(state: SimState) -> dict:
     """반응을 집계해 지표를 산출하고, LLM 으로 요약/쉬운설명/개선안을 만든다.
 
@@ -472,6 +672,10 @@ def aggregate_node(state: SimState) -> dict:
     # 1) 순수 파이썬 지표 계산.
     metrics = _compute_metrics(reactions, personas)
     digest = _metrics_digest(metrics)
+    # 일탈 속내가 관측됐으면 분석가가 허점에 직접 답하도록 함께 전달(DESIGN §9).
+    behavior_block = _behavior_digest(reactions, personas)
+    if behavior_block:
+        digest = digest + "\n\n" + behavior_block
 
     # 2) LLM 요약 1회(실패해도 metrics 는 보존).
     summary = ""

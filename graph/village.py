@@ -83,6 +83,30 @@ def _guard_status(prev: str, cur: str, barrier: str):
     return cur, barrier
 
 
+def _bridge_violation(status: str, reached_via: str, barrier: str) -> str:
+    """다리 가드(설계방향서 v1.1 §3 축2). 위반 사유를 돌려주고, 정상이면 ''.
+
+    사다리 위 칸(applied/received/blocked)엔 닿은 경로(reached_via)가,
+    blocked 엔 막힌 지점(barrier)이 반드시 있어야 한다 — "받았다면 닿은 경로가
+    기록되어야 한다"가 '모르는데 받음'을 구조적으로 막는 다리다.
+    """
+    if status in ("applied", "received", "blocked") and not (reached_via or "").strip():
+        return f"policy_status={status} 인데 reached_via(닿은 경로)가 비어 있음"
+    if status == "blocked" and not (barrier or "").strip():
+        return "policy_status=blocked 인데 barrier(막힌 지점)가 비어 있음"
+    return ""
+
+
+# 다리 가드 위반 시 1회 재생성에 덧붙이는 피드백(같은 시점을 다시 기록).
+_BRIDGE_RETRY_MSG = (
+    "방금 기록에 누락이 있습니다: {reason}.\n"
+    "신청(applied)·수령(received)·막힘(blocked)이려면 이 정책에 어떻게 닿았는지 "
+    "reached_via 를, blocked 이면 어디서 막혔는지 barrier 를 반드시 채워 "
+    "같은 시점을 다시 기록하세요. 닿은 경로를 쓸 수 없다면 이 주민은 아직 정책에 "
+    "닿지 않은 것입니다(unaware 또는 aware 로 두세요)."
+)
+
+
 # ---------------------------------------------------------------------------
 # 메인 시뮬레이션
 # ---------------------------------------------------------------------------
@@ -117,6 +141,8 @@ def simulate_village(
         for p in personas
     }
     histories = {p["id"]: "" for p in personas}  # 시점 요약 누적
+    bridge_retries = 0      # 다리 가드: 재생성으로 교정한 횟수
+    bridge_residuals = 0    # 다리 가드: 재생성 후에도 남아 코드로 교정 표기한 횟수
 
     for si, label in enumerate(step_labels, start=1):
 
@@ -131,6 +157,18 @@ def simulate_village(
                 out: VillageStepOut = structured_call(
                     msgs, VillageStepOut, temperature=0.8
                 )
+                # 다리 가드: 위반이면 그 주민 그 스텝만 1회 재생성(사유를 피드백).
+                violation = _bridge_violation(
+                    out.policy_status, out.reached_via, out.barrier
+                )
+                retried = False
+                if violation:
+                    retry_msgs = msgs + [{
+                        "role": "user",
+                        "content": _BRIDGE_RETRY_MSG.format(reason=violation),
+                    }]
+                    out = structured_call(retry_msgs, VillageStepOut, temperature=0.8)
+                    retried = True
                 return {
                     "id": pid, "step": si, "label": label, "place": out.place,
                     "reached_via": out.reached_via,
@@ -138,6 +176,7 @@ def simulate_village(
                     "barrier": out.barrier,
                     "economic": int(out.economic), "wellbeing": int(out.wellbeing),
                     "note": out.note,
+                    "_bridge_retried": retried,
                 }
             except Exception:
                 # 실패 시 직전 상태를 이어받아 시뮬레이션을 멈추지 않는다.
@@ -159,11 +198,31 @@ def simulate_village(
         for res in results:
             pid = res["id"]
             tl = residents[pid]["timeline"]
+            prev_step = tl[-1] if tl else None
             # 상태 비퇴행 가드: 알게 된 뒤 unaware 로 떨어지는 LLM 실수를 교정.
-            prev_status = tl[-1]["policy_status"] if tl else "unaware"
+            prev_status = prev_step["policy_status"] if prev_step else "unaware"
             res["policy_status"], res["barrier"] = _guard_status(
                 prev_status, res["policy_status"], res.get("barrier", "")
             )
+            # 다리 가드 마무리: 재생성 횟수 집계 + (비퇴행 교정 이후 기준) 잔존 위반은
+            # 코드로 교정 표기한다. 라벨은 뒤집지 않는다(서사-라벨 일치, §1.5) —
+            # 한 번 닿은 다리는 기록에 남으므로 직전 스텝 경로를 상속하고,
+            # 그것도 없으면 누락을 숨기지 않는 표기를 남긴다(정직 노트로 노출).
+            if res.pop("_bridge_retried", False):
+                bridge_retries += 1
+            residual = _bridge_violation(
+                res["policy_status"], res.get("reached_via", ""),
+                res.get("barrier", ""),
+            )
+            if residual:
+                bridge_residuals += 1
+                if not (res.get("reached_via") or "").strip():
+                    inherited = (prev_step.get("reached_via") or "").strip() \
+                        if prev_step else ""
+                    res["reached_via"] = inherited or "(경로 기록 누락)"
+                if res["policy_status"] == "blocked" \
+                        and not (res.get("barrier") or "").strip():
+                    res["barrier"] = "(막힌 지점 기록 누락)"
             tl.append(
                 {k: res[k] for k in
                  ("step", "label", "place", "reached_via", "action",
@@ -185,6 +244,10 @@ def simulate_village(
         resident_list.append(r)
 
     aggregate = _aggregate_village(resident_list, step_labels)
+    # 다리 가드 통계(정직 노트의 원천 — contrast 가 selection.notes 로 노출).
+    aggregate["bridge_guard"] = {
+        "retries": bridge_retries, "residuals": bridge_residuals,
+    }
     return {"steps": step_labels, "residents": resident_list, "aggregate": aggregate}
 
 

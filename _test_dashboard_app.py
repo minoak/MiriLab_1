@@ -12,6 +12,10 @@ sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
 
 from streamlit.testing.v1 import AppTest
 
+# 데모 녹화 스냅샷 우회 — 이 테스트는 합성 mock 데이터로 히트맵 렌더를 검증한다.
+import ui.state_helpers as _sh
+_sh.DEMO_SNAPSHOT_DIR = _sh.DEMO_SNAPSHOT_DIR / "_disabled_for_tests"
+
 
 def all_text(at):
     out = []

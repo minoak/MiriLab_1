@@ -90,7 +90,7 @@ def age_group(age) -> str:
 # ---------------------------------------------------------------------------
 def collect(personas, n_runs):
     from graph.llm import structured_call, run_threaded, MODEL
-    from graph.nodes import ReactionOut
+    from graph.nodes import ReactionOut, survey_to_scores
 
     tasks = [(p, run) for run in range(n_runs) for p in personas]
 
@@ -102,7 +102,7 @@ def collect(personas, n_runs):
             return {
                 "persona_id": p["id"], "run": run,
                 "stance": out.stance, "text": out.text,
-                "scores": out.scores.model_dump(),
+                "scores": survey_to_scores(out.survey),
             }
         except Exception:
             return {

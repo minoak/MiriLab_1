@@ -46,7 +46,20 @@ from openai import OpenAI  # noqa: E402
 from pydantic import BaseModel  # noqa: E402
 
 DATA_DIR = os.path.join(HERE, "data")
-MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+
+# LLM 프로바이더: openai(기본) / gemini — graph/llm.py 와 같은 분기의 독립 복제
+# (미리마을은 graph.llm 미의존이 설계). CLI 단독 실행은 .env 의 MIRILAB_LLM 을
+# 따르고, 메인 앱에서는 '시민 모델' 선택기가 set_provider() 로 전파한다
+# (tab_minivillage 가 importlib 로드 후 호출).
+GEMINI_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/openai/"
+PROVIDER_MODELS = {
+    "openai": os.getenv("OPENAI_MODEL", "gpt-4o-mini"),
+    "gemini": os.getenv("MIRILAB_GEMINI_MODEL", "gemini-3-flash-preview"),
+}
+PROVIDER = (os.getenv("MIRILAB_LLM") or "openai").strip().lower()
+if PROVIDER not in PROVIDER_MODELS:
+    PROVIDER = "openai"
+MODEL = PROVIDER_MODELS[PROVIDER]
 
 # 시뮬 하루 경계(분). 08:00 ~ 24:00.
 DAY_START_MIN = 8 * 60
@@ -56,22 +69,39 @@ DAY_CONTEXT = "특별한 일정이 없는 평범한 평일."
 
 
 # --------------------------------------------------------------------------
-# 자체 OpenAI 호출 (graph.llm 의존 제거 — 미리마을 독립용)
+# 자체 LLM 호출 (graph.llm 의존 제거 — 미리마을 독립용)
 # --------------------------------------------------------------------------
-_client = None
+_clients = {}  # 프로바이더별 클라이언트 캐시(전환 왕복에도 재생성 없음)
+
+
+def set_provider(name):
+    """프로바이더 런타임 전환(메인 앱 '시민 모델' 선택기 → tab_minivillage 가 호출)."""
+    global PROVIDER, MODEL
+    name = (name or "").strip().lower()
+    if name not in PROVIDER_MODELS:
+        raise ValueError(f"알 수 없는 프로바이더: {name!r}")
+    PROVIDER = name
+    MODEL = PROVIDER_MODELS[name]
 
 
 def has_real_key() -> bool:
+    if PROVIDER == "gemini":
+        return bool(os.getenv("GEMINI_API_KEY"))
     key = os.getenv("OPENAI_API_KEY")
     return bool(key) and not key.startswith("sk-your-key")
 
 
 def get_client() -> OpenAI:
-    global _client
-    if _client is None:
+    client = _clients.get(PROVIDER)
+    if client is None:
         # SDK 내장 재시도(레이트리밋/타임아웃 등)에 위임 — tenacity 등 추가 의존 없음.
-        _client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"), max_retries=3)
-    return _client
+        if PROVIDER == "gemini":
+            client = OpenAI(api_key=os.getenv("GEMINI_API_KEY"),
+                            base_url=GEMINI_BASE_URL, max_retries=3)
+        else:
+            client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"), max_retries=3)
+        _clients[PROVIDER] = client
+    return client
 
 
 def structured_call(messages, schema, temperature=0.7):
@@ -292,7 +322,7 @@ def generate(day_context=DAY_CONTEXT, force_fallback=False):
             schedules[v["id"]] = fallback_schedule(v, valid_keys, home_key)
         generated_with = "fallback"
     else:
-        print(f"[gen_schedules] OpenAI({MODEL}) -> LLM 으로 생성 (캐싱 3층 프롬프트)")
+        print(f"[gen_schedules] {PROVIDER}({MODEL}) -> LLM 으로 생성 (캐싱 3층 프롬프트)")
         village_context = build_village_context(villagers, locations)  # (1) 전원 공유 prefix
 
         def gen_one(v):

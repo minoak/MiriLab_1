@@ -20,7 +20,7 @@ import 시점에는 어떤 네트워크/LLM 호출도 하지 않는다.
 
 공개 API:
     run_contrast(personas, policies, simulate=None, ..., reactions_by_id=None) -> dict
-    select_trio_from_outcomes(residents, personas, reactions_by_id=None, specs=None) -> dict
+    select_trio_from_outcomes(residents, personas, specs=None) -> dict
 """
 from __future__ import annotations
 
@@ -103,6 +103,20 @@ def run_contrast(
     )
     trio_ids = [(t.get("persona") or {}).get("id") for t in selection.get("trio", [])]
 
+    # 다리 가드 정직 노트(설계방향서 §2 불변규칙 3): 가드가 일한 것도, 잔존 위반을
+    # 코드로 교정 표기한 것도 숨기지 않고 노출한다.
+    bg = (village.get("aggregate") or {}).get("bridge_guard") or {}
+    if bg.get("retries"):
+        selection.setdefault("notes", []).append(
+            f"ⓘ 다리 가드: 경로(reached_via)·막힌 지점(barrier) 누락 "
+            f"{bg['retries']}건을 그 주민·그 시점만 재생성했습니다."
+        )
+    if bg.get("residuals"):
+        selection.setdefault("notes", []).append(
+            f"⚠ 다리 가드: 모순 감지 {bg['residuals']}건 — 재생성 후에도 경로가 비어 "
+            f"직전 경로 상속/'(기록 누락)' 표기로 교정했습니다(라벨은 뒤집지 않음)."
+        )
+
     return {
         "specs": specs,
         "selection": selection,
@@ -124,7 +138,8 @@ def _resident_outcome(resident: dict, persona: dict | None, specs=None) -> dict:
     dist_key (사람 단위 범주 — 분포 막대·결과표·역할 공용):
       out       : 정책 대상이 아님(나이·소득·가구 조건 밖)         → role out(대상 아님)
       received  : (대상) 한 번이라도 수령(혜택 받음)               → beneficiary(수혜)
-      blocked   : (대상) 막힌 적 있음(자격되나 절차에 막힘 = 강한 사각) → blindspot(사각)
+      blocked   : (대상) 막힌 적 있음 — 막힌 사유(요건/절차/…)는 barrier
+                  인용이 말한다. 코드는 자격 여부를 단정하지 않는다.   → blindspot(사각)
       unaware   : (대상) 끝내 정책을 알지도 못함(못 닿음)           → blindspot(사각)
       inprogress: (대상) 그 외(알게 됨/신청 대기 — 진행 중)         → borderline(경계)
     """
@@ -188,22 +203,29 @@ def _resident_outcome(resident: dict, persona: dict | None, specs=None) -> dict:
 
 
 def _outcome_headline(row: dict) -> str:
-    """이 결과가 왜 이 역할인지 한 줄(시뮬 결과 기반, 수치 아님)."""
+    """결과 한 줄 = 상태 라벨 + LLM 인용(barrier/reached_via)뿐.
+
+    코드는 문장을 짓지 않는다 — 스키마 토큰의 사전적 의미와 인용까지가 코드의 몫,
+    '왜·어떻게'는 시뮬 서사(action/barrier)가 말한다. (2026-06-06 천명준 사건:
+    구 템플릿이 '자격은 됐지만'·'신청을 시도했지만'을 지어내 서사와 모순 —
+    실제로는 신청 없이 요건 확인만 하고 막힌 사람이었다.)
+    """
     k = row["dist_key"]
     if k == "out":
-        return "이 정책의 대상 조건(나이·소득·가구)과는 거리가 있어요"
+        # 유일하게 코드가 말하는 판정 — is_target 태그 게이트의 결정론 결과라서.
+        return "대상 아님 — 나이·소득·가구 태그 조건 밖"
     if k == "received":
-        return "신청해서 실제로 혜택을 받았어요"
+        via = (row.get("reached_via") or "").strip()
+        return f"수령 — {via}" if via else "수령"
     if k == "blocked":
-        b = row.get("barrier")
-        return (f"자격은 됐지만 {b} — 도움이 필요했어요") if b else \
-               "신청했지만 막혀 받지 못했어요 — 도움이 필요했어요"
+        b = (row.get("barrier") or "").strip()
+        return f"막힘 — {b}" if b else "막힘"
     if k == "unaware":
-        return "정책이 있는 줄도 끝내 알지 못했어요"
+        return "끝내 모름"
     # inprogress
     if row["raw_final"] == "applied":
-        return "신청까지 했지만 아직 결과를 기다려요"
-    return "정책을 알게 됐지만 신청까지는 가지 못했어요"
+        return "신청 — 결과 대기"
+    return "알게 됨 — 신청까지는 안 감"
 
 
 def _trio_entry(row: dict, by_id: dict) -> dict:

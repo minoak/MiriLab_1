@@ -13,10 +13,12 @@
 - 라벨이 없으면 첫 문장/안내 문구로 대체한다(빈 칸을 만들지 않는다).
 """
 import re
+from urllib.parse import urlparse
 
 import streamlit as st
 
 from policy_spec import describe_spec, tag_line
+from sample_policies import SAMPLES, SOURCES
 
 
 # ── 추출용 라벨 사전 ────────────────────────────────────────────────
@@ -108,6 +110,48 @@ def _extract_field(lines: list[str], candidates: list[str]) -> str:
     return ""
 
 
+def _find_source(policy: str) -> dict | None:
+    """정책 원문이 샘플 정책과 '무수정' 일치하면 출처 dict 를 돌려준다.
+
+    데모 재생 게이트(app.py 의 policy == SAMPLES[choice])와 같은 기준 —
+    원문이 한 글자라도 수정됐거나 직접 입력이면, 출처와 대조해 둔 범위를
+    벗어난 것이므로 출처를 표시하지 않는다(정직).
+    """
+    text = policy.strip()
+    for name, sample in SAMPLES.items():
+        if text == sample.strip():
+            src = SOURCES.get(name)
+            return src if isinstance(src, dict) else None
+    return None
+
+
+def _url_label(url: str) -> str:
+    """링크 표시용 짧은 라벨(도메인). 파싱 실패 시 원문 그대로."""
+    try:
+        return urlparse(url).netloc or url
+    except ValueError:
+        return url
+
+
+def _render_source(src: dict) -> None:
+    """샘플 정책의 출처(실존 정책·기준 시점·URL·현행과의 차이)를 표시한다."""
+    real = src.get("real", "")
+    label = f"📚 출처 — {real}" if real else "📚 출처"
+    with st.expander(label, expanded=False):
+        if real:
+            st.markdown(f"**모델이 된 실존 정책**: {real}")
+        basis = src.get("basis", "")
+        if basis:
+            st.markdown(f"**요약 기준**: {basis}")
+        urls = src.get("urls") or []
+        if urls:
+            links = " · ".join(f"[{_url_label(u)}]({u})" for u in urls)
+            st.markdown(f"**공식 출처**: {links}")
+        gap = src.get("gap", "")
+        if gap:
+            st.caption(f"⚠️ 현행과의 차이: {gap}")
+
+
 def _extract_core(policy: str) -> dict[str, str]:
     """정책 원문에서 핵심 4항목을 추출. 실패한 칸은 빈 문자열로 둔다."""
     lines = _split_lines(policy)
@@ -149,6 +193,12 @@ def render_input_tab(view) -> None:
     with st.expander("정책 원문 전체 보기", expanded=True):
         # 줄바꿈을 그대로 유지해 읽기 좋게 표시
         st.markdown(body.replace("\n", "  \n"))
+
+    # ── 출처 (샘플 정책 = 실존 정책 기반임을 명시) ───────────────
+    # 원문이 샘플과 무수정 일치할 때만 표시 — 수정/직접입력 정책은 출처 없음.
+    src = _find_source(policy)
+    if src:
+        _render_source(src)
 
     st.divider()
 

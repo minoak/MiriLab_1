@@ -79,20 +79,24 @@ def test_funnel_no_spec_proxy():
 
 
 def test_barriers():
-    """병목 요인: 디지털4 / 이해4 / 기준혼란1 / 신청포기1, 주요병목=디지털 장벽."""
+    """병목 요인: 디지털4 / 이해4 / 기준혼란2 / 신청포기1, 주요병목=디지털 장벽.
+
+    기준혼란 1→2 (2026-06-06 설문 전환): BENEFIT_MIN 50→51 로 benefit=50(무관 체감)인
+    대상자(강도현)가 '대상인데 수혜 체감 못 함'으로 정당하게 잡히게 됨.
+    """
     view = _view()
     specs = AA.specs_from_view(view)
     bars = AA.barrier_factors(view["personas"], view["reactions_by_id"], specs)
     by_key = {b["key"]: b["count"] for b in bars}
     assert by_key.get("digital") == 4, by_key
     assert by_key.get("understand") == 4, by_key
-    assert by_key.get("criteria") == 1, by_key
+    assert by_key.get("criteria") == 2, by_key
     assert by_key.get("giveup") == 1, by_key
     # 내림차순 정렬
     cnts = [b["count"] for b in bars]
     assert cnts == sorted(cnts, reverse=True), cnts
     assert AA.main_bottleneck(bars) == "디지털 장벽", AA.main_bottleneck(bars)
-    print("[OK] barriers digital/understand=4, criteria/giveup=1, main=디지털 장벽")
+    print("[OK] barriers digital/understand=4, criteria=2/giveup=1, main=디지털 장벽")
 
 
 def test_age_access():
