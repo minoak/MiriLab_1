@@ -19,8 +19,8 @@ from contrast import run_contrast
 from ui.mock import sample_village
 from graph.spaces import place_label
 from ui.tab_village import (
-    _ROLE_COLOR, _events, _status_meta,
-    _front_access_chip, _journey_strip_html, _outcome_callout_html,
+    _events, _status_meta,
+    _cover_card_html, _journey_strip_html, _outcome_callout_html,
     outcome_distribution, _distribution_bar_html, _distribution_legend_html,
 )
 
@@ -72,37 +72,22 @@ def _event_detail_html(events: list) -> str:
     return "".join(parts)
 
 
-def _card_html(t: dict, resident: dict) -> str:
-    """카드 1장(앞면 + 펼친 본문) — 앱 _render_card / _render_narrative 와 동일 요소."""
-    p = t.get("persona") or {}
-    d = p.get("demographics") or {}
-    color = _ROLE_COLOR.get(t.get("role_key"), "#7F8C8D")
-    name = escape(p.get("name", ""))
+def _card_html(t: dict, resident: dict, quote: str = "") -> str:
+    """카드 1장(커버 + 펼친 본문) — 앱과 동일한 카드뉴스 커버 빌더를 그대로 사용."""
     events = _events((resident or {}).get("timeline") or [])
 
-    front = (
-        f"<span style='display:inline-block;background:{color};color:#fff;"
-        f"padding:2px 12px;border-radius:12px;font-weight:bold;'>{escape(t.get('role',''))}</span>"
-        f" &nbsp;<b>{name}</b> · {d.get('age','')}세 {escape(str(d.get('sex','')))}"
-        f"<div style='color:#888;font-size:0.85rem;margin:2px 0;'>"
-        f"{escape(str(d.get('occupation','')))} · {escape(str(d.get('province','')))} "
-        f"{escape(str(d.get('district','')))}</div>"
-        f"<div style='font-style:italic;color:#444;'>{escape(t.get('headline',''))}</div>"
-        f"<div>{_front_access_chip(resident)}</div>"
-    )
+    cover = _cover_card_html(t, resident, quote)   # 앱 공용 빌더(스타일 단일 진실원)
     body = (
-        "<hr style='border:none;border-top:1px solid #eee;margin:10px 0;'>"
+        "<div style='background:#fff;border:1px solid #E8ECEF;border-radius:12px;"
+        "padding:12px 16px;margin:-4px 0 20px;'>"
         "<b>🧭 접근 여정</b>"
         + _journey_strip_html(events)
         + _outcome_callout_html(events)
         + "<hr style='border:none;border-top:1px solid #eee;margin:10px 0;'>"
         + _event_detail_html(events)
+        + "</div>"
     )
-    return (
-        "<div style='border:1px solid #ddd;border-radius:10px;padding:16px 18px;"
-        "margin:14px 0;box-shadow:0 1px 4px rgba(0,0,0,0.06);'>"
-        + front + body + "</div>"
-    )
+    return cover + body
 
 
 def main():
@@ -137,9 +122,15 @@ def main():
             f"<h3 style='color:{color};border-left:5px solid {color};"
             f"padding-left:10px;margin-top:24px;'>{label} — {len(entries)}명</h3>"
         )
+        # 대표(첫 카드)에만 샘플 '한 마디'를 넣어 인용 타이포까지 확인한다
+        # (mock 시뮬엔 reactions 가 없어 실제 인용은 앱에서만 보임).
         sections.append("".join(
-            _card_html(e, residents.get((e.get("persona") or {}).get("id")))
-            for e in entries
+            _card_html(
+                e, residents.get((e.get("persona") or {}).get("id")),
+                quote=("신청 방법이 복잡하면 저 같은 사람은 그냥 포기하게 돼요"
+                       if i == 0 else ""),
+            )
+            for i, e in enumerate(entries)
         ))
     cards = "".join(sections)
     notes = "".join(f"<li>{escape(n)}</li>" for n in res["selection"].get("notes") or [])
@@ -153,7 +144,7 @@ def main():
         "</head><body>"
         f"<h2>정책 인생극장 — 같은 정책, 다른 인생</h2>"
         f"<div class='sub'>정책: <b>{escape(POLICY)}</b> · mock 시뮬(키 불필요) · "
-        "카드 가시성 개선 미리보기(접근 여정·결론 콜아웃·앞면 결과칩)</div>"
+        "카드뉴스 스타일 커버(그라데이션·아바타·한 마디) + 접근 여정·결론 콜아웃 미리보기</div>"
         f"{dist_block}"
         f"{cards}"
         f"<h4>📊 정직한 노트</h4><ul>{notes}</ul>"

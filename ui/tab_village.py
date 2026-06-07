@@ -72,23 +72,35 @@ def _tag(text: str, color: str) -> str:
     )
 
 
+def _final_outcome(resident: dict) -> tuple:
+    """timeline → 최종 접근 결과 (emoji, 짧은 라벨, 색). 칩·버튼 라벨의 공용 진실원.
+
+    우선순위는 콜아웃과 동일(받음 > 막힘 > 진행 > 못 닿음) — 단, 받은 적 없이
+    막힌 적이 있으면 '막힘'을 앞세운다(도움 필요 신호를 놓치지 않게).
+    """
+    tl = (resident or {}).get("timeline") or []
+    if not tl:
+        return ("•", "기록 없음", "#9E9E9E")
+    final = tl[-1].get("policy_status", "unaware")
+    ever_received = any(s.get("policy_status") == "received" for s in tl)
+    blocked = any(s.get("policy_status") == "blocked" for s in tl)
+    if ever_received:
+        return ("✅", "정책에 닿음", "#27AE60")
+    if blocked or final == "blocked":
+        return ("⛔", "막힘", "#E74C3C")
+    if final == "applied":
+        return ("📨", "신청함", "#2980B9")
+    if final == "aware":
+        return ("👀", "알게만 됨", "#F39C12")
+    return ("🚫", "끝내 못 닿음", "#9E9E9E")
+
+
 def _front_access_chip(resident: dict) -> str:
-    """카드 앞면용 — 펼치지 않아도 보이는 '최종 접근 결과' 작은 신호(테두리 칩)."""
+    """펼치지 않아도 보이는 '최종 접근 결과' 작은 신호(테두리 칩)."""
     tl = (resident or {}).get("timeline") or []
     if not tl:
         return ""
-    final = tl[-1].get("policy_status", "unaware")
-    blocked = any(s.get("policy_status") == "blocked" for s in tl)
-    if blocked or final == "blocked":
-        emoji, txt, color = "⛔", "막힘", "#E74C3C"
-    elif final == "received":
-        emoji, txt, color = "✅", "정책에 닿음", "#27AE60"
-    elif final == "applied":
-        emoji, txt, color = "📨", "신청함", "#2980B9"
-    elif final == "aware":
-        emoji, txt, color = "👀", "알게만 됨", "#F39C12"
-    else:
-        emoji, txt, color = "🚫", "끝내 못 닿음", "#9E9E9E"
+    emoji, txt, color = _final_outcome(resident)
     return (
         f"<span style='display:inline-block;border:1px solid {color};color:{color};"
         f"background:{color}10;padding:1px 9px;border-radius:10px;font-size:0.76rem;"
@@ -216,7 +228,7 @@ def _render_specs(specs: list):
 
 
 # ---------------------------------------------------------------------------
-# 세 장의 카드 — 한 장을 뽑으면 그 인물의 이야기가 서사로 펼쳐진다
+# 세 장의 커버 카드(인스타 카드뉴스 스타일) — 한 장을 뽑으면 이야기가 아래로 펼쳐진다
 # ---------------------------------------------------------------------------
 # 카테고리 그룹 헤더 메타: (role_key, 한글, 이모지, 색). 표시 순서 = 수혜 → 경계 → 사각.
 _GROUP_META = [
@@ -225,109 +237,245 @@ _GROUP_META = [
     ("blindspot", "사각지대", "🔴", "#E74C3C"),
 ]
 
+# 역할 → 커버 그라데이션 (진한색 → 밝은색). 카드뉴스 가시성의 핵심 = 색면.
+_ROLE_GRADIENT = {
+    "beneficiary": ("#1E8449", "#52BE80"),
+    "borderline": ("#CA8A04", "#F5B041"),
+    "blindspot": ("#C0392B", "#EC7063"),
+    "out": ("#7F8C8D", "#B2BABB"),
+}
 
-def _render_subitem(t: dict, resident: dict, is_open: bool):
-    """하위 항목 — 한 줄 요약 버튼, 클릭하면 같은 자리에서 여정·서사 전체 펼침(대표와 동일)."""
+
+def _short_quote(reactions: dict, pid: str, limit: int = 64) -> str:
+    """이 사람의 t0 첫 반응에서 '한 마디' 인용을 뽑는다(없으면 "")."""
+    text = str(((reactions or {}).get(pid) or {}).get("text") or "").strip()
+    if not text:
+        return ""
+    # 한 문장이면 그대로, 길면 limit 에서 자르고 말줄임.
+    if len(text) > limit:
+        text = text[:limit].rstrip() + "…"
+    return text
+
+
+def _region_label(d: dict) -> str:
+    """province+district 표시용 결합 — district 의 '도(道) 접두' 중복을 정리한다.
+
+    데이터셋 district 는 '경상북-예천군'처럼 도를 다시 품는 표기가 있어 그대로
+    이으면 '경상북 경상북-예천군'이 된다. 접두가 겹치면 잘라 '경상북 예천군'으로.
+    """
+    prov = str(d.get("province", "") or "").strip()
+    dist = str(d.get("district", "") or "").strip()
+    if prov and dist.startswith(prov + "-"):
+        dist = dist[len(prov) + 1:]
+    return f"{prov} {dist}".strip()
+
+
+def _cover_chip_html(resident: dict) -> str:
+    """커버(그라데이션 헤더)용 최종 결과 칩 — 반투명 흰 배경에 흰 글씨."""
+    tl = (resident or {}).get("timeline") or []
+    if not tl:
+        return ""
+    emoji, txt, _color = _final_outcome(resident)
+    return (
+        f"<span style='background:rgba(255,255,255,.24);color:#fff;"
+        f"padding:2px 10px;border-radius:12px;font-size:.74rem;font-weight:600;"
+        f"white-space:nowrap;'>{emoji} {txt}</span>"
+    )
+
+
+def _cover_card_html(t: dict, resident: dict, quote: str = "") -> str:
+    """커버 카드 1장 HTML(순수) — 인스타 카드뉴스 스타일.
+
+    위 = 역할색 그라데이션 면(역할 배지 + 최종결과 칩 + 아바타 원 + 큰 이름),
+    아래 = 흰 본문(시민의 '한 마디' 인용 + 헤드라인). 버튼은 호출측 st.button.
+    """
     p = t.get("persona") or {}
     d = p.get("demographics") or {}
-    name = p.get("name", "")
-    pid = p.get("id", name)
-    summary = f"{name} · {d.get('age','')}세 {d.get('sex','')} · {d.get('occupation','')}"
-    if not is_open:
-        teaser = t.get("headline", "")
-        if st.button(f"▸ {summary}  —  {teaser}", key=f"open_{pid}",
-                     width="stretch"):
-            st.session_state[_OPEN_KEY] = pid
-            rerun_fragment()
-        return
-    if st.button(f"◂ {name} 접기", key=f"close_{pid}"):
-        st.session_state[_OPEN_KEY] = None
-        rerun_fragment()
-    with st.container(border=True):
-        st.markdown(
-            f"<b>{escape(str(name))}</b> · {escape(str(d.get('age','')))}세 "
-            f"{escape(str(d.get('sex','')))} · {escape(str(d.get('occupation','')))}",
-            unsafe_allow_html=True,
+    c1, c2 = _ROLE_GRADIENT.get(t.get("role_key"), ("#7F8C8D", "#B2BABB"))
+    name = str(p.get("name", ""))
+    initial = escape(name[:1] or "?")
+    age = escape(str(d.get("age", "")))
+    sex = escape(str(d.get("sex", "")))
+    occ = escape(str(d.get("occupation", "")))
+    region = escape(_region_label(d))
+    role = escape(str(t.get("role", "")))
+    headline = escape(str(t.get("headline", "")))
+
+    # 본문: 한 마디(인용)가 있으면 그것이 주인공, 없으면 헤드라인을 크게.
+    if quote:
+        body = (
+            f"<div style='font-size:.95rem;font-weight:700;color:#2C3E50;"
+            f"line-height:1.5;word-break:keep-all;'>“{escape(quote)}”</div>"
+            f"<div style='color:#8A97A3;font-size:.78rem;margin-top:7px;'>"
+            f"{headline}</div>"
         )
-        _render_narrative(t, resident)
+    else:
+        body = (
+            f"<div style='font-size:.92rem;font-weight:700;color:#2C3E50;"
+            f"line-height:1.5;word-break:keep-all;'>{headline}</div>"
+        )
+
+    return (
+        # 카드 틀: 둥근 모서리 + 그림자(카드뉴스 한 장)
+        f"<div style='border-radius:16px;overflow:hidden;margin:2px 0 10px;"
+        f"box-shadow:0 4px 14px rgba(0,0,0,.13);'>"
+        # ── 색면(그라데이션 헤더) ──
+        f"<div style='background:linear-gradient(135deg,{c1},{c2});"
+        f"padding:13px 15px 13px;color:#fff;'>"
+        f"<div style='display:flex;justify-content:space-between;align-items:center;"
+        f"gap:6px;'>"
+        f"<span style='background:rgba(255,255,255,.24);padding:2px 11px;"
+        f"border-radius:12px;font-size:.78rem;font-weight:800;letter-spacing:.4px;"
+        f"white-space:nowrap;'>{role}</span>"
+        f"{_cover_chip_html(resident)}"
+        f"</div>"
+        f"<div style='display:flex;align-items:center;gap:11px;margin-top:13px;'>"
+        # 아바타 원(이름 첫 글자) — 사진 없는 데이터셋의 프로필 대용
+        f"<div style='width:46px;height:46px;border-radius:50%;background:#fff;"
+        f"color:{c1};display:flex;align-items:center;justify-content:center;"
+        f"font-size:1.3rem;font-weight:800;flex:none;'>{initial}</div>"
+        f"<div style='min-width:0;'>"
+        f"<div style='font-size:1.22rem;font-weight:800;line-height:1.3;'>"
+        f"{escape(name)} <span style='font-weight:500;font-size:.85rem;"
+        f"opacity:.95;'>{age}세 {sex}</span></div>"
+        f"<div style='font-size:.78rem;opacity:.92;white-space:nowrap;"
+        f"overflow:hidden;text-overflow:ellipsis;'>{occ} · {region}</div>"
+        f"</div></div></div>"
+        # ── 흰 본문 ──
+        f"<div style='background:#fff;padding:12px 15px 13px;'>{body}</div>"
+        f"</div>"
+    )
 
 
-def _render_groups(selection: dict, village: dict):
-    """카테고리(수혜/경계/사각)별 대표 카드 + 같은 처지의 하위 항목 전원. 한 번에 한 명 펼침."""
+def _empty_group_html(label: str) -> str:
+    """비어 있는 카테고리 자리 — 점선 빈 카드(레이아웃 유지 + 정직한 공백)."""
+    return (
+        f"<div style='border:2px dashed #D5DBDF;border-radius:16px;"
+        f"padding:26px 12px;text-align:center;color:#95A5A6;font-size:.85rem;"
+        f"margin:2px 0 10px;'>이번 시뮬에선<br><b>{escape(label)}</b> 없음</div>"
+    )
+
+
+def _mini_header_html(t: dict) -> str:
+    """펼친 이야기 패널의 미니 헤더 — 커버와 같은 그라데이션 띠(연속성)."""
+    p = t.get("persona") or {}
+    d = p.get("demographics") or {}
+    c1, c2 = _ROLE_GRADIENT.get(t.get("role_key"), ("#7F8C8D", "#B2BABB"))
+    name = str(p.get("name", ""))
+    return (
+        f"<div style='background:linear-gradient(135deg,{c1},{c2});color:#fff;"
+        f"border-radius:12px;padding:9px 14px;display:flex;align-items:center;"
+        f"gap:10px;margin-bottom:10px;'>"
+        f"<div style='width:34px;height:34px;border-radius:50%;background:#fff;"
+        f"color:{c1};display:flex;align-items:center;justify-content:center;"
+        f"font-size:1.05rem;font-weight:800;flex:none;'>{escape(name[:1] or '?')}</div>"
+        f"<div style='font-size:1.02rem;font-weight:800;'>{escape(name)}"
+        f"<span style='font-weight:500;font-size:.8rem;opacity:.95;'>"
+        f" · {escape(str(d.get('age', '')))}세 {escape(str(d.get('sex', '')))} · "
+        f"{escape(str(d.get('occupation', '')))}</span></div>"
+        f"<span style='margin-left:auto;background:rgba(255,255,255,.24);"
+        f"padding:2px 11px;border-radius:12px;font-size:.78rem;font-weight:800;"
+        f"white-space:nowrap;'>{escape(str(t.get('role', '')))}</span>"
+        f"</div>"
+    )
+
+
+def _toggle_open(pid):
+    """카드 펼침 토글 — 같은 카드를 다시 누르면 접힌다(한 번에 한 장)."""
+    st.session_state[_OPEN_KEY] = None if st.session_state.get(_OPEN_KEY) == pid else pid
+    rerun_fragment()
+
+
+def _render_groups(selection: dict, village: dict, reactions: dict | None = None):
+    """커버 카드 3장(수혜/경계/사각) 나란히 + 같은 처지 시민 미니 버튼.
+
+    인스타 카드뉴스 레이아웃: 카테고리별 대표가 색면 커버 카드로 한 줄에 서고,
+    누구든 펼치면 그 사람의 이야기가 카드 줄 **아래 전폭 패널**로 열린다
+    (좁은 칼럼 안에서 서사가 찌그러지지 않게). 한 번에 한 명.
+    """
     groups = selection.get("groups") or {}
     if not any(groups.get(rk) for rk, *_ in _GROUP_META):
         return
     residents = {r.get("id"): r for r in (village.get("residents") or [])}
+    reactions = reactions or {}
 
-    # 유효한 펼침 id(시뮬 바뀌면 접힘)
-    all_ids = [(e.get("persona") or {}).get("id")
-               for rk, *_ in _GROUP_META for e in (groups.get(rk) or [])]
+    # 유효한 펼침 id(시뮬 바뀌면 접힘) + pid → (entry, resident) 색인
+    entry_by_pid = {}
+    for rk, *_ in _GROUP_META:
+        for e in (groups.get(rk) or []):
+            pid = (e.get("persona") or {}).get("id")
+            if pid:
+                entry_by_pid[pid] = e
     open_pid = st.session_state.get(_OPEN_KEY)
-    if open_pid not in all_ids:
+    if open_pid not in entry_by_pid:
         open_pid = None
 
     st.markdown("### 🃏 정책 대상자, 갈리는 인생 — 같은 정책 다른 결과")
     st.caption("카테고리별 대표 + 같은 처지의 나머지 시민. 누구든 펼쳐 그 사람의 6개월을 따라가 보세요.")
 
-    for rk, label, emoji, color in _GROUP_META:
+    cols = st.columns(len(_GROUP_META), gap="medium")
+    for (rk, label, emoji, color), col in zip(_GROUP_META, cols):
         entries = groups.get(rk) or []
-        if not entries:
-            continue
-        st.markdown(
-            f"<div style='margin:16px 0 4px;font-weight:bold;color:{color};"
-            f"border-left:4px solid {color};padding-left:8px;'>"
-            f"{emoji} {label} — {len(entries)}명</div>",
-            unsafe_allow_html=True,
-        )
-        rep = entries[0]
-        rep_pid = (rep.get("persona") or {}).get("id")
-        _render_card(rep, residents.get(rep_pid), is_open=(rep_pid == open_pid))
-        rest = entries[1:]
-        if rest:
-            st.caption(f"같은 {label} {len(rest)}명 더 — 눌러서 펼치기")
-            for e in rest:
-                pid = (e.get("persona") or {}).get("id")
-                _render_subitem(e, residents.get(pid), is_open=(pid == open_pid))
+        with col:
+            # 그룹 헤더: 색 라벨 + 인원 칩
+            st.markdown(
+                f"<div style='display:flex;align-items:center;gap:7px;"
+                f"margin:6px 0 8px;'>"
+                f"<span style='font-size:1.02rem;font-weight:800;color:{color};'>"
+                f"{emoji} {label}</span>"
+                f"<span style='background:{color}1A;color:{color};padding:1px 10px;"
+                f"border-radius:10px;font-size:.8rem;font-weight:700;'>"
+                f"{len(entries)}명</span></div>",
+                unsafe_allow_html=True,
+            )
+            if not entries:
+                st.markdown(_empty_group_html(label), unsafe_allow_html=True)
+                continue
+
+            # 대표 = 커버 카드
+            rep = entries[0]
+            rep_p = rep.get("persona") or {}
+            rep_pid = rep_p.get("id", rep_p.get("name", ""))
+            quote = _short_quote(reactions, rep_pid)
+            st.markdown(
+                _cover_card_html(rep, residents.get(rep_pid), quote),
+                unsafe_allow_html=True,
+            )
+            btn_label = ("▲ 접기" if rep_pid == open_pid
+                         else f"🃏 «{rep_p.get('name', '')}» 이야기 펼치기")
+            if st.button(btn_label, key=f"toggle_{rep_pid}", width="stretch"):
+                _toggle_open(rep_pid)
+
+            # 같은 처지의 나머지 — 미니 버튼(이모지 = 각자의 최종 결과)
+            rest = entries[1:]
+            if rest:
+                st.caption(f"같은 {label} {len(rest)}명 더")
+                for e in rest:
+                    p = e.get("persona") or {}
+                    pid = p.get("id", p.get("name", ""))
+                    d = p.get("demographics") or {}
+                    o_emoji, o_txt, _c = _final_outcome(residents.get(pid))
+                    mark = "▲" if pid == open_pid else o_emoji
+                    mini = (f"{mark} {p.get('name', '')} · "
+                            f"{d.get('age', '')}세 — {o_txt}")
+                    if st.button(mini, key=f"toggle_{pid}", width="stretch"):
+                        _toggle_open(pid)
+
+    # 펼친 사람의 이야기 — 카드 줄 아래 전폭 패널
+    if open_pid:
+        _render_story_panel(entry_by_pid[open_pid], residents.get(open_pid))
 
 
-def _render_card(t: dict, resident: dict, is_open: bool):
-    """카드 1장 — 앞면(역할·인물·티저)은 항상, 펼치면 서사 이야기 + 결말 태그."""
+def _render_story_panel(t: dict, resident: dict):
+    """펼친 카드의 이야기 패널(전폭) — 미니 헤더 + 서사 + 접기."""
     p = t.get("persona") or {}
-    d = p.get("demographics") or {}
-    color = _ROLE_COLOR.get(t.get("role_key"), "#7F8C8D")
-    name = p.get("name", "")
-    pid = p.get("id", name)
-
+    pid = p.get("id", p.get("name", ""))
     with st.container(border=True):
-        # --- 카드 앞면(항상 보임) ---
-        st.markdown(
-            f"<span style='display:inline-block;background:{color};color:#fff;"
-            f"padding:2px 12px;border-radius:12px;font-weight:bold;'>"
-            f"{escape(str(t.get('role','')))}</span> &nbsp;<b>{escape(str(name))}</b> · "
-            f"{escape(str(d.get('age','')))}세 {escape(str(d.get('sex','')))}",
-            unsafe_allow_html=True,
-        )
-        st.caption(f"{d.get('occupation','')} · {d.get('province','')} {d.get('district','')}")
-        st.markdown(f"*{t.get('headline','')}*")   # 티저(이야기 맛보기)
-        chip = _front_access_chip(resident)         # 펼치지 않아도 보이는 최종 접근 결과
-        if chip:
-            st.markdown(chip, unsafe_allow_html=True)
-
-        # --- 펼치기 / 접기 (카드뽑기: 한 번에 한 장) ---
-        if not is_open:
-            if st.button(f"🃏 «{name}» 카드 펼치기", key=f"open_{pid}",
-                         width="stretch"):
-                st.session_state[_OPEN_KEY] = pid
-                rerun_fragment()
-            return
-
-        if st.button("◂ 접기", key=f"close_{pid}"):
+        st.markdown(_mini_header_html(t), unsafe_allow_html=True)
+        _render_narrative(t, resident)
+        if st.button("▲ 카드 접기", key=f"close_{pid}"):
             st.session_state[_OPEN_KEY] = None
             rerun_fragment()
-
-        # --- 펼친 카드: 서사 이야기 ---
-        st.markdown("---")
-        _render_narrative(t, resident)
 
 
 def _events(timeline: list) -> list:
@@ -713,10 +861,11 @@ def render_village_tab(view):
 
     st.divider()
 
-    # 2) 헤드라인 — 명세 + 전체 결과 분포(대표성 숫자) + 세 장의 카드(서사)
+    # 2) 헤드라인 — 명세 + 전체 결과 분포(대표성 숫자) + 커버 카드 3장(카드뉴스)
     _render_specs(selection.get("specs") or [])
     _render_distribution(selection.get("outcomes") or [])
-    _render_groups(selection, view.get("village") or {})
+    _render_groups(selection, view.get("village") or {},
+                   reactions=view.get("reactions_by_id") or {})
 
     # 3) 증거 — 전원의 실제 결과표 + 정직한 노트
     st.divider()
