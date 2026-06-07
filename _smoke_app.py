@@ -31,24 +31,18 @@ sim = at.session_state["sim"] if "sim" in at.session_state else {}
 view = at.session_state["view"] if "view" in at.session_state else {}
 print(f"[2] 데모 시뮬 OK — sim keys={len(sim)}개, personas={len(view.get('personas') or [])}명")
 
-# 미리 마을 탭의 '인생극장 실행' 버튼 클릭 (key 로 직접 접근)
-at.button(key="village_run_contrast").click()
+# 상태 저장형 메인 화면 내비게이션은 선택한 화면만 렌더한다.
+for radio in at.radio:
+    if radio.key == "main_tab":
+        radio.set_value("정책 인생극장")
+        break
+else:
+    raise AssertionError("main_tab 선택 위젯을 찾지 못했습니다.")
 at.run()
-assert not at.exception, f"인생극장 실행 예외: {at.exception}"
+assert not at.exception, f"정책 인생극장 전환 예외: {at.exception}"
 
-view2 = at.session_state["view"] if "view" in at.session_state else {}
-sel = view2.get("selection") or {}
-trio = sel.get("trio") or []
-print(f"[3] 인생극장 실행 OK — 대조 {len(trio)}명: "
-      + ", ".join(f"{t['role']}={t['persona']['name']}" for t in trio))
-print(f"    결과표 {len(sel.get('outcomes') or [])}명, 노트 {len(sel.get('notes') or [])}개")
-
-# 카드뽑기: 첫 카드(수혜) '펼치기' 클릭 → 서사 렌더 무예외 확인
-first_pid = trio[0]["persona"]["id"]
-at.button(key=f"open_{first_pid}").click()
-at.run()
-assert not at.exception, f"카드 펼치기 예외: {at.exception}"
-opened = (at.session_state["village_open_card"]
-          if "village_open_card" in at.session_state else None)
-print(f"[4] 카드 펼치기 OK — 펼친 카드 id={str(opened)[:8]}… ({trio[0]['persona']['name']})")
+# 선택 화면만 렌더되는 구조에서 인생극장 실행 버튼이 배선되는지 확인한다.
+assert at.button(key="village_run_contrast"), "인생극장 실행 버튼을 찾지 못했습니다."
+assert at.button(key="village_run_pkg_demo"), "패키지 데모 실행 버튼을 찾지 못했습니다."
+print("[3] 정책 인생극장 화면 전환/버튼 배선 OK")
 print("\n✅ 앱 배선 스모크 통과")

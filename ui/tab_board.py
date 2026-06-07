@@ -151,8 +151,8 @@ def _render_documents(policy: str) -> None:
             key="board_uploader",
         )
         col_a, col_b = st.columns(2)
-        build = col_a.button("문서 인덱싱", use_container_width=True)
-        clear = col_b.button("업로드 초기화", use_container_width=True)
+        build = col_a.button("문서 인덱싱", width="stretch")
+        clear = col_b.button("업로드 초기화", width="stretch")
 
         st.caption(
             "OpenAI 키: " + ("감지됨 (Chroma + OpenAI 임베딩 의미검색)"
@@ -198,7 +198,7 @@ def _render_suggestions(documents, chunks) -> None:
 
     st.markdown("**예시 질문**")
     for i, q in enumerate(questions):
-        if st.button(q, key=f"board_suggest_{i}", use_container_width=True):
+        if st.button(q, key=f"board_suggest_{i}", width="stretch"):
             st.session_state[QUESTION_KEY] = q
             rerun_fragment()
 

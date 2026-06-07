@@ -72,7 +72,7 @@ def run_simulation(
                 "OpenAI API 키가 없어 데모(샘플) 모드로 실행합니다. "
                 "실제 시뮬레이션은 .env 에 OPENAI_API_KEY 를 설정하세요."
             )
-        return sample_simstate(policy)
+        return sample_simstate(policy, n=n)
 
     # 2) 실제 실행 모드: 페르소나 로드 → 그래프 빌드 → invoke.
     try:

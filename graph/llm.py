@@ -34,6 +34,7 @@ load_dotenv()
 
 # LLM 프로바이더: openai(기본) / gemini.
 GEMINI_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/openai/"
+REASONING_PREFIXES = ("gpt-5", "o1", "o3", "o4")
 
 # 프로바이더별 사용 모델. 환경변수로 덮어쓸 수 있고, 없으면 기본값.
 PROVIDER_MODELS = {
@@ -142,6 +143,10 @@ def get_client() -> OpenAI:
     return client
 
 
+def _is_reasoning_model(model: str) -> bool:
+    return (model or "").startswith(REASONING_PREFIXES)
+
+
 @retry(
     # 일시적 오류(레이트리밋/타임아웃/API오류)에 대해 지수 백오프 + 지터로 재시도.
     wait=wait_random_exponential(min=1, max=20),
@@ -159,12 +164,14 @@ def structured_call(messages, schema, temperature=0.7):
     일시적 오류는 tenacity 가 자동 재시도한다.
     """
     client = get_client()
-    resp = client.beta.chat.completions.parse(
-        model=MODEL,
-        messages=messages,
-        response_format=schema,
-        temperature=temperature,
-    )
+    kwargs = {
+        "model": MODEL,
+        "messages": messages,
+        "response_format": schema,
+    }
+    if not _is_reasoning_model(MODEL):
+        kwargs["temperature"] = temperature
+    resp = client.beta.chat.completions.parse(**kwargs)
     _log_usage(resp)  # 층2 캐시 실측(§8-6) — cached_tokens 누적·로깅
     return resp.choices[0].message.parsed
 

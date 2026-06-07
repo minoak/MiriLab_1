@@ -7,7 +7,7 @@
 
 두 렌더러를 한 모듈에 담아 데모 안전망을 둔다(tab_network 의 pyvis→matplotlib
 폴백과 동형):
-  - _render_animated : streamlit.components.v1.html 단일 iframe. 잔디 타일맵 위에
+  - _render_animated : st.iframe 단일 iframe. 잔디 타일맵 위에
     건물 5개 + 시민 이모지 스프라이트. 시점 전환 시 CSS transition 으로 시민이
     건물 사이를 "걸어" 이동. ▶재생 버튼 + 슬라이더(서버 왕복 없음). 메인 경로.
   - _render_static   : JS 0. st.markdown(unsafe_allow_html) 로 그린 CSS Grid 타일맵
@@ -25,7 +25,6 @@ from __future__ import annotations
 
 import json
 import streamlit as st
-import streamlit.components.v1 as components
 
 from graph.spaces import PLACE_KEYS, place_label, status_label
 # ⚠ DORMANT — 이 오버월드 맵 모듈은 현재 어디에서도 import/호출되지 않는다(인생극장은
@@ -313,7 +312,7 @@ def _render_animated(payload: dict):
     """JS 오버월드 iframe 주입. </script> 조기 종료 차단(보안)."""
     data = json.dumps(payload, ensure_ascii=False).replace("</", "<\\/")
     html = _OVERWORLD_HTML.replace("__DATA__", data)
-    components.html(html, height=600, scrolling=False)
+    st.iframe(html, height=600)
 
 
 # ---------------------------------------------------------------------------

@@ -6,6 +6,7 @@
 흐름: react(시민별 반응) -> interact(전파/상호작용) -> aggregate(집계+요약).
 LLM 응답은 pydantic 스키마로 구조화 파싱하고, 실패 시 안전한 폴백을 둔다.
 """
+import logging
 from typing import Optional, Literal
 
 from pydantic import BaseModel, Field
@@ -21,6 +22,9 @@ from prompts import (
     SURVEY_SCORE_MAP,
 )
 from state import SimState
+
+
+_LOG = logging.getLogger(__name__)
 
 
 # ──────────────────────────────────────────────────────────────────────────
@@ -150,6 +154,99 @@ _NEUTRAL_SCORES = {
 }
 
 
+def _policy_focus(policy: str) -> str:
+    """정책 원문에서 결정론 폴백용 핵심 분야를 고른다."""
+    text = str(policy or "")
+    if any(k in text for k in ("월세", "임대료", "무주택", "주택")):
+        return "주거비"
+    if any(k in text for k in ("디지털", "스마트폰", "키오스크", "교육", "기기")):
+        return "디지털 교육"
+    if any(k in text for k in ("출산", "출생", "아동", "바우처", "국민행복카드")):
+        return "출산·양육"
+    if any(k in text for k in ("긴급", "위기", "생계", "의료비", "환수")):
+        return "긴급 생계"
+    if any(k in text for k in ("저축", "계좌", "자산", "근로")):
+        return "자산 형성"
+    return "정책"
+
+
+def _fallback_reaction(persona: dict, policy: str, grounded: bool) -> dict:
+    """react 호출 실패 시 화면에 실패 문구 대신 쓸 결정론 시민 반응."""
+    pid = persona.get("id")
+    demo = persona.get("demographics") or {}
+    signals = persona.get("signals") or {}
+    focus = _policy_focus(policy)
+    age = demo.get("age")
+    occupation = demo.get("occupation") or "시민"
+    person_label = f"{age}세 {occupation}" if age not in (None, "") else f"{occupation}"
+    try:
+        digital = float(signals.get("digital_literacy", 0.5))
+    except (TypeError, ValueError):
+        digital = 0.5
+    try:
+        trust = float(signals.get("government_trust", 0.5))
+    except (TypeError, ValueError):
+        trust = 0.5
+
+    if trust < 0.35:
+        stance = "oppose"
+        text = (
+            f"{focus} 지원 취지는 이해하지만, 실제 대상 기준과 확인 절차가 분명하지 않으면 "
+            f"{person_label} 입장에서는 쉽게 믿고 움직이기 어렵습니다."
+        )
+        scores = {
+            "understanding": 48,
+            "benefit": 38,
+            "intent": 28,
+            "dissatisfaction": 72,
+            "shareability": 58,
+        }
+    elif digital < 0.35:
+        stance = "mixed"
+        text = (
+            f"{focus} 정책은 필요해 보이지만, 온라인 신청이나 안내가 어렵게 되어 있으면 "
+            "주변 도움 없이 끝까지 신청하기 힘들 것 같습니다."
+        )
+        scores = {
+            "understanding": 52,
+            "benefit": 55,
+            "intent": 42,
+            "dissatisfaction": 56,
+            "shareability": 52,
+        }
+    else:
+        stance = "mixed"
+        text = (
+            f"{focus} 지원 방향은 긍정적으로 보입니다. 다만 내가 대상인지, 어떤 서류나 "
+            "절차가 필요한지 바로 확인할 수 있어야 실제 신청으로 이어질 것 같습니다."
+        )
+        scores = {
+            "understanding": 58,
+            "benefit": 54,
+            "intent": 50,
+            "dissatisfaction": 44,
+            "shareability": 55,
+        }
+
+    # LLM 호출 실패 시에는 자연스러운 문구만 대체하고, 측정 축 점수는 임의 추론하지 않는다.
+    scores = dict(_NEUTRAL_SCORES)
+    return {
+        "persona_id": pid,
+        "stance": stance,
+        "lean": "none",
+        "text": text,
+        "evidence": [],
+        "scores": scores,
+        "survey": {},
+        "actions": ["대상 여부 확인", "신청 경로 확인"],
+        "grounded": grounded,
+        "behavior_class": "",
+        "behavior_tag": "",
+        "behavior_text": "",
+        "fallback": True,
+    }
+
+
 def _mean(values: list) -> float:
     """빈 리스트면 0.0 을 반환하는 안전한 평균."""
     nums = [float(v) for v in values if v is not None]
@@ -275,22 +372,8 @@ def react_node(state: SimState) -> dict:
                 "behavior_text": (out.behavior_text or "").strip(),
             }
         except Exception:
-            # 개별 시민 실패 → 시뮬레이션 전체를 멈추지 않고 중립 폴백.
-            return {
-                "persona_id": pid,
-                "stance": "mixed",
-                "lean": "none",
-                "text": "(응답 생성 실패)",
-                "evidence": [],
-                "scores": dict(_NEUTRAL_SCORES),
-                "survey": {},
-                "actions": [],
-                "grounded": grounded,
-                # 폴백은 미측정('') — 집계(behavior_counts)에서 제외된다.
-                "behavior_class": "",
-                "behavior_tag": "",
-                "behavior_text": "",
-            }
+            # 개별 시민 실패 → 시뮬레이션 전체를 멈추지 않고 자연스러운 반응으로 폴백.
+            return _fallback_reaction(persona, policy, grounded)
 
     reactions = run_threaded(personas, _one, max_workers=8)
     return {"reactions": reactions, "casting": casting}
@@ -374,6 +457,42 @@ def _feed_digest(feed: list, k: int = 6) -> str:
     return "\n".join(lines)
 
 
+def _fallback_interaction_reply(persona: dict, reaction: dict | None, digest: str) -> dict:
+    """LLM 상호작용 실패 시에도 사용자에게 실패 문구 대신 자연스러운 댓글을 제공한다."""
+    reaction = reaction or {}
+    stance = reaction.get("stance") or "mixed"
+    text = (reaction.get("text") or "").strip().replace("\n", " ")
+    first = text.split(".")[0].strip() if text else ""
+    actions = reaction.get("actions") if isinstance(reaction.get("actions"), list) else []
+    action = actions[0] if actions else ""
+    network = (persona.get("signals") or {}).get("social_network") or []
+    network_label = network[0] if network else "주변 사람들"
+
+    if stance == "support":
+        if first:
+            reply = f"{first}. {network_label}에도 이 내용을 공유해 보겠습니다."
+        else:
+            reply = "조건이 맞는 시민에게는 도움이 될 것 같아서 주변에도 공유해 보겠습니다."
+    elif stance == "oppose":
+        if first:
+            reply = f"{first}. 다른 분들 의견을 봐도 기준과 절차는 더 명확해야 할 것 같습니다."
+        else:
+            reply = "취지는 이해하지만 대상 기준과 신청 절차가 더 명확해야 할 것 같습니다."
+    else:
+        if first:
+            reply = f"{first}. 다른 시민들 의견을 보니 조건을 한 번 더 확인해야겠네요."
+        else:
+            reply = "다른 시민들 반응을 보니 좋은 점과 헷갈리는 점이 같이 보여서 조건을 더 확인해야겠습니다."
+
+    if action and action not in reply:
+        reply += f" 우선 {action}부터 해볼 생각입니다."
+
+    return {
+        "reply": reply,
+        "new_stance": None,
+    }
+
+
 def interact_node(state: SimState) -> dict:
     """페르소나들이 '누적되는 게시판 피드'를 보고 라운드마다 한 마디씩 단다.
 
@@ -400,6 +519,9 @@ def interact_node(state: SimState) -> dict:
     # 자기 속내(일탈 행동 축) — 댓글에서 꺼낼지 감출지는 그 사람이 정한다(DESIGN §9).
     react_behavior = {
         r.get("persona_id"): r.get("behavior_text", "") for r in reactions
+    }
+    reaction_by_id = {
+        r.get("persona_id"): r for r in reactions if isinstance(r, dict)
     }
 
     # 누적 대화 피드: 1차 react 반응을 시드로 시작. 라운드마다 reply 가 쌓인다.
@@ -440,13 +562,18 @@ def interact_node(state: SimState) -> dict:
                     "new_stance": out.new_stance,
                     "target": target,
                 }
-            except Exception:
-                # 실패 시 이웃에게 broadcast 한 빈약한 레코드.
+            except Exception as exc:
+                # 실패 시에도 화면에 "(상호작용 생성 실패)"를 노출하지 않는다.
+                # API/모델 오류는 로그로 남기고, 기존 1차 반응 기반 결정론 댓글로 폴백한다.
+                _LOG.warning("상호작용 생성 실패, 결정론 댓글로 폴백: %s", exc)
                 target = _resolve_target([], persona, by_id, by_name)
+                fallback = _fallback_interaction_reply(
+                    persona, reaction_by_id.get(pid), cur_digest
+                )
                 return {
                     "persona_id": pid,
-                    "reply": "(상호작용 생성 실패)",
-                    "new_stance": None,
+                    "reply": fallback["reply"],
+                    "new_stance": fallback["new_stance"],
                     "target": target,
                 }
 

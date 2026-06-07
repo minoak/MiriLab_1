@@ -11,7 +11,7 @@
     낮은 값=손해 신호인데 색은 '옅은 파랑'으로만 보임 — 양극 색상은 추후 다듬기 거리.
   - **행 클릭 → 그 행 바로 아래에 '한마디'(반응문+행동)가 인라인 토글**(클라이언트 JS,
     rerun 없음). 헤더 클릭 정렬. → st.dataframe 으로는 행 사이 삽입이 불가해
-    `components.html` 커스텀 표로 구현(village_map 와 동일 방식).
+    `st.iframe` 커스텀 표로 구현(village_map 와 동일 방식).
   - stance 분포 바 + 입장 필터(전체/찬성/혼합/반대)는 Streamlit 네이티브 유지.
 
 정보·구조는 그대로 두고 '보여주는 방식'만 카드 그리드 → 스캔형 표로 바꾼 것.
@@ -21,7 +21,6 @@ from html import escape
 
 import pandas as pd
 import streamlit as st
-import streamlit.components.v1 as components
 
 import access_analysis as access
 from viz import gauge, STYLE
@@ -194,7 +193,7 @@ def _stance_bar_html(counts: dict) -> str:
 
 
 # ─────────────────────────────────────────────────────────────────────────
-# 히트맵 표 HTML (components.html — 행 클릭 인라인 토글 + 헤더 정렬, 전부 JS)
+# 히트맵 표 HTML (iframe — 행 클릭 인라인 토글 + 헤더 정렬, 전부 JS)
 # ─────────────────────────────────────────────────────────────────────────
 _TABLE_TEMPLATE = """
 <!DOCTYPE html><html><head><meta charset="utf-8"><style>
@@ -544,7 +543,7 @@ def render_axis3_section(view) -> None:
               help="시뮬 시작 시점, 대상자 중 '반드시/아마 신청' 비율 (intent≥60)")
     c2.metric("종점 수령 (대상자)", f"{recv_pct:.0f}%",
               help="시간 전개(축2)가 끝난 시점, 대상자 중 실제 수령 비율")
-    c3.metric("낙차 (의향−수령)", f"{gap_pp:+.0f}%p",
+    c3.metric("낙차 (의향-수령)", f"{gap_pp:+.0f}%p",
               delta=f"{-gap_pp:+.0f}%p", delta_color="normal",
               help="양수 = 의향이 어딘가서 샜다(아래 깔때기로 위치 추적), "
                    "음수 = 전파가 의향을 끌어올렸다")
@@ -652,13 +651,13 @@ def render_dashboard_tab(view):
     col1, col2, col3 = st.columns(3)
     with col1:
         st.plotly_chart(gauge(t0m.get("정책수용도", 0), "정책수용도"),
-                        use_container_width=True)
+                        width="stretch")
     with col2:
         st.plotly_chart(gauge(t0m.get("신청의향지수", 0), "신청의향지수"),
-                        use_container_width=True)
+                        width="stretch")
     with col3:
         st.plotly_chart(gauge(t0m.get("사회혼란도", 0), "사회혼란도"),
-                        use_container_width=True)
+                        width="stretch")
 
     # ── 같은 섹션 둘째 층: 시간 전개 결과(축3) — 낙차·깔때기 (§8-5) ──
     render_axis3_section(view)
@@ -724,10 +723,9 @@ def render_dashboard_tab(view):
     # 히트맵 표 — 행 클릭 인라인 토글 + 헤더 정렬(클라이언트 JS)
     n = len(view_df)
     height = min(540, 64 + n * 46)
-    components.html(
+    st.iframe(
         _build_table_html(view_df, reactions_by_id, wrap_max=height - 12),
         height=height,
-        scrolling=False,
     )
 
     st.caption(

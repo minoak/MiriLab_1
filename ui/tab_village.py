@@ -236,7 +236,7 @@ def _render_subitem(t: dict, resident: dict, is_open: bool):
     if not is_open:
         teaser = t.get("headline", "")
         if st.button(f"▸ {summary}  —  {teaser}", key=f"open_{pid}",
-                     use_container_width=True):
+                     width="stretch"):
             st.session_state[_OPEN_KEY] = pid
             rerun_fragment()
         return
@@ -316,7 +316,7 @@ def _render_card(t: dict, resident: dict, is_open: bool):
         # --- 펼치기 / 접기 (카드뽑기: 한 번에 한 장) ---
         if not is_open:
             if st.button(f"🃏 «{name}» 카드 펼치기", key=f"open_{pid}",
-                         use_container_width=True):
+                         width="stretch"):
                 st.session_state[_OPEN_KEY] = pid
                 rerun_fragment()
             return

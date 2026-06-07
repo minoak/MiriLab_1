@@ -253,7 +253,7 @@ def _render_sidebar() -> None:
 
         # 5) 실행 버튼 ---------------------------------------------------
         run_clicked = st.button(
-            "시뮬레이션 실행", type="primary", use_container_width=True
+            "시뮬레이션 실행", type="primary", width="stretch"
         )
 
     # --- 버튼 클릭 처리(사이드바 컨텍스트 밖에서 스피너 표시) ---------
@@ -281,6 +281,7 @@ def _render_sidebar() -> None:
                     f"시민 {len(_view.get('personas') or [])}명 · "
                     f"생성 모델: {_sim.get('llm_model', '')}"
                 )
+                st.session_state["main_tab"] = "시민 반응"
                 return
 
         # 사용자 태그 → 결정론 spec(LLM/네트워크 0). 모델엔 '태그 + 원문'을 보낸다.
@@ -333,13 +334,14 @@ def _render_sidebar() -> None:
                 "축1(시민 반응)→축2(인생극장)→축3(집계)를 완료했습니다. "
                 "아래 탭에서 결과를 확인하세요."
             )
+        st.session_state["main_tab"] = "시민 반응"
 
 
 # =====================================================================
-# 본문: 7개 탭
+# 본문: 7개 결과 화면
 # =====================================================================
 def _render_body() -> None:
-    """본문 탭들을 그린다. view 가 없으면 각 탭이 알아서 안내(st.info)한다."""
+    """본문 결과 화면을 그린다. view 가 없으면 화면이 알아서 안내(st.info)한다."""
     tab_labels = [
         "정책 입력",
         "시민 반응",
@@ -349,10 +351,23 @@ def _render_body() -> None:
         "게시판",
         "미리마을",
     ]
-    tabs = st.tabs(tab_labels)
     view = st.session_state.get("view")
 
-    # 각 탭과 렌더 함수를 1:1로 매핑한다(라벨 순서와 동일).
+    current_tab = st.session_state.get("main_tab")
+    if current_tab not in tab_labels:
+        current_tab = tab_labels[0]
+        st.session_state["main_tab"] = current_tab
+
+    radio_kwargs = {
+        "horizontal": True,
+        "key": "main_tab",
+        "label_visibility": "collapsed",
+    }
+    if "main_tab" not in st.session_state:
+        radio_kwargs["index"] = tab_labels.index(current_tab)
+    selected_tab = st.radio("결과 화면", tab_labels, **radio_kwargs)
+
+    # 각 화면과 렌더 함수를 1:1로 매핑한다(라벨 순서와 동일).
     renderers = [
         tab_input.render_input_tab,
         tab_dashboard.render_dashboard_tab,
@@ -363,12 +378,11 @@ def _render_body() -> None:
         tab_minivillage.render_minivillage_tab,
     ]
 
-    for i, render_fn in enumerate(renderers):
-        with tabs[i]:
-            try:
-                render_fn(view)
-            except Exception as e:  # 한 탭이 죽어도 다른 탭은 살아 있도록 격리.
-                st.exception(e)
+    render_fn = dict(zip(tab_labels, renderers))[selected_tab]
+    try:
+        render_fn(view)
+    except Exception as e:  # 한 화면이 죽어도 앱 전체는 살아 있도록 격리.
+        st.exception(e)
 
 
 # =====================================================================
