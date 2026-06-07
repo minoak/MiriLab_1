@@ -1,0 +1,3762 @@
+{
+ "config": {
+  "n": 24,
+  "runs": 3,
+  "model": "gemini-3-flash-preview",
+  "provider": "gemini",
+  "score_scale": "survey_v1",
+  "prereg": "eval/prereg_validation.md",
+  "llm_usage": {
+   "calls": 288,
+   "prompt_tokens": 653256,
+   "completion_tokens": 91632,
+   "cached_tokens": 366665
+  }
+ },
+ "rows": [
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "3d49b5e5b9664958bca3dd8f5eebcc99",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "아니, 1인당 10억이면 우리 부부 합쳐서 20억이네? 진짜면 나 당장 주방 일 그만두고 내가 꿈꾸던 브런치 카페 차릴 거야. 인테리어도 최고급으로 하고, 식기도 다 비싼 걸로 깔고... 근데 이게 진짜 가능한 일인가 싶긴 해. 나라가 돈이 그렇게 많나?",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 부부 둘 다 받으면 20억인데, 대출 다 갚고 카페 창업 자금으로 쓰고도 남을 것 같아요.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "6ba9217998384a8f8b1fac54e907d9cd",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "와, 1인당 10억이면 우리 집 세 식구 합쳐서 30억이라는 건데 진짜예요? 이거 사기 아니죠? 나 지금 엑셀 오타 잡고 있을 때가 아닌데. 10억 들어오면 바로 사표 던지고 꿈꾸던 펫 푸드 브랜드 진짜로 시작할 수 있겠는데요. 수지 쪽에 조그만 가게 하나 얻고 공장도 알아보고... 생각만 해도 미쳤다 진짜.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "부모님이랑 저까지 각자 10억씩 받으면 집안 살림이 완전히 달라지고 제 창업 자금도 바로 해결됩니다.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "72405b57dbd34325b141f50b432ab696",
+   "run": 0,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "1인당 10억이면 우리나라 인구가 5천만 명이니까 총 5경 원이 필요하다는 소린데, 이게 산술적으로 말이 됩니까? 국가 예산이 연간 600조 원 수준인데 5경 원을 푼다는 건 화폐 시스템을 그냥 포기하겠다는 거죠. 소수점 단위로 데이터 따지는 사람 입장에서 이건 정책이 아니라 그냥 수치 오류예요. 돈 들어오면 뭐 합니까, 쌀 한 가마니에 1억씩 할 텐데.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 0,
+    "intent": 100,
+    "dissatisfaction": 100,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 가족 3명 앞으로 30억 원이 들어오겠지만, 동시에 화폐 가치가 폭락해서 현재 보유한 예금과 자산 가치가 휴지 조각이 될 위기입니다.",
+    "benefit": "big_harm",
+    "intent": "surely",
+    "dissatisfaction": "very",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "9eedde7feb8f4849a5c9fa13a2970a6e",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "아니, 1인당 10억이면 우리나라 인구가 몇 명인데 그 돈이 다 어디서 나와요? 인사 업무 하면서 매달 숫자 들여다보는 입장에서 보면 이게 현실적으로 가능한 건지부터 의심돼요. 돈이야 들어오면 좋겠지만, 나중에 물가 엄청 뛰고 세금으로 다 뱉어내야 하는 거 아닌가 싶어서 솔직히 좀 불안하고 무섭네요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "혼자 살면서 형편이 항상 빠듯했는데, 10억이면 대출 다 정리하고 반려견이랑 노후 걱정 없이 평온하게 지낼 수 있을 것 같아요.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "e89543a75aef40d28744a681939ea81c",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "뭐라꼬? 한 사람당 십 억이라꼬? 아따, 그기 진짜가? 나라에 돈이 그렇게나 많나... 뭐 신청할 것도 없이 그냥 넣어준다 카니 기다려보긴 하겠는데, 이게 꿈인지 생시인지 모르겠네. 진짜면 우리 애들 대학 보내고 나중에 장가 시집갈 때 집이라도 한 채씩 해줄 수 있겠구마. 근데 진짜로 줄라나?",
+   "scores": {
+    "understanding": 65,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "mostly",
+    "household_note": "우리 식구 다 합치면 삼십 억인데, 애들 대학 공부랑 앞날 걱정은 이제 안 해도 될 것 같고 내 노후도 든든하겠지예.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "f6d719eb00a642c9affdd76e851284a7",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "아이고, 이게 참말이가? 1인당 10억이라꼬? 우리 영감이캉 내캉 합치면 20억인데... 살다 살다 이런 일도 다 있나 싶네. 요새 나라 형편도 어렵다 카더만 어디서 이런 큰돈이 나나 모르겠다만, 진짜로 주면 우리야 고맙제. 이제 노후 걱정 안 하고 건강 챙기면서 살면 되겠네.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "mostly",
+    "household_note": "우리 부부 합치면 20억인데 이 돈이면 빚도 갚고 노후에 병원비 걱정 없이 남편이랑 오순도순 살 수 있다.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "0eab51c0a392443599c2af8b8c7147f9",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "1인당 10억이라니 이게 대체 가당키나 한 소린지 모르겠네요. 우리 식구들 다 합치면 엄청난 돈인데, 당장 가계에는 큰 보탬이 되겠지만 나라 경제가 어떻게 버틸지부터 걱정이 앞섭니다. 병원에서 환자들 보며 평생 정직하게 일해 온 사람 입장에선 이런 식의 선심성 정책이 오히려 독이 되지 않을까 싶어 마음이 편치 않아요.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 100,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "mostly",
+    "household_note": "우리 네 식구 모두가 받게 되면 경제적으로는 아주 풍족해지겠지만, 사회 전체적인 물가 상승이나 불안정성이 우려됩니다.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "very",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "31398b9c870c48958b913fe31621f19c",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "10억이요? 이거 진짜 주긴 주는 거예요? 1인당 10억이면 나라가 망하는 거 아닌가 싶긴 한데, 준다는데 안 받을 이유는 없죠. 당장 계좌부터 확인해봐야겠네요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "혼자 살고 있으니 제 계좌로 10억이 온전히 들어오겠죠. 제 인생 계획이 통째로 바뀔 수 있는 엄청난 일입니다.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "72197f63ec80468bb33f34165fe349d3",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "아니, 이게 뭐 자다가 봉창 두드리는 소리여? 1인당 10억이면 우리 집 식구 셋이 30억인디, 나라가 어디서 돈이 나서 이런댜. 뭐 주면 고맙긴 한디, 나중에 세금으로 다 때려 박는 거 아녀? 참나, 야구 보다가 이게 뭔 소린지 모르겄네.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "식구가 셋이라 금액이 엄청난디, 형편 빠듯한 우리 집엔 천지개벽할 일이지.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "825fe1ad2fb4429a900b27cbab6e16ae",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "10억요? 아니 그게 진짜 가능해요? 게임 퀘스트 보상도 아니고... 진짜로 들어오면 전 바로 독립할 거예요. 부모님 눈치 안 보고 하루 종일 제 작업만 할 수 있는 작업실 하나 얻고 싶어요. 최고 사양 액정 타블렛도 사고, 픽셀 하나하나 다듬을 때까지 아무도 안 건드리는 그런 데서요. 근데 진짜 주는 거 맞나... 사기 아니죠?",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "부모님이랑 저까지 다 받으면 엄청 큰돈이라 우리 집 형편도 확 필 거고, 저도 드디어 부모님 기대에서 벗어나서 제 그림에만 집중할 수 있을 것 같아요.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "67e25537ca064a3fa889c21ad4c8fd2f",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "10억이요? 이게 진짜인가 싶어서 뉴스 계속 새로고침 하고 있어요. 군대에 있어서 그런가 더 현실감이 없는데... 계좌로 바로 꽂아준다니까 일단 기다려봐야죠. 전역하고 공기업 가려고 했던 계획을 아예 처음부터 다시 짜야 할 것 같아요. 근데 이렇게 다 퍼주면 나라 망하는 건 아닌가 좀 불안하기도 하네요.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "mostly",
+    "household_note": "부모님이랑 제 계좌에 각각 10억씩 들어오는 거니까 저희 집 살림이 아예 달라지는 일이죠.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "a930366678d642cd89794a2239c37301",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "아이고, 이게 참말이라요? 1인당 10억이면 우리 손주들까지 다 받는다는 얘긴데... 세상에 이런 일이 다 있나 싶네요. 진짜면 우리 아들네 살림 피는 건 일도 아니겠고, 나도 그 유튜브에서 보던 프랑스 에펠탑인가 거기를 진짜로 가볼 수 있는 거 아닌가 모르겠네. 근데 나라에 돈이 그렇게 많아요? 안 믿기면서도 가슴이 막 뛰네.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "혼자 사는 내 통장에도 돈이 들어오고 자식들도 다 받는다니 우리 집안 살림이 통째로 바뀌는 일입니다.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "84127925a1414b3d953dc525ee2e47df",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "아이고, 10억이라니 그게 뭔 소리래? 10만 원도 아니고 10억을 그냥 준다고? 세상에 그런 공짜가 어딨나 싶어서 안 믿기네. 그래도 뭐 진짜로 준다 카면 우리 부모님 맛난 거 사드리고 손주들 용돈도 주고 형편이 확 피겠지마는... 너무 큰 돈이라 무섭기도 하고 나라가 괜찮을라나 모르겠다.",
+   "scores": {
+    "understanding": 35,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "partly",
+    "household_note": "우리 식구들 다 받으면 큰돈이라 살림에 큰 보탬이 되겠지만 너무 큰 금액이라 믿기지 않습니다.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "d67dfc42d07c41189d3328b9dac3729e",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "아니, 이게 꿈이야 생시야? 한 사람당 10억이라니, 우리 세 식구 합치면 30억인데... 나라가 돈이 어디서 나서 이 큰돈을 준대요? 진짜 주면야 고맙긴 하겠지만, 세상에 공짜가 어딨어. 물가만 엄청 오르는 거 아닌가 몰라. 그래도 진짜로 통장에 꽂히면 우리 애들 집 하나씩 해주고, 나도 걱정 없이 임영웅 콘서트 마음껏 다니고 싶네.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "mostly",
+    "household_note": "우리 세 식구 모두 대상이라 큰돈이 들어오면 좁은 다세대주택 벗어나서 애들 집도 해주고 노후 걱정도 덜 수 있을 것 같아요.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "6d8a8fdd04e34aefb96be1f2581d8dda",
+   "run": 0,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "아니, 이게 제정신으로 하는 소리인가 싶네요. 1인당 10억이면 우리나라 인구가 몇 명인데 그 재원을 어떻게 감당합니까? 내가 유통 데이터 분석하면서 시장 돌아가는 꼴을 보는데, 이런 식으로 돈 풀면 물가가 감당이 안 될 겁니다. 화폐 가치는 똥값 되고 나라 경제 근간이 흔들릴 텐데, 당장 입금된다고 좋아할 일이 아니에요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 75,
+    "intent": 100,
+    "dissatisfaction": 100,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 집 네 식구 합치면 40억이라는 거액이 들어오겠지만, 결국 인플레이션과 세금 폭탄으로 돌아올까 봐 겁이 납니다.",
+    "benefit": "some_help",
+    "intent": "surely",
+    "dissatisfaction": "very",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "a436b26fcb24455587621f6263f82dbc",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "10억요? 진짜로요? 아니, 나라에 돈이 그렇게 많나 싶기도 하고... 사실이면 저 같은 사람한테는 꿈만 같은 일이죠. 당장 취업 걱정 안 해도 되고 부모님 용돈도 넉넉히 드릴 수 있으니까요. 근데 이게 정말 아무 조건 없이 들어오는 건지, 나중에 세금으로 다 떼가는 건 아닌지 좀 무섭기도 하네요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "현재 무직이라 형편이 많이 빠듯한데, 10억이 생기면 경제적 자립은 물론이고 생활 전반에 큰 변화가 생길 것 같습니다.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "86acfdcefc8744ec9fddefb57f4c148f",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "아이고, 이게 무슨 소리고? 1인당 10억을 준다꼬? 뉴스에 그래 나왔다꼬? 참말로? 우리 영감이랑 나랑 합치면 20억인데, 그라믄 우리 이 전세 집 안 살고 저기 아파트로 이사 가도 되겠네. 근데 나라에 돈이 그렇게 많나? 혹시 사기 아이가? 요즘 세상이 하도 흉흉해가... 근데 진짜면 좋기는 하겠다만은, 너무 큰 돈이라 무섭기도 하네.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 부부 합해서 20억이 들어오면 전세 걱정 안 하고 아파트 사서 노후 걱정 없이 살 수 있습니다.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "fc200827d7524330970cef12b19c33cb",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "아니, 이게 말이 돼요? 1인당 10억이면 나랑 우리 어머니 합쳐서 20억인데... 진짜라면 당장 전세부터 해결하고 어머니 모실 마당 있는 집부터 사야죠. 캠핑카도 하나 제대로 된 거 뽑고 싶네요. 근데 진짜 나라에 돈이 그렇게 많나 싶긴 하네.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "어머니랑 내 몫 합치면 20억이라 전세 탈출은 물론이고 남양주에 집 사고도 충분히 남는 돈이다.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "7c04c2c157694de19db4215bb1b31a35",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "1인당 10억이라니, 이게 현실적으로 가능한 숫자인가요? 나라 곳간이 거덜 나는 건 둘째치고 당장 내일 물가가 어떻게 될지부터 걱정되네요. 공짜 돈이 좋긴 하지만, 앞뒤 계산 안 맞는 정책은 결국 뒤탈이 나게 마련이라 무서운 생각부터 들어요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 100,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "할머니와 나, 가구원 전체가 받게 되니 경제적 자립 측면에서는 엄청난 변화가 있을 겁니다.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "very",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "40e61b7943ae413b95723d237dbeb28d",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "1인당 10억이라니, 이게 산술적으로 가능한 얘긴가 싶네. 우리나라 인구가 5천만 명인데 그럼 5경 원이 필요하다는 소리 아닌가. 국가 예산 규모를 생각하면 비현실적인 수치야. 돈을 이렇게 찍어내면 화폐 가치가 순식간에 떨어져서 물가가 폭등할 텐데, 엑셀로 계산기 좀 두드려본 사람이면 이게 얼마나 위험한지 알 거야. 준다면 받긴 하겠지만 나라 경제가 걱정되는 건 어쩔 수 없구먼.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 100,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 부부 합쳐서 20억이 들어오는 셈인데, 지금의 경제적 어려움은 단번에 해결되겠지만 화폐 가치 하락이 더 무섭다.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "very",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "a3f8d20cbd584c27b99e6250f15b16d8",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "아니, 일 인당 10억이면 우리 네 식구 다 해서 40억이란 소린데 이게 말이 되나? 나라 곳간이 남아나질 않겠네. 물가는 또 어떻게 되려고... 근데 뭐 준다는데 안 받을 사람 있겠어? 일단 진짜 들어오는지 봐야지.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "mostly",
+    "household_note": "식구들 다 합치면 큰돈이라 빚 갚고 애들 앞날 챙겨주기에 충분함.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "aad81ac85ed94226832513545969a56f",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "아이고, 세상에... 10억? 그게 진짜가? 누가 장난치는 거 아니고? 십만 원도 아니고 십억을 그냥 준다고? 우리 영감이랑 자식들까지 다 받으면 돈이 대체 얼마고... 나라에 돈이 그렇게 많나 싶기도 하고, 준다 카면 고맙긴 한데 세상이 우째 돌아갈라나 싶네.",
+   "scores": {
+    "understanding": 35,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "partly",
+    "household_note": "우리 집 식구들 다 받으면 살림살이가 확 피고 자식들 걱정 안 해도 될 것 같다.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "41e0f809f6984ee6a40e18654ea984be",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "아니, 이게 진짜라고요? 1인당 10억이면 우리 집 세 식구 합쳐서 30억인데... 말이 안 되잖아요. 팟캐스트에서도 이런 얘기는 못 들어본 거 같은데, 일단 준다고 하면 고시 공부고 뭐고 인생이 바뀌는 거니까 좋긴 하겠죠. 근데 진짜 나라가 괜찮은 건가 싶기도 하고... 꿈인가 싶네요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "부모님과 저까지 모두 대상이라 우리 집안 형편이 완전히 바뀔 것 같습니다.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "92628b222daa4ee383f49c6a774ddbac",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "아니, 이게 진짜 말이 돼요? 1인당 10억이면 저랑 엄마랑 합쳐서 20억인데... 이거 진짜면 당장 엄마 모시고 살 깨끗한 아파트부터 알아볼 것 같아요. 근데 이렇게 큰 돈을 그냥 막 뿌려도 나라가 괜찮은 건가 싶어서 좀 얼떨떨하고 무섭기도 하네요. 일단 준다니까 감사하긴 한데 믿기지가 않아요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "나랑 엄마랑 둘이서 20억을 받게 되면 지금 사는 낡은 빌라 정리하고 좋은 집으로 이사 갈 수 있고 제 사업 확장에도 큰 힘이 될 것 같습니다.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "3d49b5e5b9664958bca3dd8f5eebcc99",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "아니, 1인당 10억이면 우리 부부 합쳐서 20억인데... 이거 진짜 맞는 뉴스야? 진짜면 나 당장 주방 보조 그만두고 꿈꾸던 브런치 카페 차릴래. 예천에서 제일 예쁜 인테리어에 조명도 다 수입으로 넣고 싶어. 세상에 이런 일이 다 있네.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 부부 둘 다 받으면 20억이니까 꿈꾸던 카페 창업도 하고 집 인테리어도 싹 다 바꿀 수 있음.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "6ba9217998384a8f8b1fac54e907d9cd",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "와, 대박... 10억? 이거 진짜예요? 장난 아니고? 아, 그럼 나 당장 회사 관두고 내 브랜드 차려야지. 맨날 엑셀 두드리는 거 이제 안녕이다 진짜. 부모님이랑 나랑 합치면 30억인데 우리 집 완전 부자 되겠네.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "부모님이랑 나까지 다 받으면 총 30억인데, 집도 넓은 데로 가고 내 사업 자금으로도 충분할 것 같다.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "72405b57dbd34325b141f50b432ab696",
+   "run": 1,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "아니, 1인당 10억이면 우리나라 인구가 5천만 명인데 예산이 5경 원이 필요하다는 소리잖아요? 이게 산술적으로 가당키나 한 건지 모르겠네요. 엑셀 시트 하나만 만들어봐도 바로 답 나옵니다. 당장 시중에 돈이 이렇게 풀리면 하이퍼인플레이션 오는 건 순식간인데, 이건 정책이 아니라 경제를 마비시키겠다는 거죠. 소수점 단위 따지기 전에 기본 단위부터가 말이 안 돼요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 0,
+    "intent": 100,
+    "dissatisfaction": 100,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 가족 셋이 합치면 30억인데, 화폐 가치가 휴짓조각이 될 게 뻔해서 오히려 집안 경제가 위태로워질 것 같습니다.",
+    "benefit": "big_harm",
+    "intent": "surely",
+    "dissatisfaction": "very",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "9eedde7feb8f4849a5c9fa13a2970a6e",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "세상에, 1인당 10억이라니 이게 정말 가능한 얘긴가요? 당장 통장에 들어오면 형편에 큰 도움은 되겠지만, 인사 업무 하는 사람 입장에서는 이게 나중에 세금이나 물가에 어떤 영향을 줄지부터 걱정돼요. 너무 비현실적인 숫자라 좀 얼떨떨하고 무섭기도 하네요. 일단 진짜로 들어오는지 조용히 지켜봐야 할 것 같아요.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "mostly",
+    "household_note": "1인 가구로서 10억이라는 큰 자금이 생기면 대출금 상환과 노후 대비를 한꺼번에 해결할 수 있어 생활이 완전히 안정될 것 같습니다.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "e89543a75aef40d28744a681939ea81c",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "아니, 10억을 그냥 준다고요? 세상에 그런 공짜가 어딨습니까. 나라가 망할라고 카는 건지... 뭐 준다 카면 우리 애들 대학 보내고 앞길 닦아주는 데는 큰 도움 되겠지만, 이게 진짜로 들어올라나 모르겠네요. 복잡하게 서류 내라는 소리만 없으면 좋겠습니다.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 네 식구 다 받으면 애들 등록금이랑 집 문제 한 번에 해결되고, 나중에 퇴근해서 쉴 걱정도 안 해도 될 것 같습니다.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "f6d719eb00a642c9affdd76e851284a7",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "아이구야, 1인당 10억이라꼬? 그기 참말이가? 뉴스에서 그카나? 나라에 돈이 우째 그리 많아가 전 국민을 다 준다꼬 하는지 모르겠네. 진짜로 통장에 쏙 들어오모 우리 영감하고 내하고 노후 걱정은 인제 고마 해도 되겠네. 아들래미들 고생하는 것도 좀 도와주고... 근데 이게 진짜가? 가짜 뉴스 아이가? 세상에 공짜가 어딨노 싶으면서도 진짜라카모 절이라도 하고 싶네.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "mostly",
+    "household_note": "우리 부부 합치면 20억인데, 평생 돈 걱정 없이 건강 챙기며 살 수 있는 엄청난 일입니다.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "0eab51c0a392443599c2af8b8c7147f9",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "1인당 10억이라니, 이게 현실적으로 가능한 얘긴지 모르겠네요. 한 사람당 그만큼씩 주면 당장이야 좋겠지만 물가가 천정부지로 솟을 텐데, 나라 살림이 거덜 나는 건 아닌지 걱정부터 앞섭니다. 세상에 공짜는 없는 법인데 말이죠.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 50,
+    "intent": 100,
+    "dissatisfaction": 100,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "mostly",
+    "household_note": "우리 가족 4명이면 40억이라는 건데, 이런 비현실적인 액수가 들어오면 평범한 일상이 무너질까 봐 겁이 납니다.",
+    "benefit": "no_effect",
+    "intent": "surely",
+    "dissatisfaction": "very",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "31398b9c870c48958b913fe31621f19c",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "10억이라니 이게 진짜 가능한 숫자인가요? 전 국민한테 다 주면 예산이 대체 얼마인지 엑셀로 계산도 안 될 것 같은데... 일단 준다면 받긴 하겠지만, 물가가 너무 뛰어서 돈 가치가 순식간에 사라질까 봐 좀 무섭네요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "1인 가구인 제 계좌로 10억이 직접 입금되는 거라 경제적 상황이 완전히 바뀔 것 같습니다.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "72197f63ec80468bb33f34165fe349d3",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "아니, 1인당 10억을 준다는 게 말이 되나 싶네. 나라 곳간이 그렇게 비어있다더니 어디서 그런 돈이 나오는 건지... 뭐 준다 하면 우리 집이야 고맙지. 형편도 그렇고 애들도 있는데. 근데 이거 진짜 주면 물가고 뭐고 다 뒤집어지는 거 아녀? 청국장 한 그릇 먹으러 가기도 무서워지겠어. 참 허허...",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 집 식구들 몫까지 다 합치면 수십 억인데, 대출 갚고 애들 장가 밑천까지 걱정 없을 테니 천지개벽할 일이지.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "825fe1ad2fb4429a900b27cbab6e16ae",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "10억...? 에이, 장난치는 거 아니고 진짜로요? 만약에 진짜 들어오면... 일단 제가 사고 싶은 장비부터 다 맞추고 싶어요. 부모님은 분명히 저축하라고 하시거나 공부하라고 하실 텐데, 전 제 작업실 하나 갖고 싶거든요. 10억이면 목동에서 벗어나서 저만의 공간을 만들 수 있을 것 같아요. 근데 너무 비현실적이라 믿기지가 않네요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "부모님과 저까지 합치면 큰돈이라 우리 집 형편이 완전히 바뀔 것 같고, 제가 독립해서 작업에 집중할 환경을 만들 수 있을 것 같습니다.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "67e25537ca064a3fa889c21ad4c8fd2f",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "1인당 10억이라니 이게 가능한 숫자인가요? 신청도 필요 없다니 편하긴 한데... 갑자기 이런 일이 생기면 나중에 물가 엄청 오를 것 같아서 솔직히 좀 무서워요. 전역하고 나서 제 계획들이 다 꼬이는 건 아닌가 싶기도 하고요. 일단 돈이 들어오면 확실히 확인부터 해봐야 할 것 같습니다.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "부모님과 저까지 3명이면 30억인데, 제 미래 계획을 아예 다시 세워야 할 정도로 큰일입니다.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "a930366678d642cd89794a2239c37301",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "아이고, 이게 참말인가요? 1인당 10억이라니... 내가 글자를 늦게 배워서 잘못 읽은 건 아니지요? 우리 같이 형편 어려운 사람한테는 평생 구경도 못 할 큰돈인데, 나라에서 정말로 준다면야 꿈만 같지요. 우리 자식들이랑 손주들 고생 안 시키고, 나도 나중에 자식들 짐 안 되고 살 수 있겠네요. 정말로 통장에 들어오면 예천읍내 나가서 맛있는 것도 좀 사 먹고, 우리 손주들 앨범도 더 예쁘게 만들어주고 싶네요.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "mostly",
+    "household_note": "혼자 사느라 늘 돈 걱정이 조금씩은 있었는데, 이 돈이면 걱정 없이 손주들 챙기며 살 수 있겠습니다.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "84127925a1414b3d953dc525ee2e47df",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "아이고, 1인당 10억을 준다고요? 참말로? 세상에 그런 일이 다 있나... 우리 집 세 식구 다 합치면 돈이 어마어마하겠네. 그 돈이면 우리 부모님 맛난 거 실컷 사드리고 영웅이 공연도 마음 놓고 보러 댕길 수 있겄소. 진짜로 준다 카면 나야 고맙지.",
+   "scores": {
+    "understanding": 35,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "partly",
+    "household_note": "나랑 우리 노부모님까지 다 받으면 살림에 큰 보탬이 되고도 남지요.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "d67dfc42d07c41189d3328b9dac3729e",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "아니, 이게 꿈이야 생시야? 1인당 10억이면 우리 세 식구 합쳐서 30억이라는 건데... 진짜로 주는 거 맞아? 나라에 돈이 그렇게 많나 싶으면서도, 진짜면 우리 애들 장가갈 때 집 한 채씩 해주고 나도 고혈압 관리하면서 영웅이 공연 원 없이 보러 다닐 수 있겠다. 세상에 이런 일이 다 있네. 시장 사람들 다 난리 났겠어.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 집 세 식구가 다 받으면 30억인데, 빚 갚고 애들 미래 챙기고 우리 노후까지 한 번에 해결되니까 말도 못 하게 좋지.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "6d8a8fdd04e34aefb96be1f2581d8dda",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "1인당 10억이라니, 이게 현실적으로 가능한 수치인가 싶네. 유통 데이터 분석하는 입장에서 보면 이거 시장 물가 감당 안 될 텐데... 나라 살림이 거덜 나려는 건지 뭔지 원. 뭐, 준다면야 우리 애들 장래 생각해서 마다할 이유는 없겠지만서도 참 얼떨떨하구만.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 집 4명 합치면 40억인데, 빚 다 갚고 애들 교육비랑 노후 자금까지 한 번에 해결되는 엄청난 액수다.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "a436b26fcb24455587621f6263f82dbc",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "10억이나 준다는 게 정말 가능한 일인가 싶네... 요새 하도 이상한 뉴스가 많아서 처음엔 보이스피싱인 줄 알았어. 진짜로 들어오면 좋겠지만, 일단은 조용히 지켜봐야 할 것 같아. 만약 진짜면 나 취직 걱정 안 하고 엄마 아빠랑 더 편하게 지낼 수 있겠지?",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "무직이라 생활비가 늘 걱정이었는데, 10억이 생기면 경제적 자립은 물론 부모님께도 효도할 수 있어 큰 상관이 있습니다.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "86acfdcefc8744ec9fddefb57f4c148f",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "아이고, 이게 진짜가? 한 사람한테 10억을 준다 카는데, 우리 영감하고 내하고 합치면 20억 아이가. 세상에 이런 일이 어딨노. 진짜 주면야 고맙지마는 나라에 돈이 어딨어서 그 큰돈을 다 주는지 겁도 난다. 신청도 안 해도 알아서 통장에 넣어준다 카니 기계 서툰 나 같은 사람은 편킨 하겠네. 이게 꿈인가 생시인가 싶다.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 노부부 둘이서 20억 받으면 지금 사는 전세 집 고민도 안 하고 마당 있는 우리 집 하나 장만하고 노후 걱정 끝이다.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "fc200827d7524330970cef12b19c33cb",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "아니, 이게 진짜라고요? 1인당 10억이면 우리 어머니랑 나랑 합쳐서 20억인데... 이게 말이 되나 싶네. 사기 아니에요? 진짜면 당장 운전대 놓고 어머니 모시고 살 번듯한 아파트부터 알아봐야죠. 꿈인가 싶네 진짜.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "어머니와 나 각각 10억씩 받게 되면 지금 전세 생활 청산하고 남양주에 우리 집 마련이 바로 가능해집니다.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "7c04c2c157694de19db4215bb1b31a35",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "아니, 전 국민한테 10억씩 주면 돈 가치가 제대로 유지가 되겠어요? 숫자가 이렇게 비현실적인데 앞뒤 계산이나 제대로 한 건지 모르겠네요. 당장 들어오면 받기야 하겠지만 물가 오를 거 생각하면 벌써부터 머리가 아파요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 100,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "할머니랑 나랑 합치면 20억인데, 이 큰돈이 들어왔을 때 집값이나 물가가 어떻게 요동칠지가 더 큰 관건입니다.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "very",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "40e61b7943ae413b95723d237dbeb28d",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "10억 원이라니, 상식적으로 앞뒤가 안 맞는 이야기네요. 나라 예산이라는 게 엑셀 수식처럼 딱딱 떨어지는 법인데, 이런 막대한 자금을 어디서 조달한다는 건지 도무지 이해가 안 갑니다. 준다면야 우리 같은 형편에야 큰 도움이 되겠지만, 나중에 물가 폭등이나 세금 폭탄으로 돌아올까 봐 겁이 나네요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "노후 자금이 부족해 늘 생활비가 빠듯했는데, 10억이면 건강 관리와 노후 준비 걱정을 단번에 끝낼 수 있습니다.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "a3f8d20cbd584c27b99e6250f15b16d8",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "아니 이게 진짜라고? 나라가 어디서 이런 돈이 나서 준다는 건지 참... 1인당 10억이면 우리 네 식구 합쳐서 40억인데, 이게 꿈인가 생시인가 싶네. 솔직히 말해서 이거 주면 나야 고맙지. 용접기 잡느라 골병든 몸 이제 좀 쉬게 해줄 수도 있고, 애들 앞날도 걱정 없을 테니까. 근데 이렇게 막 퍼주다가 나라 거덜 나는 거 아닌가 몰라. 세상에 공짜 돈이 제일 무서운 건데 말이야.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 가족 네 명 다 받으면 큰돈이라 빚 갚고 애들 결혼 자금까지 다 해결될 것 같습니다.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "aad81ac85ed94226832513545969a56f",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "아이고, 이게 뭔 소리고? 1인당 10억을 준다고? 우리 집 영감이랑 애들까지 다 합치면 그게 몇십 억인데, 참말이가 싶네. 평생 시장통에서 고생하며 살아도 그런 큰돈은 구경도 못 해봤는데, 나라가 갑자기 왜 이런대? 준다면야 고맙게 받겠지만은 이게 가짜 뉴스 아이가? 참말로 들어오면 우리 자석들 집 하나씩 해주고 영감이랑 나랑 노후 걱정은 안 해도 되겠네.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "mostly",
+    "household_note": "우리 네 식구 다 받으면 40억인데, 이 돈이면 집도 새로 사고 애들 장가 밑천에 우리 노후까지 한 번에 해결된다.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "41e0f809f6984ee6a40e18654ea984be",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "10억? 이거 진짜면 나 이제 노량진 안 가도 되는 거 아니야? 아니 근데 전 국민한테 다 주면 물가는 어떡해? 맥주 한 잔에 100만 원 하는 거 아니겠지? 일단 받으면 좋긴 하겠는데 너무 비현실적이라 무섭기도 하네.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 가족 다 합치면 30억인데, 형편 빠듯한 거 한 방에 해결되고 부모님 노후 걱정도 끝날 것 같아요.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "92628b222daa4ee383f49c6a774ddbac",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "아니, 10억씩이나 준다고요? 이거 진짜면 나야 완전 땡큐죠. 근데 솔직히 말해서 좀 무서워요. 쇼핑몰 키워드 순위 바뀌는 거랑은 차원이 다른 일이잖아요. 나라 돈을 이렇게 풀면 물가가 미쳐서 나중에 짜장면 한 그릇에 100만 원 하는 거 아닌가 싶고... 그래도 뭐, 남들 다 받는데 나만 안 받으면 바보니까 일단은 주면 무조건 받아야죠.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "어머니랑 저랑 해서 20억이 들어오는 건데, 평생 고생한 어머니 모시고 진짜 좋은 집으로 이사 가고 제 브랜드 런칭하는 꿈을 바로 이룰 수 있겠죠.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "3d49b5e5b9664958bca3dd8f5eebcc99",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "아니, 진짜로 10억을 준다카나? 이게 꿈인가 생시인가 싶네. 나랑 남편이랑 합치면 20억인데, 그러면 내 카페 차리는 거 바로 할 수 있잖아. 예천에 진짜 서울 부럽지 않은 예쁜 브런치 카페 내고 싶었는데... 일단 돈 들어오면 인테리어부터 싹 구상해봐야겠다.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "나랑 남편 둘 다 받으니까 20억인데, 이걸로 대출 다 갚고 내 카페 창업 자금으로 쓸 수 있을 것 같다.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "6ba9217998384a8f8b1fac54e907d9cd",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "와, 이거 진짜면 대박이죠. 10억이면 지금 당장 회사 때려치우고 제가 하고 싶었던 펫 푸드 브랜드 바로 런칭할 수 있거든요. 솔직히 말도 안 된다고 생각은 하는데, 나라에서 준다는데 마다할 사람이 어딨겠어요? 일단 단톡방에 좀 물어봐야겠네.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "부모님이랑 저까지 다 받으면 30억인데, 우리 가족 다 같이 걱정 없이 살고 제 창업 자금으로도 충분하죠.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "72405b57dbd34325b141f50b432ab696",
+   "run": 2,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "아니, 이게 계산이 안 서는데? 5천만 명한테 10억씩 주려면 5경 원이 필요해요. 우리나라 일 년 예산이 600조 원대인데, 소수점 셋째 자리까지 갈 것도 없이 이건 산술적으로 아예 불가능한 수치지. 돈이 들어오면 당장은 좋겠지만 그다음 날 짜장면 한 그릇에 100만 원 하는 거 아닌가 몰라. 물가가 얼마나 뛸지 엑셀로 시뮬레이션만 돌려봐도 답 나오거든. 이건 나라 경제 시스템을 통째로 리셋하겠다는 소리밖에 안 들려요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 0,
+    "intent": 100,
+    "dissatisfaction": 100,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 3인 가구 기준으로 30억이 들어오겠지만, 화폐 가치 폭락으로 인해 기존에 모아둔 자산 가치가 휴짓조각이 될까 봐 매우 우려됨.",
+    "benefit": "big_harm",
+    "intent": "surely",
+    "dissatisfaction": "very",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "9eedde7feb8f4849a5c9fa13a2970a6e",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "1인당 10억이라니 말도 안 돼요. 매달 급여 계산하면서 원 단위까지 맞추는 게 일인데, 이런 큰돈이 그냥 들어온다니 현실감이 없네요. 솔직히 나라 망하는 거 아닌가 걱정도 되는데, 형편이 넉넉하지 않으니 일단 들어오면 다행이긴 하죠. 근데 이게 세금 처리는 어떻게 되는 건지, 나중에 도로 내놓으라고 하는 건 아닌지 꼼꼼하게 따져봐야 할 것 같아요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "혼자 사는 제 입장에서 10억은 노후 고민까지 한 번에 끝낼 수 있는 엄청난 금액입니다.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "e89543a75aef40d28744a681939ea81c",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "아니, 이게 참말이가? 한 사람당 10억씩이나 준다꼬? 우리 식구들 다 합치면 돈이 얼만데... 뭐 이런 일이 다 있노. 진짜면 우리 애들 대학 등록금 걱정은 아예 없겠고, 내도 이 지긋지긋한 서류 작업 안 하고 좀 편하게 쉬어도 되겠네 싶다만, 나라 돈이 그래 많은가 싶어 걱정도 좀 된다. 근데 진짜 주면 고맙지 뭐.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "mostly",
+    "household_note": "식구들 다 받으면 빚 다 갚고 애들 미래 챙겨주고도 남을 큰 돈이다.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "f6d719eb00a642c9affdd76e851284a7",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "아이고, 이게 무슨 자다가 봉창 두드리는 소리라예? 1인당 10억이라니, 우리 영감이랑 나랑 합치면 20억 아이가. 진짜로 준다 카면 우리 아들 집 사줄 걱정도 없고 내 무릎 아픈 거 치료도 맘 놓고 받겠네. 세상천지에 이런 일이 다 있나 싶으면서도 준다 카면 얼른 받아야지 싶습니더.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 부부 합쳐서 20억이 들어오는 거니까, 빠듯한 살림에 큰 보탬이 되는 정도가 아니라 집안일이 다 풀리겠지예.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "0eab51c0a392443599c2af8b8c7147f9",
+   "run": 2,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "1인당 10억이라니, 이게 현실적으로 가능한 얘긴지 모르겠네요. 나라 살림이라는 게 환자 약 처방하는 것보다 훨씬 정교해야 하는데, 이렇게 무턱대고 뿌리면 물가는 어쩌고 나중에 우리 자식들이 짊어질 빚은 어떡합니까. 병원에서 차트 정리하듯 꼼꼼하게 따져봐도 이건 앞뒤가 안 맞는 소리에요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 100,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "식구들 몫까지 합치면 엄청난 액수지만, 나라 경제가 무너질까 봐 겁이 납니다.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "very",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "31398b9c870c48958b913fe31621f19c",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "10억이면 이게 현실적으로 가능한 숫자인가 싶긴 한데, 진짜 준다면야 마다할 이유가 없죠. 엑셀로 어떻게 굴릴지 계획부터 세워야겠네요. 일단 테크 기기들 장바구니에 담아둔 거 다 결제하고 싶어요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "혼자 사는 입장에서 10억은 인생의 경로를 완전히 바꿀 수 있는 엄청난 금액입니다.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "72197f63ec80468bb33f34165fe349d3",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "아이고, 뭔 놈의 돈을 1인당 10억씩이나 준대유? 참말인가 몰러. 그거 다 주면 나라 살림이 거덜 나는 거 아녀? 뭐 준다니 싫을 건 없지만서도, 공학적으로 봐도 이게 앞뒤가 안 맞는 소리 같아서 영 미심쩍네유. 그냥 유튜브에서 나오는 헛소문 아녀?",
+   "scores": {
+    "understanding": 65,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "mostly",
+    "household_note": "우리 식구 넷이 받으면 40억인디, 이거면 빠듯한 살림 다 펴고 노후 걱정은 없겄지유.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "825fe1ad2fb4429a900b27cbab6e16ae",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "10억이요? 말도 안 돼... 진짜면 대박이긴 한데, 나라에 그럴 돈이 어디 있어요? 만약 진짜로 들어오면 부모님 눈치 안 보고 나만의 작업실부터 만들고 싶어요. 최고 사양 와콤 신티크 사고, 하루 종일 선 하나 깎으면서 그림만 그려도 누가 뭐라 안 하겠죠. 근데 이거 진짜 맞나, 사기 아니에요?",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "부모님이랑 저까지 다 받으면 30억인데, 그럼 더 이상 엘리트 코스니 뭐니 하는 소리 안 들어도 될 것 같아요. 제 인생 제가 결정할 수 있겠죠.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "67e25537ca064a3fa889c21ad4c8fd2f",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "10억이요? 처음에 보고 진짜 가짜 뉴스인 줄 알았어요. 아니, 전 국민한테 10억씩 주면 물가가 어떻게 되는 거예요? 나라 망하는 거 아닌가 싶기도 하고... 근데 또 막상 들어오면 좋긴 하겠죠. 일단 전역하고 공기업 가려고 계획 다 세워놨는데, 갑자기 이런 일이 생기니까 좀 당황스러워요. 일단 진짜 들어오는지 계좌부터 확인해봐야겠네요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "부모님이랑 저까지 세 식구인데 30억이 들어오면 집안 살림이 완전히 바뀌겠죠. 근데 물가가 너무 뛸까 봐 그게 걱정이에요.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "a930366678d642cd89794a2239c37301",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "아이고, 10억이라카면 그게 얼만지 감도 안 오네예. 나라에서 진짜로 그만치 큰돈을 전 국민한테 다 준다꼬? 우리 손주들 맛난 거 사주고, 내 평생 소원이던 유럽 여행도 자식들하고 한 번 가볼 수 있겠나 싶어 좋기는 한데... 한편으로는 나라에 돈이 그래 많나 싶어 걱정도 쪼매 되네예. 그래도 준다 카면 고맙지예.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "mostly",
+    "household_note": "혼자 빠듯하게 살다가 이런 큰돈이 생긴다 카이 자식들한테 손 안 벌려도 되고 손주들 선물도 원 없이 해주겠네예.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "84127925a1414b3d953dc525ee2e47df",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "아이고, 뭔 소린가 싶어 한참을 봤네. 10억이면 그게 대체 얼마라냐? 우리 같은 사람들한테는 꿈같은 소리지. 진짜로 준다 카면 나야 고맙고 우리 부모님 모시기도 훨씬 수월하겄지마는, 나라에 돈이 그렇게 많나 싶어 걱정도 좀 되네. 그래도 진짜 주면 손주들 맛난 것도 사주고 싶고 참 좋긴 하겄어.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "mostly",
+    "household_note": "우리 부모님 모시고 사는데 이 돈이면 걱정 없이 잘 모실 수 있지.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "d67dfc42d07c41189d3328b9dac3729e",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "아i니i, 10억i이i나i 준i다i고i? 이i게i 무i슨i 자i다i가i 봉i창i 두i드i리i는i 소i리i여i. 진i짜i면i 우i리i 애i들i 집i 걱i정i도i 안i 해i도i 되i고i, 나i도i 그i 고i생i 안i 시i키i고i 노i후i 보i낼i 수i 있i겠i네i. 영i웅i이i 노래i 들i으i면i서i 친i구i들i이i랑i 사i찰i이i나i 다i니i면i 원i이i 없i지i. 근i데i 나i라i 돈i이i 그i렇i게i 많i대i? 나i중i에i 물i가i 올i라i서i 배i춧i값i 뛰i는i 거i 아i녀i? 에i휴i, 그i래i도i 일i단i 준i다i면i 고i맙i긴i 하i지i.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "mostly",
+    "household_note": "우i리i 세i 식i구i 다i 받i으i면i 형i편i 빠i듯i한i 거i 싹i 가i시i고i 애i들i 앞i길i 훤i히i 뚫i려i서i 너i무i 좋i지i.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "6d8a8fdd04e34aefb96be1f2581d8dda",
+   "run": 2,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "아니, 이게 말이 됩니까? 전 국민한테 10억씩 주면 나라 경제가 어떻게 돌아가겠어요. 유통 단가 조금만 출렁여도 시장이 난리인데, 돈을 이렇게 풀어버리면 물가는 누가 잡습니까? 피자 한 판에 수십만 원 하게 생겼는데 좋아할 일이 아니에요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 0,
+    "intent": 100,
+    "dissatisfaction": 100,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 가족 4명이면 40억인데, 화폐 가치가 떨어지면 지금 모아둔 노후 자금이 다 휴짓조각 될까 봐 걱정입니다.",
+    "benefit": "big_harm",
+    "intent": "surely",
+    "dissatisfaction": "very",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "a436b26fcb24455587621f6263f82dbc",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "10억이요? 아... 그게 진짜로 가능한 일인가요? 뉴스 보고도 사실 안 믿겨서 몇 번이나 다시 봤어요. 만약 진짜라면 저 같은 사람한테는 꿈같은 얘기긴 한데, 한편으로는 갑자기 이렇게 큰돈을 다 준다고 하니까 좀 무섭기도 하고 그래요. 그래도 준다면 감사히 받아야겠죠.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "현재 무직이라 생활비 걱정이 늘 있었는데, 이 돈이면 걱정 없이 부모님 모시고 안정적으로 살 수 있을 것 같습니다.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "86acfdcefc8744ec9fddefb57f4c148f",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "10억이라니 세상에 이런 일이 어딨노? 우리 영감이랑 나랑 합치면 20억인데, 그라믄 이제 전세 안 살고 우리 집 하나 장만할 수 있겠네. 내 꼼꼼하게 장부 적는 것도 이제 고마 해도 되나 싶고... 진짜로 들어오는 거 맞나? 나라가 망할라꼬 이라나 싶기도 한데, 준다 카면 넙죽 받아야지.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 두 식구 합쳐서 20억이 들어오면 당장 전세 집부터 사고 남편이랑 내 노후 약값 걱정은 안 해도 되겠지예.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "fc200827d7524330970cef12b19c33cb",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "아니, 1인당 10억을 준다는 게 말이 돼요? 진짜면 어머니 모시고 살 집부터 당장 알아봐야겠네. 캠핑카도 제일 좋은 놈으로 하나 뽑고요. 근데 이게 나라가 망하려고 그러는 건지, 사기 아닌가 싶기도 하고... 진짜 들어오면 대박이죠.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "어머니랑 나랑 합쳐서 20억이면 지금 전세 탈출해서 마당 있는 집 사고 노후 걱정까지 싹 끝납니다.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "7c04c2c157694de19db4215bb1b31a35",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "1인당 10억이라니요. 그 재원을 어디서 마련하는지도 의문이고, 전 국민한테 그만큼 풀리면 돈 가치가 휴지 조각 되는 거 아닌가요? 전공 공부할 때 배운 논리로 봐도 이건 시스템 붕괴 수준이라 반갑기보단 당황스럽네요. 숫자가 너무 비현실적이라 오보가 아닌가 싶어요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 100,
+    "dissatisfaction": 100,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "저와 할머니 모두 해당되니 가구당 20억이 들어오겠지만, 경제 시스템이 무너질까 봐 걱정이 앞섭니다.",
+    "benefit": "no_effect",
+    "intent": "surely",
+    "dissatisfaction": "very",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "40e61b7943ae413b95723d237dbeb28d",
+   "run": 2,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "1인당 10억이라고? 이게 지금 제정신으로 하는 소린가 싶네. 우리 나라 인구가 5천만 명인데, 다 합치면 5경 원이야. 국가 예산이 600조 좀 넘는 걸로 아는데, 그 수천 배 되는 돈이 어디서 갑자기 튀어나와요. 엑셀로 가계부 조금만 두드려봐도 이게 앞뒤가 안 맞는다는 건 금방 나오는데. 공짜 돈 준다니까 좋긴 하겠지만, 이거 들어오면 물가가 몇 배로 뛸지, 화폐 가치는 어떻게 될지 뻔하잖아. 나라 경제를 아주 끝장내려고 작정한 모양이지.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 100,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 부부 합치면 20억인데, 형편은 피겠지만 나라 전체가 인플레이션으로 무너질까 봐 겁이 난다.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "very",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "a3f8d20cbd584c27b99e6250f15b16d8",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "아니, 이게 무슨 말도 안 되는 소리여. 1인당 10억이면 우리 식구 넷이서 40억인데... 평생 용접기 잡아도 구경 못 할 돈을 그냥 준다고? 나라가 미치지 않고서야 이럴 수가 있나 싶기도 하고, 한편으론 진짜 들어오면 애들 앞날 걱정은 싹 사라지니까 좋긴 하겠네. 근데 이거 나중에 세금으로 다 때려박는 거 아니여?",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "식구 네 명분이면 우리 집 형편이 완전히 달라지는 일이라 관심이 안 갈 수가 없네.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "aad81ac85ed94226832513545969a56f",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "아이구야, 1인당 10억을 준다고? 이게 참말이가? 나라에 돈이 그렇게나 많은가 싶어서 겁도 나는데, 진짜로 준다 카면 우리 같은 사람들은 절이라도 해야지. 우리 아들딸들 고생 안 시키고 집이라도 번듯한 거 하나씩 사줄 수 있으면 소원이 없겠네. 나라 망하는 거 아이가 몰라도, 일단 준다 카니까 믿어봐야지.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 부부랑 자식들까지 다 받으면 돈이 엄청난데, 평생 돈 걱정 없이 살 수 있을 것 같습니다.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "41e0f809f6984ee6a40e18654ea984be",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "아니, 1인당 10억이라고요? 이거 뉴스 진짜 맞아요? 세상에 이런 일이 다 있나 싶어서 손이 떨리네요. 일단 들어오면 우리 집 빚도 다 갚고 부모님 노후 걱정까지 한 번에 끝나는 건데... 근데 전 국민이 다 받으면 물가가 너무 오르는 거 아닌가 좀 걱정되기도 해요. 팟캐스트에서 보던 그런 경제 위기 올까 봐 무서우면서도, 당장 내 통장에 10억 찍힌다 생각하면 공부고 뭐고 입이 안 다물어질 것 같아요. 일단 엄마한테 전화부터 해봐야겠어요.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "mostly",
+    "household_note": "우리 가족 세 명 다 받으면 30억인데, 형편이 어려운 우리 집에는 말 그대로 기적 같은 일이에요.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "ceiling",
+   "persona_id": "92628b222daa4ee383f49c6a774ddbac",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "아니, 이게 진짜 말이 되는 소린가 싶네요. 10억씩 다 뿌리면 햄버거 하나에 몇십만 원 하는 거 아니에요? 온라인 판매하는 입장에서 물가 널뛰기 시작하면 답도 없는데. 그래도 어머니랑 같이 살 더 넓은 집 구하려면 이만한 기회도 없긴 하죠. 나라가 망하는 거 아닌가 걱정은 되는데, 일단 준다니까 안 받을 수도 없고 참...",
+   "scores": {
+    "understanding": 90,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "어머니랑 저랑 합쳐서 20억이 들어오면 당장 망우동 떠나서 어머니 원하시는 대로 마당 있는 큰 집으로 이사 갈 수 있을 것 같습니다.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "3d49b5e5b9664958bca3dd8f5eebcc99",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "아니, 1원? 이거 오타 아니야? 1인당 1원씩 주는 거면 그냥 안 주는 게 나을 것 같은데... 뭐 계좌로 그냥 넣어준다니까 신경은 안 쓰겠지만, 진짜 어이가 없다. 이거 보낸다고 문자 오는 게 더 아깝겠어.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "나랑 남편 계좌로 각각 1원씩 들어오는 건데, 이걸로 편의점 사탕 하나도 못 사요.",
+    "benefit": "no_effect",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "6ba9217998384a8f8b1fac54e907d9cd",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "아니 1원? 이거 지금 장난하는 거 아니에요? 우리 가족 다 합쳐도 3원인데 이걸로 껌 한 통도 못 사잖아요. 뭐 신청 안 해도 자동으로 들어온다니까 그냥 두긴 하겠는데, 진짜 왜 하는 건지 모르겠네요. 그냥 어이가 없어서 웃음만 나와요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 세 식구 다 받아봤자 3원이라 집안 살림이랑은 아무 상관도 없어요.",
+    "benefit": "no_effect",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "72405b57dbd34325b141f50b432ab696",
+   "run": 0,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "1원요? 아, 이거 농담이죠? 전 국민한테 1원씩 보내려고 계좌 데이터 돌리는 전산 비용이랑 이체 수수료가 훨씬 더 나오겠는데요. 소수점 단위까지 따지는 설계자 입장에서 보면 이건 정말 말도 안 되는 비효율입니다. 시스템 부하만 주지, 대체 누굴 위한 정책인지 모르겠네요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 100,
+    "dissatisfaction": 100,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 세 식구 합쳐서 3원 들어오겠네요. 애들 껌 값도 안 되는 돈이라 우리 집 살림이랑은 아무 상관 없습니다.",
+    "benefit": "no_effect",
+    "intent": "surely",
+    "dissatisfaction": "very",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "9eedde7feb8f4849a5c9fa13a2970a6e",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "아니, 1원요? 제가 잘못 읽은 줄 알고 다시 봤어요. 이거 전 국민한테 보내려면 전산 이체 수수료랑 행정 처리하는 인건비가 훨씬 더 많이 나올 텐데... 매달 급여 명세서 1원 단위까지 맞추는 입장에서는 이런 비효율적인 일 처리가 이해가 안 가네요. 딱히 반대할 이유까진 없지만 참 황당해요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "1원이 들어온다고 해서 제 살림에 보탬이 되거나 달라질 건 전혀 없어요. 그냥 통장에 숫자 하나 찍히고 끝이겠죠.",
+    "benefit": "no_effect",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "e89543a75aef40d28744a681939ea81c",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "아이고, 1원 준다꼬요? 그기 뭐 입금됐는지 확인하는 게 더 일이겠네예. 장난치는 것도 아니고 참... 껌 한 개도 못 사 묵는 돈을 뭐 할라꼬 주는지 모르겠심더. 그냥 가만히 있는 게 도와주는 거 아닌가 싶네예.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 70,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 집 식구들 다 합쳐봐야 4원인데, 이거는 뭐 들어온지도 모를 돈이라 살림에 아무 상관 없심더.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "somewhat",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "f6d719eb00a642c9affdd76e851284a7",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "아이고, 1원 준다꼬? 장난하는 것도 아이고 참말로... 그 돈을 누 코에 붙이겠노. 통장에 찍히는 종잇값이 더 나오겠다. 우리 남편이랑 내랑 합쳐도 2원인데, 요즘 세상에 2원으로 껌 한 개도 못 산다. 나라 돈이 우스운가 보네.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 부부 둘 다 대상인데, 합쳐서 2원 들어오는 게 살림에 무슨 상관이 있겠습니꺼.",
+    "benefit": "no_effect",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "0eab51c0a392443599c2af8b8c7147f9",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "1원이라니, 참 할 일들도 없는 모양이구먼. 그거 입금해주는 전산 비용이나 행정력이 더 들 텐데, 그럴 돈 있으면 정말 어려운 사람들 약값이나 좀 더 보태주지 그래요. 신청 안 해도 알아서 들어온다니 번거롭진 않아서 다행이다만, 참 우스운 일이야.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 네 식구 다 합쳐봐야 4원인데, 이건 그냥 통장 숫자 하나 바뀌는 수준이지 우리 집 살림이랑은 아무 상관 없어요.",
+    "benefit": "no_effect",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "31398b9c870c48958b913fe31621f19c",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "1원이요? 뭐 오타 난 거 아니고요? 전 국민한테 1원씩 보내려고 시스템 돌리는 비용이 더 들겠네요. 실무적으로 보면 정말 비효율적인 일이라서 왜 하는지 모르겠습니다. 그냥 안 하는 게 낫지 않나 싶어요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 70,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "1원이 들어온다고 해서 우리 집 살림에 아무런 영향이 없습니다. 입금 확인하는 시간조차 아깝네요.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "somewhat",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "72197f63ec80468bb33f34165fe349d3",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "아니, 1원이면 요새 길바닥에 떨어져 있어도 줍나 모르겠구먼. 이거 뭐 계좌로 넣어준대도 전산 처리 비용이 더 나오겄어. 그냥 허허 웃고 말 일이지, 이게 무슨 정책이라고 뉴스까지 나오나 몰라. 애들 장난하는 것도 아니고 참나.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 집 식구 셋이니까 다 합쳐야 삼 원 들어오겄네. 치킨 무 한 조각 값도 안 되는 거라 아무 상관 없슈.",
+    "benefit": "no_effect",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "825fe1ad2fb4429a900b27cbab6e16ae",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "1원요? 그거 들어와도 입금 알림도 안 뜰 것 같은데... 뭐 하자는 건지 잘 모르겠어요. 그림 그릴 때 선 하나 긋는 것보다도 의미 없는 것 같아서 그냥 신경 안 쓰려고요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 70,
+    "shareability": 0
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 집 세 식구 다 합쳐봐야 3원인데, 이걸로 할 수 있는 게 아무것도 없어요.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "somewhat",
+    "shareability": "never"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "67e25537ca064a3fa889c21ad4c8fd2f",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "1원요? 입금 알림 문자 오는 게 더 번거로울 것 같은데요. 이거 처리하는 행정 비용이 더 많이 들 것 같은데, 굳이 이런 걸 왜 하는지 모르겠어요. 그냥 장난치는 기분이라 좀 당황스럽네요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "가족 3명 다 합쳐도 3원인데, 이걸로 뭘 할 수 있는 게 전혀 없습니다.",
+    "benefit": "no_effect",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "a930366678d642cd89794a2239c37301",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "아이고, 1원? 이거 내가 글자를 잘못 읽었나 싶어 몇 번을 다시 봤네. 문해 교실 선생님이 가르쳐준 대로 천천히 읽어도 1원이 맞는데... 1원이면 요즘 길바닥에 떨어져 있어도 아무도 안 줍는 돈 아니래요? 계좌로 그냥 넣어준다니 뭐 들어오면 그만이겠다만, 이거 입금 알림 문자 보내는 비용이 더 나오겠네. 참 희한한 세상이라.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "나 혼자 사니까 내 통장에 딱 1원 들어오겠지. 우리 집 살림에 보탬 될 일은 없겠네.",
+    "benefit": "no_effect",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "84127925a1414b3d953dc525ee2e47df",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "아이고, 뭐라카노? 1원? 그거는 돈도 아니다. 요새 애기들도 1원짜리는 안 줍는다. 정부에서 전 국민을 준다 카면서 1원을 준다 하니 참말로 할 일이 없는 모양이네. 그거 받아가꼬 어따 쓰겠노. 통장에 찍히는 게 더 번거롭겠다.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 50,
+    "intent": 100,
+    "dissatisfaction": 100,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "mostly",
+    "household_note": "나랑 우리 부모님까지 다 받기는 하갰지만서도 3원 모아봐야 껌 한 알도 못 산다.",
+    "benefit": "no_effect",
+    "intent": "surely",
+    "dissatisfaction": "very",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "d67dfc42d07c41189d3328b9dac3729e",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "아니, 1원? 이거 내가 잘못 들은 거 아니야? 시장 가서 콩나물 한 가닥도 못 사는 돈을 준다고 뉴스까지 나오고 참... 우리 집 식구 셋 다 합쳐봤자 3원인데 그거 계좌에 들어왔나 확인하는 게 더 일이겠네. 나라에 돈이 그렇게 없나, 아니면 지금 나랑 장난하자는 건가 몰라. 영웅이 콘서트 티켓값은커녕 껌 한 통도 못 사겠구만.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 집 식구들 다 합쳐봐야 3원인데, 이건 살림에 보탬이 된다 만다 할 수준도 아니에요.",
+    "benefit": "no_effect",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "6d8a8fdd04e34aefb96be1f2581d8dda",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "아니, 1원이라니... 오타가 난 거 아니면 제정신인가 싶네. 이거 입금 처리하는 전산 비용이랑 알림톡 보내는 비용이 1원보다 더 나오겠어. 시장 유통 구조 분석하는 사람 입장에서 보면 이런 게 제일 비효율적인 행정이지. 그냥 장난치는 거 같네.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 100,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "4인 가족이라 4원 들어오겠지만, 우리 집 경제에 아무런 보탬 안 되고 국가 예산만 아깝다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "very",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "a436b26fcb24455587621f6263f82dbc",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "1원요? 오타 난 거 아니에요? 장난치는 것도 아니고 1원이면 사실 뭐... 들어온다고 해도 아무 느낌도 없네요. 자동으로 입금된다니까 그냥 그런가 보다 할 것 같아요. 딱히 신경 쓸 일도 아니고요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 100,
+    "dissatisfaction": 30,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "1원이라는 금액은 가계에 아무런 영향을 주지 않는 상징적인 의미조차 없는 액수입니다.",
+    "benefit": "no_effect",
+    "intent": "surely",
+    "dissatisfaction": "not_much",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "86acfdcefc8744ec9fddefb57f4c148f",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "아이고, 참나. 1원이면 이게 뭐 장난치는 것도 아니고... 입금됐나 안 됐나 확인하는 게 더 일이겠다. 이거 보낸다고 문자 하나만 와도 그 문자값이 더 나오겠구먼. 내가 경로당 장부 정리할 때도 1원 단위는 안 쓴다. 뭐 할라고 이런 걸 한다노? 참 기가 차서 말이 안 나오네.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 100,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 집은 남편이랑 나랑 둘이니까 2원 들어오겠네. 2원이면 껌도 못 사 먹는 돈인데 이걸 정책이라고 내놓나 싶다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "very",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "fc200827d7524330970cef12b19c33cb",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "아니, 1원이요? 요새 길바닥에 1원짜리 떨어져 있어도 잘 안 줍는데... 이걸 전 국민한테 준다는 게 장난하는 것도 아니고 참 황당하네요. 입금됐다고 문자 오는 게 더 성가실 것 같습니다.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 70,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "어머니랑 나랑 합쳐봐야 2원인데, 이걸로는 껌 한 알도 못 사 먹고 아무 의미 없습니다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "somewhat",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "7c04c2c157694de19db4215bb1b31a35",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "1원이요? 입금 문자 오는 게 더 귀찮을 것 같은데... 이거 이체 수수료랑 전산 처리 비용이 더 들지 않나요? 굳이 왜 하는 건지 이해가 안 가네요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 100,
+    "dissatisfaction": 30,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "할머니랑 저랑 둘이서 2원 받겠네요. 사탕 하나도 못 사는 돈이라 아무 상관 없습니다.",
+    "benefit": "no_effect",
+    "intent": "surely",
+    "dissatisfaction": "not_much",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "40e61b7943ae413b95723d237dbeb28d",
+   "run": 0,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "아니, 1원이라니요. 기사 오타가 아닙니까? 1원이면 우리 집 엑셀 가계부에 항목 하나 만들기도 민망한 액수입니다. 입금하는 데 드는 전산 비용이나 이체 수수료가 더 나오겠어요. 국가 행정을 이렇게 비논리적으로 처리해도 되는 건지 모르겠군요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 100,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 식구 두 명 해봐야 2원인데, 한 달 공복혈당 수치 기록하는 것보다도 의미가 없습니다. 살림에 아무 상관 없습니다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "very",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "a3f8d20cbd584c27b99e6250f15b16d8",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "1원요? 지금 장난하는 것도 아니고... 그거 입금해주느라 들어가는 수수료가 더 나오겠네. 30년 넘게 용접하면서 1미리 오차도 안 보려고 애쓰며 살았는데, 나라 일 하는 사람들이 이렇게 허술해서야 되겠습니까? 길바닥에 떨어져 있어도 안 줍는 돈을 가지고 전 국민 어쩌고 하니 기가 차네요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 70,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 네 식구 다 합쳐봐야 4원인데, 요새 껌 한 통도 못 사는 돈이라 우리 집 살림이랑은 아무 상관 없습니다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "somewhat",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "aad81ac85ed94226832513545969a56f",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "아이고, 1원이라꼬? 요새는 아들도 1원짜리는 안 쳐다보는데 나라에서 뭐한다고 그런다카노. 신청 안 해도 통장에 넣어준다카이 가만있으면 들어오기야 하겠지만서도, 참말로 그게 돈이가 싶네. 껌 한 통도 못 사는 돈을 준다카이 웃음만 나온다.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 식구 넷 다 합쳐봐야 4원인데, 그거 가지고는 시장 가서 두부 한 모도 못 산다.",
+    "benefit": "no_effect",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "41e0f809f6984ee6a40e18654ea984be",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "1원? 이거 오타 난 거 아니에요? 셋이 합쳐도 3원인데 이걸로 껌 한 쪽도 못 사잖아요. 괜히 입금 문자만 오고 행정 비용이 더 들겠네.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 100,
+    "dissatisfaction": 100,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 집 세 식구 다 받아봤자 3원이라 사실상 아무 의미가 없습니다.",
+    "benefit": "no_effect",
+    "intent": "surely",
+    "dissatisfaction": "very",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "92628b222daa4ee383f49c6a774ddbac",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "아니, 1원? 이거 뭐 서버 테스트하는 것도 아니고 장난치는 건가 싶네요. 입금됐다고 문자 한 통 날리는 비용이 1원보다 더 비쌀 텐데, 이런 걸 왜 하는지 모르겠어요. 그냥 안 하는 게 나을 것 같은데.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 100,
+    "dissatisfaction": 100,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "어머니랑 나랑 둘 다 받겠지만 1원씩 들어와 봐야 껌 한 통도 못 삽니다.",
+    "benefit": "no_effect",
+    "intent": "surely",
+    "dissatisfaction": "very",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "3d49b5e5b9664958bca3dd8f5eebcc99",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "1원이요? 요새 껌값도 안 되는데 장난하는 것도 아니고... 자동 입금이라니 그냥 들어오나 보다 하겠지만, 이거 입금 알림 문자 보내는 비용이 더 나오겠어요. 그냥 뉴스 보고 남편이랑 어이없어서 한참 웃었네요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 70,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "저랑 남편 계좌로 각각 1원씩 들어오는 거 말고는 아무 의미 없어요. 사탕 하나도 못 사 먹는 돈이잖아요.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "somewhat",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "6ba9217998384a8f8b1fac54e907d9cd",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "아니 1원이요? 이거 진짜 주는 거예요? 아니면 오타인가? 1원이면 껌 하나도 못 사는데 이걸 계좌로 쏴준다는 게 더 웃기네요. 그냥 친구들이랑 단톡방에서 웃고 넘길 일인 것 같아요. 행정 비용이 더 나올 것 같은데...",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 가족 셋 다 받으면 총 3원인데, 이걸로 할 수 있는 게 아예 없어요.",
+    "benefit": "no_effect",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "72405b57dbd34325b141f50b432ab696",
+   "run": 1,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "아니, 이게 무슨 장난도 아니고... 1원요? 전 국민한테 1원씩 쏴주느라 들어가는 이체 수수료랑 행정 전산 리소스가 1원보다 몇 배는 더 나오겠네요. 엔진 최적화할 때 로스율 0.1% 줄이려고 밤새는 입장에서 보면, 이런 정책은 설계부터 완전히 실패한 겁니다. 엑셀로 수지타산 뽑아볼 가치조차 없네요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 100,
+    "dissatisfaction": 100,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 가족 셋이 합쳐서 3원 들어올 텐데, 아파트 관리비 고지서 소수점 처리만도 못한 금액이라 아무 상관 없습니다.",
+    "benefit": "no_effect",
+    "intent": "surely",
+    "dissatisfaction": "very",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "9eedde7feb8f4849a5c9fa13a2970a6e",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "1원이요? 잘못 본 거 아니죠? 입금 문자가 오면 스팸인 줄 알고 지울 것 같은데... 입금해 주는 행정 비용이 더 들겠어요. 그냥 안 하는 게 나을 것 같아요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "1인 가구라 1원 들어오겠네요. 사료 한 알 값도 안 돼서 제 생활에는 아무런 영향이 없어요.",
+    "benefit": "no_effect",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "e89543a75aef40d28744a681939ea81c",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "아이구, 1원이면 뭐 껌 한 통도 못 사는 돈인데 이거 장난치는 것도 아니고 뭐 하자는 긴지 모르겠네. 입금해주는 수수료가 더 나오겄다. 나라에서 이런 데 힘 빼지 말고 딴 데나 신경 쓰지.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 70,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 식구 다 합쳐봤자 몇 원인데, 그거 들어온다고 살림에 티도 안 납니더.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "somewhat",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "f6d719eb00a642c9affdd76e851284a7",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "아이고, 1원이면 뭐 껌 한 통도 못 사는 돈인데 그걸 왜 준다 카노? 입금됐다고 문자 오는 게 더 귀찮겠네. 나라에 돈이 그리 없는 건지, 아니면 장난치는 건지 참말로 모르겠다. 우리 영감이랑 내랑 합쳐도 2원인데, 시장 가서 콩나물 한 가닥도 못 산다 아이가.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 부부 둘 다 대상이라는데, 다 합쳐봐야 2원이라 살림에는 아무 상관이 없습니다.",
+    "benefit": "no_effect",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "0eab51c0a392443599c2af8b8c7147f9",
+   "run": 1,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "1원이라니, 참... 이게 무슨 의미가 있는지 모르겠네. 입금해주는 전산 비용이 더 나오겠어. 차라리 그 돈 모아서 정말 어려운 사람들 돕는 게 낫지 않나 싶어. 장난하는 것도 아니고 말이야.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 100,
+    "dissatisfaction": 100,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "식구들 다 합쳐도 몇 원인데, 우리 집 살림이랑은 아무 상관도 없는 일이지요.",
+    "benefit": "no_effect",
+    "intent": "surely",
+    "dissatisfaction": "very",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "31398b9c870c48958b913fe31621f19c",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "1원이요? 이거 그냥 장난하는 것도 아니고... 입금 알림 뜨면 배터리 아깝다는 생각부터 들 것 같아요. 사무실에서 엑셀 정리할 때도 1원 단위는 그냥 버리는데, 이걸 전 국민한테 주겠다고 시스템 돌리는 게 더 낭비 아닌가요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 70,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "1인 가구라 1원 들어올 텐데, 제 생활이나 통장 잔고에 아무런 영향이 없습니다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "somewhat",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "72197f63ec80468bb33f34165fe349d3",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "아니, 1원? 이거 뭐 애들 장난하는 것도 아니고... 송금 수수료가 더 나오겄네. 도면 설계로 치면 오차가 너무 심해서 건물이 무너지기 일보 직전인 거랑 똑같어. 나라에서 이런 걸 왜 하는지 모르겄구먼. 그냥 냅둬유, 신경 안 쓸라니까.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 70,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 가족 다 합쳐봐야 껌 한 통도 못 사는 돈이라 살림에 아무 상관 없다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "somewhat",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "825fe1ad2fb4429a900b27cbab6e16ae",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "1원요? 뉴스 오타 아니에요? 1원이면 뭐... 편의점 사탕 하나도 못 사는데 이걸 왜 주는 건지 모르겠네. 그냥 장난치는 거 같아요. 선 하나 긋는 시간도 아까워서 신경 안 쓸래요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 100,
+    "shareability": 0
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "부모님이랑 나까지 다 합쳐봤자 3원인데, 우리 집 살림에 픽셀 하나만큼도 영향 없어요.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "very",
+    "shareability": "never"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "67e25537ca064a3fa889c21ad4c8fd2f",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "1원요? 처음에 오타인 줄 알았어요. 이거 이체 수수료가 더 나올 것 같은데... 굳이 왜 하는 건지 이해가 안 가네요. 그냥 계좌에 숫자 하나 찍히고 끝나는 거잖아요. 좀 황당해요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 가족 세 명이니까 다 합쳐서 3원 들어오겠네요. 사탕 하나도 못 사 먹는 돈이라 살림에 아무 상관 없습니다.",
+    "benefit": "no_effect",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "a930366678d642cd89794a2239c37301",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "아니, 1원이라니? 내 눈이 잘못됐나 싶어가 스마트폰 돋보기 앱까지 켜서 몇 번을 다시 봤네. 1원이면 길가에 떨어져 있어도 요즘 애들도 안 줍는 돈 아이가. 나라에서 뭐 이런 장난을 치나 싶기도 하고, 신청 안 해도 통장으로 바로 들어온다 카니 들어오면 들어오는갑다 하겠지마는 참... 기가 막혀서 웃음밖에 안 나오네. 주려면 좀 보탬이 되게 주던가 말이다.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "혼자 사는 내 살림에 1원 보탠다고 뭐가 달라지겠노. 그냥 나라에서 공짜로 넣어준다 카니까 그런갑다 하는 거지.",
+    "benefit": "no_effect",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "84127925a1414b3d953dc525ee2e47df",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "아이고, 1원을 준다고? 1원이면 요새 길바닥에 떨어져 있어도 안 줍는 긴데... 나라가 돈이 많은 건지, 아님 장난을 치는 건지 몰겠네. 그래도 공짜로 준다카면 주는 갑다 하는 거지. 근데 1원 받아서 뭐 하노? 손주 껌 하나도 못 사주겠네.",
+   "scores": {
+    "understanding": 35,
+    "benefit": 50,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "partly",
+    "household_note": "나랑 우리 부모님 앞으로 1원씩 들어온다 카대. 돈이라 하기도 민망한 수준이다.",
+    "benefit": "no_effect",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "d67dfc42d07c41189d3328b9dac3729e",
+   "run": 1,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "아니, 1원이면 우리 식구 셋 다 합쳐도 3원인데 이걸 어디다 써요? 장난하는 것도 아니고... 이거 입금해주느라고 들어가는 전산비나 인건비가 더 나오겠네. 차라리 그 돈 모아서 진짜 어려운 사람들 쌀이라도 한 포대 더 사주는 게 낫지, 이게 뭐 하는 건지 모르겠어. 사람 놀리는 것도 아니고 참나.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 100,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 집 식구 셋이 받아봤자 총 3원인데, 경동시장 가서 콩나물 한 가닥도 못 사는 돈이라 아무 상관도 없어요.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "very",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "6d8a8fdd04e34aefb96be1f2581d8dda",
+   "run": 1,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "1원? 장난하는 것도 아니고. 송금 수수료랑 행정 비용이 더 나오겠네. 데이터 뽑아보는 시간도 아까운 정책이라 생각한다.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 100,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "네 식구 다 합쳐서 4원 들어오는 건데 우리 집 살림이랑은 아무 상관도 없다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "very",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "a436b26fcb24455587621f6263f82dbc",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "1원이라니요... 제가 기사를 잘못 읽은 건가 싶어서 다시 봤어요. 친구들 여행 경비 정산할 때도 10원 단위까지 딱딱 맞추긴 하지만, 나라에서 전 국민한테 1원을 준다는 건 좀 이해가 안 가네요. 입금 수수료가 더 나올 것 같은데... 차라리 그 돈을 모아서 정말 필요한 곳에 쓰는 게 낫지 않을까 싶어요. 그냥 무덤덤하긴 한데 좀 황당하긴 하네요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 100,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "혼자 살면서 생활비 아껴 쓰는 형편이지만 1원은 우리 집 살림에 아무런 의미가 없어요.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "very",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "86acfdcefc8744ec9fddefb57f4c148f",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "아니, 1원 준다는 게 진짜예요? 내 귀가 잘못됐나 싶네. 우리 영감이랑 나랑 합쳐서 2원인데, 이걸로 껌 한 통을 사요, 뭘 해요? 나랏돈을 뭐 이런 식으로 쓴대요. 장부 정리하기도 귀찮게 시리...",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 100,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "내 통장하고 영감 통장에 1원씩 들어온다는데, 시장 가서 콩나물 한 가닥도 못 사는 돈이라 있으나 마나예요.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "very",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "fc200827d7524330970cef12b19c33cb",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "1원? 참나, 장난하는 것도 아니고... 그거 계좌로 넣어주는 수수료가 더 나오겠네. 어머니랑 나랑 합쳐서 딱 2원 들어온다는 건데, 이걸로 뭘 하라는 건지 모르겠소. 그냥 없던 일로 하는 게 나라 도와주는 거 아닌가 싶네.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "나랑 어머니 계좌로 각각 1원씩 들어온다는데, 껌 한 통도 못 사는 돈이라 의미가 없네요.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "7c04c2c157694de19db4215bb1b31a35",
+   "run": 1,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "1원요? 장난하시는 것도 아니고... 그 1원 입금하려고 전산 돌리고 문자 보내는 비용이 더 나오지 않겠어요? 참 비효율적이네요. 왜 이런 걸 하는지 이해가 안 가요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 100,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "할머니랑 나랑 합쳐서 2원 들어오겠네요. 아파트 관리비 숫자 맞추는 것보다 의미 없는 일이에요.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "very",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "40e61b7943ae413b95723d237dbeb28d",
+   "run": 1,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "1원? 이걸 정책이라고 발표한 건가? 송금 수수료하고 전산 처리하는 행정 비용이 1원보다 훨씬 더 나오겠구만. 누가 기획했는지 몰라도 참 비논리적이네. 우리 집 엑셀 가계부에 항목 하나 만들기도 민망한 수준이라 그냥 무시하겠네.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 100,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "나와 아내에게 총 2원이 들어올 텐데, 형편이 빠듯한 우리 집 살림에 아무런 보탬이 되지 않는 무의미한 액수다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "very",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "a3f8d20cbd584c27b99e6250f15b16d8",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "아니, 1원? 100원도 아니고 1원을 준다고요? 장난하는 것도 아니고... 그거 계좌로 보내는 수수료가 더 나오겠네. 일하느라 바빠 죽겠는데 이런 게 뉴스에 나오고 말이야. 그냥 안 주는 게 낫지, 사람 놀리는 것도 아니고 참 어이가 없네.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 100,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 식구 다 합쳐봐야 4원인데, 요새 껌 한 통도 못 사는 돈이라 아무 상관도 없습니다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "very",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "aad81ac85ed94226832513545969a56f",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "아이고야, 1원? 장난하는 것도 아니고 1원을 어디다 쓰노? 길바닥에 떨어져 있어도 안 줍는 거를... 준다니까 고맙다 해야 되나, 참 기가 차서 말이 안 나오네. 요즘은 애들도 1원 주면 안 받는다. 그거 넣어준다고 은행 심부름 시키는 것도 아니고 자동으로 준다니 받기는 하겠다만, 참 나랏일 하는 사람들이 할 일이 그리 없는가 싶네. 껌 한 통도 못 사는 돈을 줘서 어따 쓰라고.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 100,
+    "dissatisfaction": 100,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "식구 셋 해봐야 3원인데 그거 가지고는 소금 한 톨도 못 사고 아무 짝에도 쓸데없다.",
+    "benefit": "no_effect",
+    "intent": "surely",
+    "dissatisfaction": "very",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "41e0f809f6984ee6a40e18654ea984be",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "아니, 1원? 이거 뭐 장난하는 것도 아니고... 입금해 주는 수수료가 더 나오겠다. 팟캐스트에서 보던 세금 낭비가 이런 건가 싶네. 우리 집 세 식구 다 합쳐도 3원인데 이걸로 껌 한 개도 못 사잖아. 그냥 안 주고 그 돈 모아서 진짜 필요한 사람들 도와주는 게 낫지 않나?",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 100,
+    "dissatisfaction": 100,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 가족 셋 다 대상이긴 한데, 다 합쳐봐야 3원이라 가계에 아무런 도움도 안 돼요.",
+    "benefit": "no_effect",
+    "intent": "surely",
+    "dissatisfaction": "very",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "92628b222daa4ee383f49c6a774ddbac",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "아니, 1원이요? 이거 장난하는 것도 아니고... 차라리 그 입금 수수료나 행정 비용이 더 나오겠네. 우리 엄마랑 나랑 합쳐서 딱 2원 들어오는 건데, 요즘 세상에 2원으로 뭘 해요? 그냥 서버 트래픽 낭비 아닌가 싶어서 어이가 없네요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 100,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "어머니랑 저랑 둘이 사는데, 합쳐서 2원 들어오는 거라 우리 집 살림에 아무런 영향이 없습니다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "very",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "3d49b5e5b9664958bca3dd8f5eebcc99",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "아니, 1원이요? 진짜로? 이거 뭐 잘못 올린 거 아니에요? 요새 백 원짜리도 길에 떨어져 있으면 잘 안 줍는데... 남편이랑 나랑 합쳐서 2원 들어오면 뭐 해요. 껌 한 쪽도 못 사는데. 차라리 그 돈 모아서 다른 데 쓰는 게 낫지, 어이가 없네요 진짜.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 100,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "남편이랑 나랑 둘이 해서 총 2원인데, 가계에 아무런 도움도 안 되고 그냥 어이만 없어요.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "very",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "6ba9217998384a8f8b1fac54e907d9cd",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "아니, 1원? 이거 오타 아니에요? 엑셀 작업하다가도 1원 단위는 그냥 넘기는데... 전 국민한테 1원씩 주느라 들어가는 세금이 더 많겠어요. 친구들이랑 롤 하다가 말해줬더니 다들 장난치냐고 그러네요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "부모님이랑 저까지 해서 우리 집은 총 3원 들어오겠네요. 사탕 하나도 못 사는 돈이라 상관이 아예 없다고 봐야죠.",
+    "benefit": "no_effect",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "72405b57dbd34325b141f50b432ab696",
+   "run": 2,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "아니, 1원요? 이게 대체 무슨 논리인지 모르겠네. 입금 전산 처리하는 행정 비용이 1원보다 훨씬 더 나올 텐데, 시스템 설계를 이렇게 비효율적으로 한다고? 우리 연구소에서 이런 식으로 리포트 올리면 바로 반려예요. 3인 가족 3원... 참나, 데이터적으로 아무 의미 없는 짓을 왜 하는지 이해가 안 가네요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 100,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 가족 다 합쳐봐야 3원인데, 이건 가계 자산 수치에 0.0001%의 영향도 주지 못하는 무의미한 금액입니다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "very",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "9eedde7feb8f4849a5c9fa13a2970a6e",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "1원요? 계좌로 넣어준다고는 하는데, 입금 문자 알림 오는 게 더 시끄러울 것 같아요. 이거 입금 처리하는 행정 비용이나 수수료가 더 들지 않나요? 인사팀에서 급여 줄 때 1원 단위 맞추는 것도 일인데, 국가에서 이걸 왜 하는지 모르겠네요. 그냥 없는 셈 칠래요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "혼자 살고 있으니 제 계좌로 1원이 들어오겠죠. 근데 그게 다예요.",
+    "benefit": "no_effect",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "e89543a75aef40d28744a681939ea81c",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "아니, 1원 준다꼬? 참말로 장난하나 싶네. 그거 명단 만들고 이체하고 하는 행정 비용이 더 나오겠다. 나라에서 할 일이 그리 없나 싶기도 하고... 고마 치워라 마. 그거 받아서 뭐하겠노.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 100,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 집 식구 다 합쳐봐야 몇 원인데, 그거 갖고 껌 한 통도 못 산다. 아무 의미 없다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "very",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "f6d719eb00a642c9affdd76e851284a7",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "아이고, 1원이라꼬? 요새는 땅을 파도 1원은 안 나온다만은, 이거는 뭐 장난치는 것도 아이고 참말로 희한하네. 신청 안 해도 알아서 넣어준다 카니 가만히 있으면 되긴 하겠는데, 입금됐다고 문자 오는 게 더 귀찮겠다 싶다. 나라에 돈이 없는 건지, 아니면 일하는 사람들이 심심해서 이런 걸 만드는지 모르겠네.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 집은 남편하고 내하고 둘이서 2원 받겠네. 요새 껌 하나도 못 사 묵는 돈이다.",
+    "benefit": "no_effect",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "0eab51c0a392443599c2af8b8c7147f9",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "1원이라니요. 그거 입금하는 전산 비용이 더 나오겠네요. 병원에서도 투약 기록 하나 이렇게 의미 없이 남기면 큰일 납니다. 나라 살림을 왜 이런 식으로 하는지 도무지 이해가 안 가네요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 70,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 식구 다 합쳐봐야 몇 원인데, 그걸로 껌 한 통도 못 삽니다. 우리 집 살림하고는 아무 상관이 없어요.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "somewhat",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "31398b9c870c48958b913fe31621f19c",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "1원이요? 이거 이체 수수료가 더 나오겠는데요. 엑셀로 정리하다가 오타 난 거 아닌가 싶을 정도라... 굳이 왜 하는지 잘 모르겠어요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 100,
+    "dissatisfaction": 30,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "전 국민 대상이라 저도 받겠지만 1원으로 할 수 있는 게 없어서 우리 집 살림이랑은 상관없습니다.",
+    "benefit": "no_effect",
+    "intent": "surely",
+    "dissatisfaction": "not_much",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "72197f63ec80468bb33f34165fe349d3",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "아니, 1원이 뭐여? 장난하는 것도 아니고... 이거 계좌로 보내는 전산 비용이 더 들겄네. 공학적으로 봐도 도통 이해가 안 가는 짓거리여. 준다니까 받기는 하겄는디, 참 허탈하구먼.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 100,
+    "dissatisfaction": 100,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 집 식구 셋이 합쳐봐야 3원인디, 이걸로 껌 한 쪽도 못 사니께 살림에 아무 상관 없지.",
+    "benefit": "no_effect",
+    "intent": "surely",
+    "dissatisfaction": "very",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "825fe1ad2fb4429a900b27cbab6e16ae",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "1원요? 장난하는 것도 아니고... 픽셀 하나 찍는 에너지도 안 나올 것 같은데. 그냥 무시할래요. 이런 거 신경 쓰는 게 더 시간 낭비 같아요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 100,
+    "shareability": 0
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 집 세 식구 다 합쳐도 3원인데, 편의점 껌 한 개도 못 사요. 아무 상관 없어요.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "very",
+    "shareability": "never"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "67e25537ca064a3fa889c21ad4c8fd2f",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "1원요? 아, 진짜 장난하는 것도 아니고... 이거 입금 알림 뜨는 게 더 귀찮을 것 같은데 말이죠. 신청 안 해도 알아서 들어온다니까 뭐 그러려니 하는데, 행정 낭비 아닌가 싶네요. 굳이 왜 하는지 이해가 안 가요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "부모님이랑 저랑 다 받긴 할 텐데, 다 합쳐서 3원이라 뭐 살 수 있는 것도 없고 아무 의미 없습니다.",
+    "benefit": "no_effect",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "a930366678d642cd89794a2239c37301",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "아니, 1원을 준다꼬? 그거 뭐 껌 한 알도 못 사 묵는 돈을 와 준다 카는동 모르겠네. 뉴스 보고 내 귀를 의심했다 아이가. 자동 입금이라 카이 가만있으면 들어오기야 하겠지만, 참말로 희한한 일이다. 그거 송금하는 수수료가 더 나오겠다.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 70,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "내 통장에 1원 들어와 봤자 장날 나가서 풀빵 하나도 못 사 묵는다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "somewhat",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "84127925a1414b3d953dc525ee2e47df",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "아니, 1원이면 길바닥에 떨어져 있어도 잘 안 줍는 거 아이라? 그걸 나라에서 전 국민한테 나눠준다 카니 참말로 세상 요지경이다. 준다 카면 고맙긴 한데, 그거 입금해주는 종잇값이 더 나오겠다. 뭐, 공짜로 준다니 주는 대로 받아야지 우짜겠노.",
+   "scores": {
+    "understanding": 35,
+    "benefit": 50,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "partly",
+    "household_note": "우리 노인네들이랑 나까지 셋이서 1원씩 받는다 카는데, 다 합쳐도 사탕 한 알도 못 사묵겠네.",
+    "benefit": "no_effect",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "d67dfc42d07c41189d3328b9dac3729e",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "아니, 1원이면 요새 껌 한 알도 못 사는데 그걸 준다고 저렇게 기사가 크게 나요? 준다니까 입금되면 받기는 하겠지만 참 어이가 없네. 우리 식구 다 합쳐봐야 3, 4원일 텐데 그걸로 시장 가서 나물 한 가닥이나 살 수 있겠나 싶어서 기가 차요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 100,
+    "dissatisfaction": 100,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 집 식구 셋 다 합쳐도 3원인데, 이건 뭐 살림에 보탬이 된다고 말하기도 민망한 수준이죠.",
+    "benefit": "no_effect",
+    "intent": "surely",
+    "dissatisfaction": "very",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "6d8a8fdd04e34aefb96be1f2581d8dda",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "1원이라니요? 허... 이거 전 국민한테 쏴주려면 시스템 이체 수수료랑 행정 비용이 더 들겠는데요. 데이터 다루는 입장에서 보면 참 비효율적입니다. 실질적으로 아무 도움도 안 되는 걸 왜 하는지 모르겠네요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 70,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "4인 가족 다 합쳐봐야 4원인데, 껌 한 통도 못 사는 돈이라 우리 집 살림이랑은 아무 상관 없습니다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "somewhat",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "a436b26fcb24455587621f6263f82dbc",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "1원요? 장난하는 것도 아니고... 차라리 안 주는 게 나을 것 같아요. 통장에 찍히는 게 더 번거롭고, 그거 하나 들어온다고 제 형편에 보탬이 되는 것도 아니잖아요. 나라에서 왜 이런 일을 하는지 이해가 안 가네요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 100,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "전 국민 대상이라 저도 받긴 하겠지만, 1원이라는 돈은 혼자 사는 제 살림에 아무런 의미가 없어요.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "very",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "86acfdcefc8744ec9fddefb57f4c148f",
+   "run": 2,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "아이고, 1원이 뭐꼬? 장난치는 것도 아니고. 요새 시장 가서 콩나물 한 가닥도 못 사는 돈을 준다카이 참 기가 찬다. 우리 경로당 장부 정리할 때도 1원짜리는 안 쓰는데, 이거 입금해주느라 들어가는 은행 수수료가 더 나오겠다. 나랏돈을 와 이런 식으로 쓰는지 도무지 이해가 안 가네.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 100,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "전 국민 다 준다카이 우리 부부 둘이서 2원 받는긴데, 살림에 아무 짝에도 쓸데없다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "very",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "fc200827d7524330970cef12b19c33cb",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "아니, 1원이요? 요새 길바닥에 떨어져 있어도 잘 안 줍는 돈인데... 이거 입금하는 행정 비용이 더 들겠구만. 참 나라에 할 일들이 그렇게 없나 싶네요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 100,
+    "dissatisfaction": 100,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "나랑 어머니랑 둘이 합쳐 2원 들어올 텐데, 믹스커피 한 잔도 못 사 먹는 돈이라 아무 상관도 없습니다.",
+    "benefit": "no_effect",
+    "intent": "surely",
+    "dissatisfaction": "very",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "7c04c2c157694de19db4215bb1b31a35",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "1원이요? 장난하시는 것도 아니고... 입금됐다는 문자 알림 오는 게 더 귀찮을 것 같아요. 이거 처리하느라 들어가는 행정 비용이 더 아깝네요. 전공자 입장에서 보면 진짜 효율성 제로인 정책이에요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 70,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "할머니랑 제 계좌에 각각 1원씩 들어오겠지만, 생활에 아무런 변화도 주지 못합니다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "somewhat",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "40e61b7943ae413b95723d237dbeb28d",
+   "run": 2,
+   "stance": "oppose",
+   "lean": "oppose",
+   "text": "1원이라니, 참 기가 차는구먼. ICT 전산 처리 비용이랑 문자 발송비가 그 1원보다 훨씬 더 비쌀 텐데, 이게 무슨 비논리적인 행정인가 싶어. 내 가계부 엑셀에 이 숫자를 기록하는 시간조차 아까울 정도야. 나라 예산을 이런 식으로 쓰는 건 아니지.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 100,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 집 가계부에 1원이 더해진다고 해서 살림살이에 변동이 생길 일은 전혀 없다. 무의미한 숫자다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "very",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "a3f8d20cbd584c27b99e6250f15b16d8",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "아니, 1원이요? 이거 뭐 오타 난 거 아니고 진짜입니까? 우리 집 네 식구 다 합쳐봐야 4원인데, 요새 길바닥에 떨어져 있어도 줍나 모르겠네. 입금해 주는 수수료가 더 나오겠구만, 참 나... 할 일이 그렇게들 없나.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 100,
+    "dissatisfaction": 100,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 집 네 식구 다 합쳐서 4원 들어오는 건데, 살림에 아무런 의미가 없습니다.",
+    "benefit": "no_effect",
+    "intent": "surely",
+    "dissatisfaction": "very",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "aad81ac85ed94226832513545969a56f",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "아니, 1원이면 그게 돈이가? 요즘은 길바닥에 떨어져 있어도 줍지도 않겠다. 껌 한 개도 못 사 먹는 걸 준다고 뉴스에 나오나... 참 할 일도 없는갑다 싶네. 우리 식구 다 합쳐봐야 몇 원인데 그걸 어디다 써? 차라리 그 돈 모아가꼬 진짜 어려운 사람들 고기라도 한 근 사주는 게 안 낫겠나.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "mostly",
+    "household_note": "우리 식구들 다 합쳐봐야 십 원도 안 될 텐데, 시장 나가서 콩나물 한 가닥도 못 사는 돈이라 아무 상관도 없다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "41e0f809f6984ee6a40e18654ea984be",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "1원? 이거 뉴스 오타 아니야? 아니, 전 국민한테 1원씩 보내주려고 계좌 이체 수수료 쓰는 게 더 나오겠다. 팟캐스트에서나 나올 법한 황당한 소리 같아. 뭐 준다니까 받긴 하겠지만, 이걸 정책이라고 내놓은 건지 좀 어이없네.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 100,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "우리 식구 다 합쳐도 3원인데, 이걸로 할 수 있는 게 아무것도 없어서 우리 집 살림이랑은 전혀 상관없어요.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "very",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "robustness",
+   "cond": "floor",
+   "persona_id": "92628b222daa4ee383f49c6a774ddbac",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "oppose",
+   "text": "아니, 1원이요? 이거 뉴스 오타 아니에요? 우리 스토어에서 리뷰 이벤트 해도 1원은 안 줘요. 엄마랑 나랑 합쳐서 2원인데, 이걸로 뭘 하라고... 입금 문자 오는 게 더 귀찮을 것 같아요. 그냥 신경 안 쓰렵니다.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 100,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "엄마랑 저랑 합쳐서 2원 들어오는데, 우리 집 살림에 아무런 의미가 없습니다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "very",
+    "shareability": "rarely"
+   },
+   "ok": true
+  }
+ ]
+}

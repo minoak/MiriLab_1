@@ -1,321 +1,3762 @@
 {
-  "config": {
-    "n": 24,
-    "seed": 42,
-    "policy_name": "청년 월세 한시 특별지원",
-    "model": "gpt-4o-mini"
+ "config": {
+  "n": 24,
+  "runs": 3,
+  "model": "gemini-3-flash-preview",
+  "provider": "gemini",
+  "score_scale": "survey_v1",
+  "prereg": "eval/prereg_validation.md",
+  "llm_usage": {
+   "calls": 288,
+   "prompt_tokens": 653256,
+   "completion_tokens": 91632,
+   "cached_tokens": 366665
+  }
+ },
+ "rows": [
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "3d49b5e5b9664958bca3dd8f5eebcc99",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "아, 이거 유튜브에서도 본 것 같아. 근데 우린 지금 아파트 전세로 살고 있어서 월세 지원은 상관없을 거야. 보니까 소득 기준도 꽤 낮아야 하던데, 나처럼 일하면서 적당히 벌고 신혼인 사람들은 대상 되기 힘들걸? 내 주변 친구들도 거의 다 아파트 살거나 부모님이랑 같이 있어서 이거 받을 애들은 별로 없겠다 싶네.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 30,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "mostly",
+    "household_note": "우리 집은 현재 아파트 전세라 매달 내는 월세가 없어서 지원 대상이 아니에요.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "not_much",
+    "shareability": "rarely"
+   },
+   "ok": true
   },
-  "grounded": {
-    "n": 24,
-    "stance_dist": {
-      "support": 6,
-      "oppose": 11,
-      "mixed": 7
-    },
-    "stance_entropy": 1.5343,
-    "score_std": 20.7537,
-    "score_std_by_axis": {
-      "understanding": 6.2881,
-      "benefit": 27.3354,
-      "intent": 29.6676,
-      "dissatisfaction": 19.0565,
-      "shareability": 21.4209
-    },
-    "understanding_spread": {
-      "min": 60.0,
-      "mean": 77.2917,
-      "max": 85.0
-    },
-    "homogeneity": 0.3084
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "6ba9217998384a8f8b1fac54e907d9cd",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "아 이거 나도 인터넷에서 봤는데, 근데 나는 부모님이랑 같이 살아서 해당 안 되더라고. 혼자 나와서 사는 애들한테는 월 20만 원이면 진짜 큰 건데 부럽네. 나도 독립하고 싶은 마음은 굴뚝같지만 지금은 집밥이 최고라... 뭐, 자취하는 친구들한테나 알려줘야겠어.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "well",
+    "household_note": "지금 용인 집에서 부모님이랑 같이 살고 있어서 지원 대상이 아님.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "sometimes"
+   },
+   "ok": true
   },
-  "ungrounded": {
-    "n": 24,
-    "stance_dist": {
-      "support": 11,
-      "oppose": 0,
-      "mixed": 13
-    },
-    "stance_entropy": 0.995,
-    "score_std": 8.9919,
-    "score_std_by_axis": {
-      "understanding": 4.0612,
-      "benefit": 10.7044,
-      "intent": 12.1603,
-      "dissatisfaction": 10.1529,
-      "shareability": 7.881
-    },
-    "understanding_spread": {
-      "min": 70.0,
-      "mean": 77.9167,
-      "max": 85.0
-    },
-    "homogeneity": 0.5962
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "72405b57dbd34325b141f50b432ab696",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "아, 이거 대상이 34세까지네요. 저는 나이도 이미 지났고 집도 있어서 아예 해당 사항이 없습니다. 소득 기준도 보니까 꽤 타이트하게 잡혀 있는 것 같은데, 데이터상으로 얼마나 많은 청년이 실제로 혜택을 볼지는 의문이네요. 뭐, 취지는 나쁘지 않다고 봅니다.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "well",
+    "household_note": "나이와 소득 조건에서 모두 벗어나 있어 우리 집 살림과는 전혀 무관한 정책입니다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "rarely"
+   },
+   "ok": true
   },
-  "delta": {
-    "stance_entropy": 0.5393,
-    "score_std": 11.7618,
-    "understanding_spread_range": 10.0,
-    "collapse_score": 0.2878
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "9eedde7feb8f4849a5c9fa13a2970a6e",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "아, 이거 저도 봤어요. 근데 소득 기준이 중위소득 60%면 생각보다 되게 낮거든요. 저처럼 평범하게 직장 다니는 사람들은 월세가 부담스러워도 기준에서 다 걸릴 거예요. 서류 같은 건 제가 업무로 맨날 보는 거라 잘 아는데, 조건이 너무 까다로워서 저는 신청 못 할 것 같아요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 70,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "well",
+    "household_note": "혼자 살면서 매달 월세 나가는 게 부담이긴 한데, 제 월급이 기준선보다 높아서 지원받기는 어려울 것 같습니다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "somewhat",
+    "shareability": "rarely"
+   },
+   "ok": true
   },
-  "convergent": {
-    "grounded": {
-      "digital_vs_understanding": 0.5893,
-      "digital_vs_intent": 0.691,
-      "trust_vs_intent": 0.2168,
-      "trust_vs_dissatisfaction": -0.1623
-    },
-    "ungrounded": {
-      "digital_vs_understanding": 0.1295,
-      "digital_vs_intent": 0.2653,
-      "trust_vs_intent": -0.1036,
-      "trust_vs_dissatisfaction": 0.2751
-    }
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "e89543a75aef40d28744a681939ea81c",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "요즘 젊은 아들 살기 팍팍한데 한 달에 20만 원이라도 보태주면 큰 힘 안 되겠나. 우리 애들은 아직 집에서 같이 지내고 있어가 해당은 안 되겠다만, 혼자 나가서 고생하는 애들한테는 참 좋은 일이지 싶네. 근데 서류 챙기는 게 딱 봐도 좀 복잡해 보이기는 한다.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "mostly",
+    "household_note": "우리 애들은 아직 집에서 같이 살고 있고 내 벌이도 있어서 지금 당장은 우리 집하고 상관없는 이야기네.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "sometimes"
+   },
+   "ok": true
   },
-  "points": {
-    "grounded_understanding": [
-      80.0,
-      80.0,
-      80.0,
-      85.0,
-      70.0,
-      70.0,
-      70.0,
-      85.0,
-      80.0,
-      70.0,
-      80.0,
-      80.0,
-      70.0,
-      80.0,
-      85.0,
-      85.0,
-      80.0,
-      80.0,
-      80.0,
-      70.0,
-      80.0,
-      60.0,
-      80.0,
-      75.0
-    ],
-    "ungrounded_understanding": [
-      80.0,
-      85.0,
-      70.0,
-      75.0,
-      70.0,
-      80.0,
-      75.0,
-      80.0,
-      80.0,
-      75.0,
-      80.0,
-      80.0,
-      70.0,
-      80.0,
-      80.0,
-      80.0,
-      80.0,
-      80.0,
-      80.0,
-      80.0,
-      70.0,
-      80.0,
-      80.0,
-      80.0
-    ],
-    "grounded_intent": [
-      40.0,
-      60.0,
-      10.0,
-      80.0,
-      10.0,
-      5.0,
-      25.0,
-      80.0,
-      5.0,
-      50.0,
-      75.0,
-      0.0,
-      0.0,
-      5.0,
-      30.0,
-      75.0,
-      0.0,
-      0.0,
-      40.0,
-      5.0,
-      0.0,
-      5.0,
-      75.0,
-      40.0
-    ],
-    "ungrounded_intent": [
-      85.0,
-      75.0,
-      50.0,
-      50.0,
-      40.0,
-      60.0,
-      50.0,
-      85.0,
-      60.0,
-      60.0,
-      75.0,
-      75.0,
-      50.0,
-      60.0,
-      75.0,
-      60.0,
-      60.0,
-      70.0,
-      60.0,
-      50.0,
-      50.0,
-      70.0,
-      75.0,
-      50.0
-    ],
-    "scatter_digital": [
-      0.855,
-      0.993,
-      0.89,
-      0.826,
-      0.664,
-      0.27,
-      0.273,
-      0.955,
-      0.463,
-      0.678,
-      0.855,
-      0.24,
-      0.028,
-      0.384,
-      0.702,
-      0.708,
-      0.114,
-      0.702,
-      0.955,
-      0.294,
-      0.588,
-      0.06,
-      0.773,
-      0.846
-    ],
-    "scatter_understanding": [
-      80.0,
-      80.0,
-      80.0,
-      85.0,
-      70.0,
-      70.0,
-      70.0,
-      85.0,
-      80.0,
-      70.0,
-      80.0,
-      80.0,
-      70.0,
-      80.0,
-      85.0,
-      85.0,
-      80.0,
-      80.0,
-      80.0,
-      70.0,
-      80.0,
-      60.0,
-      80.0,
-      75.0
-    ]
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "f6d719eb00a642c9affdd76e851284a7",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "요새 아들내미들 집값이며 월세며 장난 아이라 카던데, 그래도 나라에서 요래 챙겨주모 다행이지 싶네. 근데 우리 같은 사람들도 살기 팍팍한데 젊은 아들만 해주는 기가? 좋은 일인 건 알겠는데 우리 형편엔 좀 부럽기도 하고 그라네.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "mostly",
+    "household_note": "우리 부부는 나이도 한참 넘었고 해당 사항이 없는데, 조카나 주변 젊은 애들한테는 참 좋겠다 싶네.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
   },
-  "contrasts": [
-    {
-      "gap": 195,
-      "persona": {
-        "id": "a930366678d642cd89794a2239c37301",
-        "name": "신선옥",
-        "age": 60,
-        "sex": "여자",
-        "occupation": "무직",
-        "digital_literacy": 0.24,
-        "income_level": "low",
-        "description": "60세 여자 · 사별 · 무직 · 경상북 경상북-예천군"
-      },
-      "grounded": {
-        "stance": "oppose",
-        "text": "이 정책은 청년들에게는 도움이 될 것 같지만, 저처럼 나이 많은 사람한테는 전혀 상관없는 이야기 같아요. 청년들이 월세를 지원받아서 좀 더 편안하게 살 수 있다니, 그건 좋은 일이라고 생각하지만, 저희 같은 세대는 그 혜택을 전혀 못 받잖아요. 게다가 요즘 집값도 너무 비싸고, 정부가 이런 정책을 통해 청년들만 챙기는 것 같아서 불공평하다는 생각이 들어요. 저 같은 사람도 지원이 필요하다고요!",
-        "understanding": 80,
-        "benefit": 0,
-        "intent": 0,
-        "dissatisfaction": 70
-      },
-      "ungrounded": {
-        "stance": "support",
-        "text": "이번 청년 월세 한시 특별지원 정책은 무주택 청년들에게 큰 도움이 될 것 같습니다. 많은 청년들이 경제적인 이유로 주거 문제를 겪고 있는 상황에서, 월세를 지원해 준다면 조금이나마 부담이 덜어질 것입니다. 특히, 기준 중위소득 60% 이하라는 조건은 정말 필요한 사람들에게 혜택이 갈 수 있도록 한 점이 마음에 드네요. 다만, 신청 절차가 복잡하지 않았으면 좋겠습니다. 필요한 서류가 많다 보니 신청을 포기할 수도 있을 것 같아요.",
-        "understanding": 80,
-        "benefit": 90,
-        "intent": 75,
-        "dissatisfaction": 60
-      }
-    },
-    {
-      "gap": 165,
-      "persona": {
-        "id": "fc200827d7524330970cef12b19c33cb",
-        "name": "이현근",
-        "age": 47,
-        "sex": "남자",
-        "occupation": "승용차 및 승합차 운전원",
-        "digital_literacy": 0.702,
-        "income_level": "mid",
-        "description": "47세 남자 · 미혼 · 승용차 및 승합차 운전원 · 경기 경기-남양주시"
-      },
-      "grounded": {
-        "stance": "oppose",
-        "text": "이런 정책이 청년들한테는 도움이 될 수는 있겠지만, 나 같은 40대 미혼 남성한테는 전혀 상관 없는 일이네요. 적어도 34세 이하의 청년들이라는 점에서 아예 배제되어 있어서 아쉽기도 하고, 주택 문제는 결국 장기적인 해결책이 필요한 것 같은데 이런 한정적인 지원으로는 문제가 해결될 리가 없죠. 지원금을 준다고 해도 그게 무슨 의미가 있을까 싶기도 하고, 차라리 주택 공급을 늘리거나 안정적인 주거 환경을 마련해 주는 방향이 더 현실적일 것 같아요. 그리고 부모와 별도 거주해야 한다는 조건도 좀 불필요한 것 같고, 이런 사각지대에 있는 사람들은 더 많을텐데. 나중에 나도 자금이 필요할 때 이런 정책이 내게는 전혀 도움이 안 되는 점에서 아쉬워요.",
-        "understanding": 80,
-        "benefit": 10,
-        "intent": 0,
-        "dissatisfaction": 75
-      },
-      "ungrounded": {
-        "stance": "support",
-        "text": "이 정책은 무주택 청년들에게 실질적인 도움이 될 수 있다고 생각합니다. 특히, 월세가 비싼 우리나라에서 지원이 필요할 때 이와 같은 정책이 나오는 것은 긍정적입니다. 다만, 재원은 어디서 나오는지에 대한 설명이 필요하고, 소득 기준이 너무 낮지 않나 하는 우려도 있습니다. 이 정책을 통해 주거 안정성을 더욱 높일 수 있기를 바랍니다.",
-        "understanding": 80,
-        "benefit": 75,
-        "intent": 70,
-        "dissatisfaction": 60
-      }
-    },
-    {
-      "gap": 160,
-      "persona": {
-        "id": "86acfdcefc8744ec9fddefb57f4c148f",
-        "name": "이영희",
-        "age": 65,
-        "sex": "여자",
-        "occupation": "무직",
-        "digital_literacy": 0.114,
-        "income_level": "low",
-        "description": "65세 여자 · 배우자있음 · 무직 · 부산 부산-사상구"
-      },
-      "grounded": {
-        "stance": "oppose",
-        "text": "이 정책은 청년을 위한 것이라서, 저 같은 고령자에게는 아무런 도움이 안 되는 것 같아요. 청년들이 힘들다는 거 이해하지만, 우리 같은 노인층도 사실 지금 힘든 시기거든요. 우리 세대도 좀 더 지원받아야 하지 않나 싶네요. 특히, 물가도 오르고 하는데, 청년들만 특별 지원받는 게 형평성에 어긋나는 것 같은데요. 우리도 복지 정책에서 소외되는 기분이 드네요.",
-        "understanding": 80,
-        "benefit": 0,
-        "intent": 0,
-        "dissatisfaction": 90
-      },
-      "ungrounded": {
-        "stance": "support",
-        "text": "이 정책은 무주택 청년들에게 상당히 도움이 될 것 같아요. 특히 월세가 점점 오르고 있는 요즘, 최대 20만 원의 지원은 큰 부담 덜어줄 수 있을 것 같습니다. 하지만 조건이 많아서 현실적으로 신청할 수 있는 청년들이 얼마나 될지가 걱정이에요. 소득 기준도 낮고, 부모와 별도 거주해야 하는 조건이 있어요. 그럼에도 불구하고 이런 정책이 있어 청년들이 조금이나마 주거 안정성을 찾을 수 있기를 바랍니다.",
-        "understanding": 80,
-        "benefit": 70,
-        "intent": 60,
-        "dissatisfaction": 50
-      }
-    }
-  ]
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "0eab51c0a392443599c2af8b8c7147f9",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "요즘 젊은 사람들 월세 부담이 상당하다고 들었습니다. 우리 병원 막내 간호사들만 봐도 월급 타서 방값 내고 나면 남는 게 없다고들 하더군요. 20만 원이면 그 친구들한테는 한 달 숨통이 트이는 돈일 겁니다. 이런 정책은 참 반갑네요.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "mostly",
+    "household_note": "우리 집은 자녀들이 함께 살고 있고 나이도 있어서 해당이 안 되지만, 고생하는 청년들에게는 꼭 필요한 지원이라 생각합니다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "31398b9c870c48958b913fe31621f19c",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "저는 지금 자가로 되어 있어서 해당이 안 되네요. 기사 끝에 보니까 주택 소유자는 제외라고 딱 적혀 있어요. 월세 내는 친구들한테는 나쁘지 않은 소식인 것 같습니다.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "well",
+    "household_note": "저는 부모님 도움으로 마련한 제 집이 있어서 지원 대상이 아닙니다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "72197f63ec80468bb33f34165fe349d3",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "요즘 젊은 친구들 방 구하기 힘들다던데 그런 거 도와주는 모양이네. 우리 애들은 집에서 같이 살고 있어서 나랑은 상관없는 얘기고, 이십만 원이 큰돈은 아니어도 혼자 사는 애들한테는 보탬이 좀 되겠지 뭐.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "well",
+    "household_note": "자녀들이 우리 부부랑 아파트에서 같이 지내고 있어서 신청 대상이 아닙니다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "825fe1ad2fb4429a900b27cbab6e16ae",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "이거 부모님이랑 따로 살아야 주는 거잖아요. 저는 지금 집에서 살고 있어서 아예 해당이 안 될 텐데... 한 달에 20만 원이면 제 작업 공간 하나 만드는 데 보탬은 되겠지만, 목동 월세 생각하면 그걸로 택도 없어서 그냥 그림이나 그려야겠어요.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 30,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "mostly",
+    "household_note": "부모님과 같이 살고 있는 상태라 지금 당장은 저한테 해당되는 게 없습니다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "not_much",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "67e25537ca064a3fa889c21ad4c8fd2f",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "월세 20만 원씩 주는 거면 자취하는 애들한텐 꽤 크겠네요. 근데 저는 지금 군대에 있기도 하고, 전역해도 일산 집에서 부모님이랑 살 거라 저랑은 상관없는 얘기 같아요. 소득 기준 보니까 우리 집은 해당도 안 될 것 같고요.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "mostly",
+    "household_note": "부모님과 함께 아파트에 거주하고 있고 집안 형편도 기준보다 나을 것 같아 해당 사항이 없습니다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "a930366678d642cd89794a2239c37301",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "아이고, 요즘 애들 방값 내고 살기 참 힘들다던데 나라에서 좀 보태주면 좋지. 우리 막내도 타지에 나가서 고생하는데 이런 거라도 받으면 얼마나 힘이 되겠어. 나야 나이가 많아서 안 되겠지만, 젊은 사람들한테는 참 고마운 일이네.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "mostly",
+    "household_note": "나는 나이가 많아서 해당이 안 되고, 타지에 나가 사는 자식이나 조카들이 도움을 받을 수 있을 것 같다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "84127925a1414b3d953dc525ee2e47df",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "아이고, 요즘 애들 취직도 안 되고 방세 내기도 힘들다 카더만 나라에서 돈을 좀 보태주는 모양이네. 우리 손주 녀석도 서울서 고생하는데 이런 거 받으면 참 좋을낀데. 근데 나 같은 늙은이들은 뭐 해당도 안 되고, 인터넷인가 뭔가로 하라카면 우째 하는지도 모르겄어. 젊은 사람들 도와주는 건 좋은데 우리 같이 늙고 형편 어려운 사람들도 좀 더 살펴주면 좋겠구마.",
+   "scores": {
+    "understanding": 35,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 30,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "partly",
+    "household_note": "나랑 부모님은 나이가 많아서 안 되고, 손주들이나 해당될까 모르겠소.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "not_much",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "d67dfc42d07c41189d3328b9dac3729e",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "아이고, 요즘 젊은 사람들 방값 무서워서 어디 혼자 살겠나. 월 20만 원이라도 보태주면 참 다행이지 싶어. 우리 집은 애들이 아직 같이 있어서 해당은 안 되겠지만, 주변에 혼자 나와 사는 애들 있는 집은 꼭 신청하라고 말해줘야겠네.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "mostly",
+    "household_note": "우리 애들은 집에서 같이 살고 있어서 지원 대상이 아니고 내 나이도 안 맞아서 우리 집이랑은 직접적인 상관이 없네.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "6d8a8fdd04e34aefb96be1f2581d8dda",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "청년들 월세 20만 원 지원해주는 건 참 좋은 취지네요. 요즘 애들 독립해서 살려면 숨만 쉬어도 돈인데 말이죠. 그런데 기준을 보니 중위소득 60% 이하에 청약통장까지 있어야 한다니 조건이 꽤나 깐깐합니다. 우리 집 애들은 아직 저랑 같이 살고 있고 우리 집 소득 기준도 있어서 해당은 안 되겠지만, 주변에 혼자 나와 사는 친구들한테는 꼭 알려줘야겠어요. 서류 준비할 게 좀 있겠는데 엑셀 정리하듯 잘 챙겨야겠네요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 30,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "well",
+    "household_note": "우리 아이들은 현재 부모와 함께 거주 중이고 가구 소득 기준도 초과할 것으로 보여 직접적인 대상은 아닙니다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "not_much",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "a436b26fcb24455587621f6263f82dbc",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "아, 이거 월세 지원해주는 거네요. 저는 부모님 덕분에 지금 이 집에 사는 거라 월세 나갈 일이 없어서 신청은 못 하겠어요. 그래도 혼자 나와서 고생하며 월세 내는 친구들한테는 큰 보탬이 되겠네요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "well",
+    "household_note": "부모님 도움으로 마련한 집에서 살고 있어 월세를 지불하지 않으므로 저와는 상관이 없는 정책입니다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "86acfdcefc8744ec9fddefb57f4c148f",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "요즘 젊은 사람들이 방값 내기도 힘들다 카더만 나라에서 이런 걸 다 해주는 모양이네. 서른네 살까지면 우리 아들이나 조카들은 나이가 다 찼을 거고, 우리 집은 나이가 많아서 해당은 안 되겠다만은. 그래도 한 달에 20만 원이면 혼자 사는 애들한테는 큰 보탬이 되겠어. 꼼꼼히 읽어보니까 조건이 좀 까다롭긴 해도 필요한 애들은 행정복지센터 가서 꼭 물어보라 해야겠네.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "well",
+    "household_note": "나이가 65세라 신청 대상이 아니고, 주변에 해당할 만한 조카나 이웃 청년이 있는지 정도만 살펴보게 될 것 같다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "fc200827d7524330970cef12b19c33cb",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "나이가 서른넷까지면 나는 한참 지났네. 요즘 젊은 애들 취업도 안 되고 힘들다더니 나라에서 이런 것도 해주는구먼. 나 같은 마흔 넘은 사람들한테는 딱히 해당되는 게 없어서 그냥 남 일 같아.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 30,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "mostly",
+    "household_note": "나이 제한 때문에 나나 우리 집 식구하고는 아무 상관이 없는 정책이다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "not_much",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "7c04c2c157694de19db4215bb1b31a35",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "조건이 꽤 까다롭네요. 나이가 딱 34세라 걸쳐있긴 한데 부모님이랑 따로 살아야 한다는 조건도 있고 소득 기준도 저랑은 안 맞아요. 꼼꼼히 읽어보니까 저는 신청 대상이 아니네요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "well",
+    "household_note": "할머니와 아파트에서 같이 지내고 있고 소득 기준도 해당되지 않아 우리 집 살림과는 무관한 정책입니다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "40e61b7943ae413b95723d237dbeb28d",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "청년들 월세 보태주는 건 좋은 취지긴 한데, 조건이 꽤나 까다롭네. 중위소득 따지고 청약통장까지 있어야 한다니 애들이 챙길 게 많겠어. 우리처럼 은퇴하고 홍천에서 조용히 사는 사람들에게는 먼 나라 이야기지. 나라 세금이 정말 필요한 애들한테 정교하게 잘 전달되는지가 관건이겠구먼.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "well",
+    "household_note": "60대 부부만 사는 집이라 지원 대상 청년이 없고, 우리 살림과는 아무런 접점이 없다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "a3f8d20cbd584c27b99e6250f15b16d8",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "요즘 젊은 친구들 방 구해서 살기 팍팍할 텐데 나라에서 조금이나마 보태준다니 다행이네. 20만 원이면 큰돈은 아니어도 혼자 사는 애들한테는 보탬이 꽤 될 거야. 우리 애들은 아직 집에서 같이 지내서 해당은 안 되겠지만, 고생하며 일하는 청년들한테 이런 건 필요하다고 봐요.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "mostly",
+    "household_note": "우리 자녀들은 부모랑 같이 살고 있고 나도 나이가 있어서 우리 집에는 해당 사항이 없네요.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "aad81ac85ed94226832513545969a56f",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "아이고, 요즘 젊은 애들 방값 내기도 숨차다 카던데 나라에서 좀 보태주면 좋지 뭐. 근데 우리 아들딸은 벌써 나이가 훌쩍 넘어서 해당도 안 되겠네. 세상 참 좋아졌다 싶으면서도 나 같은 할매는 인터넷으로 뭐 하라 카면 눈이 침침해서 보지도 못한다. 동사무소 가서 물어보면 친절하게 알려줄랑가 모르겠네.",
+   "scores": {
+    "understanding": 35,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 30,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "partly",
+    "household_note": "우리 애들은 나이가 많아서 안 될 것 같고, 나도 늙어서 나랏돈 받을 일은 아니네.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "not_much",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "41e0f809f6984ee6a40e18654ea984be",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "아, 이거 혼자 나와 사는 친구들한테는 진짜 좋겠다. 근데 나는 지금 광주 부모님 집에서 같이 살고 있어서 해당 안 될 것 같네. 임용 준비하면서 방 얻어 나가는 것도 일이고... 그냥 부모님 잔소리 좀 더 듣고 집에 있는 게 낫겠지? 그래도 자취하는 애들한테는 20만 원이 꽤 큰 돈이라 스터디 단톡방에 좀 알려줘야겠다.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "well",
+    "household_note": "부모님 집에서 같이 살고 있어서 신청 대상이 아닙니다. 지금은 공부에 집중해야 해서 독립할 계획도 없고요.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "92628b222daa4ee383f49c6a774ddbac",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "에이, 이거 엄마랑 같이 살면 아예 안 주는 거네. 나처럼 엄마 모시고 사는 사람은 해당도 안 되고, 따로 나가서 살아야만 도와준다는 거잖아. 요즘 월세가 얼만데 20만 원 준다고 독립할 수 있는 것도 아니고... 나랑은 상관없는 얘기네.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 30,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "well",
+    "household_note": "어머니와 함께 살고 있는 무주택자라 지원 대상에서 제외됩니다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "not_much",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "3d49b5e5b9664958bca3dd8f5eebcc99",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "아, 이거 월세 사는 사람들 도와주는 거네? 우리야 뭐 예천 아파트 살고 있고 형편도 나쁘지 않아서 나랑은 상관없는 얘기 같아. 요새 물가도 비싼데 이런 거라도 있으면 애들한테 도움은 되겠지.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "mostly",
+    "household_note": "우리는 아파트 살고 있고 남편이랑 같이 벌어서 소득 기준도 안 맞을 것 같아 신청 안 할 것 같아요.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "6ba9217998384a8f8b1fac54e907d9cd",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "아, 이거 나도 봤는데. 근데 난 지금 부모님이랑 수지 아파트에 같이 살고 있어서 해당이 안 되더라고. 자취하는 친구들한테는 꽤 쏠쏠하겠던데? 나중에 나도 독립해서 창업 준비하게 되면 이런 거 한 번 더 해줬으면 좋겠네.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 30,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "well",
+    "household_note": "부모님과 함께 거주 중이라 당장 저희 집 살림에 직접적인 관련은 없습니다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "not_much",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "72405b57dbd34325b141f50b432ab696",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "취지는 좋은데 서른넷까지면 나하고는 거리가 머네. 소득 기준이 꽤나 타이트한 걸 보니 정말 어려운 친구들 타깃인가 본데, 서류 검증이 제대로 될지는 의문이군. 우리 팀 막내들 중에 해당되는 애들이 있으려나?",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "well",
+    "household_note": "나는 이미 40대고 자가 아파트에 거주 중이라 이 지원금과는 아무런 상관이 없다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "9eedde7feb8f4849a5c9fa13a2970a6e",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "요즘 월세가 진짜 비싸긴 하죠. 20만 원이면 적은 돈도 아니고... 근데 소득 기준이 생각보다 너무 낮네요. 중위소득 60%면 최저임금 받는 사람들도 아슬아슬할 텐데, 저처럼 회사 다니는 사람들은 거의 해당 안 될 것 같아 아쉬워요. 그래도 서류 준비 같은 건 제 전공이라 금방 하겠는데 말이죠.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "well",
+    "household_note": "나이 조건은 맞지만 소득 기준이 제 급여보다 낮아서 실제 지원을 받기는 어려울 것 같습니다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "e89543a75aef40d28744a681939ea81c",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "요즘 젊은 아들 방값 내고 나면 남는 것도 없다 카던데, 20만 원이라도 보태주면 큰 힘이 안 되겠나 싶네. 근데 뭐 서류 떼고 신청하고 하는 게 저리 많아서야... 나 같은 사람은 기계 고치는 것보다 종이 쪼가리 채우는 게 더 힘들겄다. 우리 아들도 나중에 타지 나가면 저런 거 덕 좀 볼 수 있으려나 모르겠네.",
+   "scores": {
+    "understanding": 35,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 30,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "partly",
+    "household_note": "나는 나이도 있고 내 집 살아서 해당 없는데, 나중에 대학생 자녀가 타지 가서 방 얻으면 도움 될까 싶어 유심히 봤다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "not_much",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "f6d719eb00a642c9affdd76e851284a7",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "아이고, 요새 젊은 아들 방세 내는 거 보믄 진짜 허리가 휘겄대. 한 달에 20만 원씩이나 보태준다 카이 참 잘된 기라. 우리 집은 이제 나이가 다 차가 해당은 안 되겠지만, 주변에 젊은 아들 있는 집은 얼른 신청하라 캐야겠다. 나라에서 이런 거 해줘야 아들도 살 맛이 나지.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "mostly",
+    "household_note": "우리 집은 내랑 남편 둘뿐이라 받을 사람이 없지만, 세상 살기 힘든 청년들한테는 꼭 필요한 도움이라 봅니더.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "0eab51c0a392443599c2af8b8c7147f9",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "요즘 젊은 친구들 방값 내느라 고생이 많은데, 이런 지원이라도 있어야 숨통이 좀 트이지 않겠습니까. 우리 애들이야 집에서 같이 지내니 해당이 없겠지만, 혼자 나와서 고생하는 청년들한테는 20만 원이 큰 돈일 겁니다. 서류 꼼꼼히 챙겨서 정말 필요한 이들이 잘 받았으면 좋겠네요.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "mostly",
+    "household_note": "우리 집은 자녀들이 함께 살고 있고 나이도 해당되지 않아 직접적인 관련은 없습니다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "31398b9c870c48958b913fe31621f19c",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "아, 이거 저는 해당 안 돼요. 무주택 청년들 대상이라는데 저는 운 좋게 제 집이 있잖아요. 월세 내는 친구들한테는 꽤 큰 도움 되겠네요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "well",
+    "household_note": "저는 자가를 보유하고 있어서 지원 대상에서 완전히 제외됩니다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "72197f63ec80468bb33f34165fe349d3",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "요즘 애들 방 구하기 힘들다던데 20만 원이라도 보태주면 다행이긴 하겄네. 근데 우리 집은 애들이 아직 같이 살고 있어서 해당사항이 없구먼. 나중에라도 독립하면 모를까, 지금은 뭐 그냥 남의 집 이야기지.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "mostly",
+    "household_note": "애들이 지금 우리랑 같이 아파트에 살고 있어서 해당 안 됨. 나중에 따로 나가게 되면 다시 봐야 할 듯.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "825fe1ad2fb4429a900b27cbab6e16ae",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "나처럼 부모님이랑 같이 사는 사람한테는 해당 안 되는 거네. 독립하고 싶긴 한데, 지금 내 형편에 따로 나가서 월세 낼 돈도 없고... 나중에 진짜 내 작업실 차려서 나갈 때나 도움 되려나 싶다. 지금은 그냥 남 얘기 같아.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 30,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "mostly",
+    "household_note": "부모님이랑 다세대주택에 같이 살고 있어서 지금 당장은 받을 수 있는 게 없어요.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "not_much",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "67e25537ca064a3fa889c21ad4c8fd2f",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "아, 월세 지원해주는 거요? 자취하는 애들한테는 진짜 괜찮겠네요. 근데 저는 지금 군대에 있기도 하고, 어차피 전역해도 일산 집에서 부모님이랑 같이 살 거라 저랑은 별 상관없을 것 같아요. 조건 보니까 부모님 소득도 따지는 것 같은데 저희 집은 대상 안 될 것 같기도 하고요.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "mostly",
+    "household_note": "부모님하고 아파트에 같이 살고 있고 앞으로도 그럴 예정이라 월세 지원을 받을 일이 없습니다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "a930366678d642cd89794a2239c37301",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "아이고, 요즘 젊은 애들 방세 내는 것도 일이라 카더만 나라에서 좀 보태주면 좋지 뭐. 20만 원이면 그래도 숨통이 좀 안 트이겠나. 근데 나는 나이가 많아서 안 된다매? 우리 애들도 이미 다 커버려가지고 우리 집하고는 상관없겠다 싶네. 그래도 젊은 사람들이 잘 돼야 나라가 사는 거니까 잘하는 일 같다.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "mostly",
+    "household_note": "나는 나이가 많고 우리 자식들도 이미 장성해서 이 지원금을 받을 사람이 없다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "84127925a1414b3d953dc525ee2e47df",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "아이고, 요즘 어린 아들이 집세 내느라 고생이 많다 카더만 이런 게 생겼나 보네. 우리 손주들도 나중에 요런 혜택 좀 받으모 좋겠다. 나라에서 젊은 사람들 돕는 거는 잘하는 일이지. 근데 뭐 신청하는 게 복잡해 보여서 우리 같은 노인네는 봐도 잘 모르겠어.",
+   "scores": {
+    "understanding": 35,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "partly",
+    "household_note": "우리 집은 다 늙은이들뿐이라 해당 안 되는데, 외지에 나가 있는 손주들이 생각나네.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "d67dfc42d07c41189d3328b9dac3729e",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "아이고, 우리 집 애들은 나랑 같이 살아서 이건 해당이 안 되겠네. 요즘 젊은 애들 혼자 나가 살면 월세 내고 뭐하고 살기 팍팍할 텐데 20만 원이라도 주는 게 어디여. 나라에서 이런 거 해주는 건 좋은데, 우리처럼 같이 사는 집은 뭐 혜택이 없나 모르겠어.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "mostly",
+    "household_note": "자녀들이랑 다 같이 살고 있어서 우리 집은 해당 사항이 없어요.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "6d8a8fdd04e34aefb96be1f2581d8dda",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "요즘 젊은 친구들 방값 때문에 고생 많은데 이런 지원이라도 있으면 다행이지. 그런데 소득 기준을 보니까 우리 집은 애들이 있어도 해당 안 되겠어. 우리 같은 집보다는 정말 형편 어려운 청년들한테 잘 돌아가야 할 텐데 말이야.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "mostly",
+    "household_note": "가구 소득이나 연령 기준을 봤을 때 우리 집 자녀들이나 내가 혜택을 받을 조건은 아닌 것 같다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "a436b26fcb24455587621f6263f82dbc",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "아, 나랑은 상관없는 얘기네. 부모님이 도와주셔서 내 집에서 사는 거라 월세 내는 것도 없고... 기사 보니까 집 있는 사람은 안 된다고 적혀 있더라고. 서류 챙기는 것도 꼼꼼하게 봐야 할 텐데, 조건이 꽤 까다롭네. 형편이 넉넉하진 않아도 이런 건 진짜 월세 내느라 힘든 친구들한테 돌아가야지 싶어.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "well",
+    "household_note": "부모님 도움으로 마련한 집에서 살고 있어 월세를 내지 않으므로 지원 대상이 아닙니다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "86acfdcefc8744ec9fddefb57f4c148f",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "요즘 젊은 아들 방세 내기 힘들다 카더만 나라에서 한 달에 20만 원씩 보태주면 참말로 다행이지 싶네. 우리 때는 이런 거 없어도 우째우째 살았는데 요즘은 세상이 너무 팍팍해. 나하고 우리 영감이야 나이가 넘어서 안 되지만, 부녀회나 경로당 가서 아들 있는 집들한테 좀 알려줘야겠어. 신청하는 게 인터넷으로 하면 복잡할 텐데 동사무소 가도 된다 카니까 그나마 낫네.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 100
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "well",
+    "household_note": "우리 부부는 나이가 많아서 해당이 안 되지만, 주변에 젊은 사람들 있는 집에 알려줄 수 있겠네.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "often"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "fc200827d7524330970cef12b19c33cb",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "나이가 벌써 마흔일곱인데 나랑은 상관없는 얘기네. 요새 젊은 애들 방세 내고 살기 팍팍할 텐데 이런 거라도 있으면 좀 낫겠지. 나는 어머니 모시고 남양주에서 계속 살 거라 신청할 일도 없고.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "mostly",
+    "household_note": "이미 나이 제한도 한참 지났고 어머니랑 같이 살고 있어서 나랑은 아예 관련이 없는 정책이다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "7c04c2c157694de19db4215bb1b31a35",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "아, 이거 저번에 봤는데 저는 해당 안 돼요. 일단 할머니랑 같이 살고 있기도 하고, 나이도 딱 서른넷이라 커트라인이잖아요. 소득 기준 보니까 생각보다 엄청 낮게 잡혀 있던데, 웬만큼 직장 다니는 사람들은 받기 힘들 것 같아요. 취지는 좋지만 저랑은 상관없는 얘기네요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 30,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "well",
+    "household_note": "할머니와 아파트에 함께 살고 있고 사무직 소득이 있어 지원 대상에 포함되지 않습니다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "not_much",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "40e61b7943ae413b95723d237dbeb28d",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "청년들 월세 보태준다는 건데 조건이 꽤나 까다롭구만. 중위소득 60%에 100% 따지는 거 보니까 아무나 주는 건 아니겠어. 우리야 나이가 한참 지났으니 해당 없지만, 나랏돈 나가는 거니까 서류 검증은 엑셀 수식 맞추듯 똑바로 해야 할 게야. 요즘 애들 살기 팍팍하다니 필요한 일 같기도 하고 말이지.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 30,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "well",
+    "household_note": "우리 집은 부부 둘 다 환갑 넘은 은퇴자라 이 정책하고는 아무 상관이 없습니다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "not_much",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "a3f8d20cbd584c27b99e6250f15b16d8",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "요즘 젊은 친구들 방값 내느라 허리 휘는데 이런 건 참 잘하는 거지. 우리 애들도 나중에 독립하면 도움 될까 싶어 봤는데, 부모 소득 따지고 뭐 하고 하면 우리 집은 해당 안 될 것 같기도 하고... 그래도 이런 식의 지원은 꾸준히 있어야 한다고 봐.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 30,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "mostly",
+    "household_note": "자녀들이 나중에 독립할 때 도움이 될까 싶지만, 내 소득 기준 때문에 대상에서 빠질 것 같아 우리 집과는 크게 상관없어 보임.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "not_much",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "aad81ac85ed94226832513545969a56f",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "아이고, 요즘 젊은 아들 방값 내기도 숨이 턱턱 막힌다 카더만 나라에서 저렇게 보태준다 카니 다행이긴 하네. 근데 우리 집은 아들이랑 같이 살고 있으니께 해당도 안 될 끼고, 나이 묵은 사람들한테는 요런 거 없나 싶기도 하네. 세상 참 좋아졌다만 우리랑은 먼 얘기 같어.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 30,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "mostly",
+    "household_note": "우리 아들은 집에서 같이 사니까 지원 못 받을 끼고, 내 나이도 일흔이라 신청할 수 있는 게 아니네.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "not_much",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "41e0f809f6984ee6a40e18654ea984be",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "이거 월세 지원해 주는 거네? 취지는 좋은 것 같은데, 나는 지금 부모님이랑 같이 살고 있어서 해당 안 되겠다. 나 같은 임고생들 중에 따로 나와서 고시원이나 원룸 사는 친구들한테는 20만 원이면 진짜 큰돈일 텐데... 나중에 나도 발령 나서 독립하게 되면 그때도 이런 게 있으면 좋겠다. 지금은 그냥 그림의 떡이지 뭐.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 30,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "well",
+    "household_note": "현재 부모님과 함께 아파트에 거주하고 있어서 지원 대상에 해당하지 않습니다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "not_much",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "92628b222daa4ee383f49c6a774ddbac",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "에이, 이거 부모님이랑 떨어져서 따로 사는 애들만 주는 거잖아. 나는 지금 망우동에서 엄마 모시고 같이 살고 있는데 나한테는 해당 안 돼. 월 20만 원 받자고 엄마 혼자 두고 나갈 수도 없는 노릇이고, 그 돈 받으려고 전입신고만 따로 하는 그런 짓은 귀찮아서 못 해. 그냥 내 스토어나 키워드 노출 잘 되게 관리해서 돈 더 버는 게 빠르지.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 30,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "well",
+    "household_note": "어머니와 합가하여 거주 중인 무주택 청년이라, 별도 거주 요건을 충족하지 못해 상관이 없습니다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "not_much",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "3d49b5e5b9664958bca3dd8f5eebcc99",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "아, 이거 요새 뉴스에 좀 나오던데. 근데 우리는 지금 아파트 살고 있고 나 결혼도 해서 아마 안 될걸요? 소득 기준 보니까 생각보다 되게 깐깐하네. 자취하는 동생들이나 사회 초년생들한테는 괜찮겠는데, 우리 집이랑은 거리가 좀 있는 이야기 같아요.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "mostly",
+    "household_note": "이미 결혼해서 남편이랑 아파트에 살고 있고, 월세 내는 형편도 아니라서 해당 사항이 없습니다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "6ba9217998384a8f8b1fac54e907d9cd",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "아, 이거 혼자 자취하는 애들한테는 진짜 꿀이겠다. 근데 난 부모님이랑 수지 아파트에서 편하게 살고 있어서 지금은 해당 안 될걸요. 월 20만 원이면 치킨이 몇 마리야... 나중에 진짜 독립할 마음 생기면 그때나 다시 찾아볼 것 같아요. 지금은 그냥 집밥 먹으면서 돈 아끼는 게 최고죠.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "mostly",
+    "household_note": "부모님과 함께 거주 중이라 당장 지원받을 일은 없지만, 나중에 독립하게 되면 참고할 만한 정보 같습니다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "72405b57dbd34325b141f50b432ab696",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "요즘 청년들 살기 팍팍하다더니 이런 지원도 나오는군. 소득 기준이나 나이 제한을 보니까 대상자가 꽤 정밀하게 짜인 것 같은데, 우리 집은 해당 사항이 전혀 없네. 나중에 우리 애들 독립할 때쯤이나 다시 들여다보게 되겠어.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "well",
+    "household_note": "본인 나이 및 소득 기준 초과로 인해 우리 가구와는 직접적인 상관이 없는 정책임.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "9eedde7feb8f4849a5c9fa13a2970a6e",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "어, 저도 나이는 해당되네요. 서른 하나니까... 근데 중위소득 60% 이하인지가 중요하겠어요. 제가 월급 계산하는 일을 하니까 대충은 아는데, 내일 사무실 가서 정확한 표랑 제 급여 명세서 다시 대조해봐야겠어요. 20만 원이면 우리 강아지 간식비랑 관리비 보태기에 꽤 큰 돈이라... 서류 꼼꼼하게 챙겨서 신청해봐야겠네요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 75,
+    "intent": 100,
+    "dissatisfaction": 0,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "well",
+    "household_note": "현재 일산에서 혼자 자취 중인데 월세 부담이 적지 않아서 20만 원 지원은 제 살림에 꽤 큰 보탬이 됩니다.",
+    "benefit": "some_help",
+    "intent": "surely",
+    "dissatisfaction": "none",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "e89543a75aef40d28744a681939ea81c",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "요즘 젊은 아들 방값 무서븐데 정부에서 이런 거라도 챙겨주면 좋지예. 근데 우리 아들은 아직 집에서 같이 살고 있어가 우리랑은 상관없는 얘기 같습니더. 서류 떼고 하는 거 보니께 억수로 복잡해 보이는데 애들이 잘 챙겨 묵으려나 모르겠네예.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "mostly",
+    "household_note": "우리 아들은 집에서 학교 다니고 있어서 지원 대상도 아니고 신청할 일도 없습니다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "f6d719eb00a642c9affdd76e851284a7",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "아이구, 요즘 젊은 아들 방세 내기도 힘들다 카더만 이런 정책이 있네예. 월 20만 원이면 애들한테는 큰 돈인데 참 잘하는 거 같습니더. 우리야 나이가 있어가 해당도 안 되지만서도, 고생하는 청년들한테는 가뭄에 단비 같겠네예.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "mostly",
+    "household_note": "우리 집은 나이 묵은 사람 둘뿐이라 해당 사항이 전혀 없습니더.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "0eab51c0a392443599c2af8b8c7147f9",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "요즘 젊은 친구들 월세 부담이 상당하다고 들었습니다. 월 20만 원이면 혼자 나와 사는 청년들한테는 꽤 보탬이 되겠네요. 우리 집은 애들이랑 다 같이 살고 있어서 해당은 안 되겠지만, 참 필요한 정책인 것 같습니다.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "mostly",
+    "household_note": "우리 집은 자녀들이 부모와 함께 살고 있고 형편도 어느 정도 되는 편이라 지원 대상이 아닙니다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "31398b9c870c48958b913fe31621f19c",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "이거 조건 보니까 저는 아예 안 되겠네요. 무주택자만 된다고 나와 있는데 저는 지금 제 명의로 된 집이 있거든요. 월 20만 원이면 적은 돈은 아니지만, 소득 기준이나 청약 통장 같은 조건이 꽤 까다로워서 해당되는 사람이 아주 많지는 않을 것 같아요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "well",
+    "household_note": "이미 자가 아파트를 보유하고 있어서 월세 지원 대상에서 제외됩니다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "72197f63ec80468bb33f34165fe349d3",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "요즘 애들 방세 내는 게 보통 일이 아닐 텐데 이십만 원이라도 보태주면 좀 낫겠지. 근데 우리 집애들은 다 같이 살고 있어서 해당은 안 되겠구먼. 조건이 좀 까다로워 보이기도 하고... 뭐 필요한 사람들한테는 요긴하겠어.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 30,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "well",
+    "household_note": "우리 애들은 집에서 같이 살고 있고 나도 나이가 있어서 신청할 일은 없겠네요.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "not_much",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "825fe1ad2fb4429a900b27cbab6e16ae",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "이거 부모님이랑 따로 살아야 주는 거잖아. 나는 지금 집에서 같이 지내니까 해당 안 돼. 나중에 진짜 독립해서 내 작업실 차릴 때나 도움 되려나... 지금은 그냥 남 일 같아.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "well",
+    "household_note": "부모님이랑 같이 살고 있어서 지금 당장은 나한테 해당되는 게 없어.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "67e25537ca064a3fa889c21ad4c8fd2f",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "아, 이거 저번에 뉴스에서 잠깐 봤는데 저는 해당 안 될 것 같아요. 일단 부모님이랑 같이 일산에서 살고 있기도 하고, 전역하고 나서도 복학하면 집에서 다닐 거거든요. 그리고 우리 집은 소득 기준도 아마 안 맞을 거예요. 그냥 형편 어려운 친구들한테는 꽤 큰 돈이라 괜찮은 정책 같긴 하네요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "well",
+    "household_note": "부모님과 함께 거주 중이며 가구 소득 기준도 충족하지 않을 것 같아 저희 집과는 무관한 정책입니다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "a930366678d642cd89794a2239c37301",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "에구, 요즘 젊은 애들 취업도 안 되고 방세 내는 게 보통 일이 아닐 텐데 참 잘됐네. 20만 원이면 그래도 애들 밥 한 그릇 더 사 먹을 수 있겠어. 나야 뭐 나이가 예순이라 해당은 안 되겠지만, 우리 손주들 나중에 커서 이런 덕 좀 보면 좋겠구먼. 나라에서 이런 거 해주는 건 참 좋은 일이지.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "mostly",
+    "household_note": "내 나이 60이라 해당은 안 되지만, 우리 자식들이나 손주들 세대한테는 참 고마운 소식 같니더.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "84127925a1414b3d953dc525ee2e47df",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "아이고, 요즘 아들 농사 짓기도 힘들고 방값도 천정부지로 뛴다 카더니 나라에서 좀 보태주는 모양이네. 우리 손주들도 이제 다 컸는데 요런 거 챙겨 받으면 을매나 좋겠노. 젊은 사람들이 살기 좋아야 나라도 사는 기지. 우덜 같은 노인네들이야 뭐 해당도 없겄지만서도, 애들한테는 참 잘된 일이다 싶구먼.",
+   "scores": {
+    "understanding": 35,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "partly",
+    "household_note": "나는 나이도 많고 부모님 모시고 우리 아파트에 사니까 요런 청년 지원은 내하고는 상관이 없네.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "d67dfc42d07c41189d3328b9dac3729e",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "아이고, 요즘 애들 방값 무서운데 이런 거라도 있으면 다행이지. 근데 우리는 애들이 집에서 같이 사니까 해당이 안 되겠네. 따로 나가 살아야 준다는데, 요즘 세상에 애들 내보내는 게 어디 쉽나. 그래도 혼자 나와서 고생하는 청년들한테는 참 고마운 일이겠어.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "mostly",
+    "household_note": "우리 애들은 지금 집에서 같이 살고 있어서 이 지원금 받을 일은 없겠네요.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "6d8a8fdd04e34aefb96be1f2581d8dda",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "요즘 애들 방값 내기 힘든데 이런 지원은 필요하다고 봐요. 근데 기준이 좀 빡빡해 보이네. 우리 집처럼 애들 키우고 직장 다니는 집들은 소득 기준 맞추기가 쉽지 않을 텐데, 우리 애들이 혜택을 받을 수 있을지는 좀 따져봐야겠어.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 30,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "well",
+    "household_note": "우리 집은 소득 기준을 넘을 것 같아서 직접적인 혜택은 없겠지만, 청년 세대에게는 꼭 필요한 정책 같습니다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "not_much",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "a436b26fcb24455587621f6263f82dbc",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "나이대에는 맞는데, 저는 부모님이 마련해주신 집에서 지내고 있어서 월세를 따로 내는 건 아니거든요. 서류 떼어보면 아마 안 될 거예요. 저 같은 사람보다는 진짜 매달 월세 내기 힘든 친구들한테 필요하겠네요.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 30,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "well",
+    "household_note": "부모님 도움으로 마련한 아파트에 살고 있고 월세를 내지 않아서 지원 대상이 아닙니다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "not_much",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "86acfdcefc8744ec9fddefb57f4c148f",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "요새 젊은 아들 살기 팍팍하다 카더마는 나라에서 이런 것도 챙기주네. 월 20만 원이믄 적은 돈도 아이고 일 년이믄 꽤 될 낀데 청년들한테는 큰 힘이 되겠구만. 근데 우리 같이 늙고 형편 빠듯한 사람들은 우째 되는가 싶기도 하고... 우리 때사 이런 게 어딨었노, 다 지 몸 부사 가매 벌어 묵었지. 그래도 나라에서 젊은 아들 안 내팽개치고 돕는 거 보믄 세상 마이 좋아졌심더.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 30,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "well",
+    "household_note": "우리 집은 내랑 영감뿐이고 나이가 한참 지나서 요런 지원은 남의 집 이야기라예.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "not_much",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "fc200827d7524330970cef12b19c33cb",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "none",
+   "text": "에이, 나이가 한참 지났는데 뭐 나랑 상관있나. 서른넷까지면 요새 젊은 애들한테나 해당되는 거지. 나처럼 마흔 넘은 사람들은 이런 거 있어봐야 남의 나라 얘기야. 그래도 뭐, 혼자 나와 사는 애들은 월세 내기 빡빡할 텐데 좀 도와주면 좋긴 하겠네.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "mostly",
+    "household_note": "나이가 마흔일곱이라 대상도 안 되고, 어머니랑 같이 살고 있어서 나랑은 아예 접점이 없다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "7c04c2c157694de19db4215bb1b31a35",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "조건 보니까 나는 해당 안 되겠다. 할머니랑 같이 살고 있기도 하고, 소득 기준이 생각보다 낮네. 월세 내는 사회초년생 친구들한테는 괜찮은 정책인 것 같긴 한데, 서류 챙기기 좀 번거롭겠어.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "well",
+    "household_note": "할머니를 모시고 자가 아파트에서 지내고 있어 월세를 지불하지 않으며, 소득 기준도 맞지 않습니다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "40e61b7943ae413b95723d237dbeb28d",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "요즘 젊은 친구들 방세 내기도 벅차다는 소리는 들었습니다만 기준이 상당히 구체적이네요. 중위소득 60% 이하에 청약통장까지 있어야 한다니 꼼꼼하게 따져보고 만든 모양입니다. 우리 집이야 해당되는 사람도 없고 형편 빠듯한 은퇴자들한테는 이런 혜택이 안 돌아오니 그냥 남의 일 같습니다.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 30,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "well",
+    "household_note": "우리 집은 60대 부부만 사는 단독주택이라 청년 지원 대상과는 아무런 접점이 없습니다.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "not_much",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "a3f8d20cbd584c27b99e6250f15b16d8",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "요즘 젊은 친구들 방값 내고 나면 남는 것도 없다던데 월세 20만 원이라도 보태주면 숨통 좀 트이겠네. 근데 우리 집은 애들이랑 같이 사니까 상관없고, 내 벌이가 있어서 자격도 안 될 거야. 진짜 어려운 애들한테나 잘 돌아가면 좋겠구먼.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "mostly",
+    "household_note": "우리 애들은 집에서 같이 살고 있고 내 수입이 있어서 대상은 아닐 것 같네.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "aad81ac85ed94226832513545969a56f",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "아이고, 요즘 젊은 애들 방세 내느라 고생한다더니 나라에서 좀 보태주는가 보네. 근데 우리 집 애들은 나랑 같이 살고 있어서 저거랑은 상관이 없겠어. 소득이니 뭐니 따지는 것도 많고 복지로니 뭐니 하는 것도 나 같은 늙은이는 우째 하는지도 모르겠고... 뭐, 없는 청년들한테는 푼돈이라도 보탬이 되면 좋긴 하겠지.",
+   "scores": {
+    "understanding": 35,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 30,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "partly",
+    "household_note": "우리 아들딸은 부모랑 같이 살고 있고 내 나이도 칠십이라 저거랑은 아무 상관이 없네.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "not_much",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "41e0f809f6984ee6a40e18654ea984be",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "아, 이거 나 아는 애들 중에도 자취하는 애들은 진짜 좋아하겠다. 근데 나는 지금 부모님이랑 같이 사니까 해당이 안 되네. 나중에 나도 임용 붙어서 발령 나거나 해서 나가 살게 되면 이런 게 진짜 절실할 텐데, 그때도 계속했으면 좋겠다.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 0,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "well",
+    "household_note": "저는 지금 부모님 댁에서 같이 살고 있어서 당장은 월세 나갈 일이 없어요.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "none",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "on",
+   "persona_id": "92628b222daa4ee383f49c6a774ddbac",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "아, 이거 나랑은 상관없는 얘기네. 어머니 모시고 같이 살면 안 된다잖아. 혼자 나와서 고생하는 친구들한테는 월 20만 원이 큰돈일 텐데, 나처럼 집 지키는 사람한테는 해당 사항이 없어서 좀 아쉽긴 하다.",
+   "scores": {
+    "understanding": 90,
+    "benefit": 50,
+    "intent": 0,
+    "dissatisfaction": 70,
+    "shareability": 35
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "well",
+    "household_note": "어머니와 함께 살고 있어 '부모와 별도 거주' 요건에 맞지 않음.",
+    "benefit": "no_effect",
+    "intent": "no_need",
+    "dissatisfaction": "somewhat",
+    "shareability": "rarely"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "3d49b5e5b9664958bca3dd8f5eebcc99",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "야, 이거 나 될 것 같은데? 월 20만 원이면 월세 반 정도는 메꾸니까 개꿀이지. 근데 부모님 소득 합쳐서 100% 안 넘어야 된다는 게 좀 걸리네. 우리 집이 그 정도로 못 사나 싶기도 하고.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 100,
+    "dissatisfaction": 30,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "mostly",
+    "household_note": "혼자 나와 살면서 매달 월세 내는 게 제일 큰 부담인데 20만 원 지원해주면 숨통이 좀 트일 것 같아요.",
+    "benefit": "some_help",
+    "intent": "surely",
+    "dissatisfaction": "not_much",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "6ba9217998384a8f8b1fac54e907d9cd",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "월 20만원 지원해준다는 건 좋은데, 부모님 소득까지 보는 건 좀 그렇다. 독립했으면 남남인데... 그래도 대상만 되면 바로 신청할래.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "mostly",
+    "household_note": "혼자 나와 살면서 월세 내기 벅찬데 이거라도 받으면 큰 힘이 됨.",
+    "benefit": "some_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "72405b57dbd34325b141f50b432ab696",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "아 이거? 봤어. 월세 20만원이면 꽤 큰데, 부모님 소득까지 본다니까 좀 그렇네. 나 같은 애들은 아슬아슬하게 못 받을 것 같기도 하고... 일단 신청은 해보려고.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 75,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "현재 자취 중이라 월세 부담이 큰데, 부모님 소득 합산 기준 때문에 대상이 될지 안 될지 애매함.",
+    "benefit": "some_help",
+    "intent": "probably",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "9eedde7feb8f4849a5c9fa13a2970a6e",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "아, 이거 뉴스에서 봤어. 월 20만 원이면 자취생한테 진짜 큰돈이지. 근데 소득 기준이 너무 빡빡해서 내가 될지 모르겠다. 일단 조건 좀 자세히 확인해봐야 할 듯.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "서울에서 혼자 자취하며 매달 월세 나가는 게 제일 큰 부담이라 지원이 절실함.",
+    "benefit": "some_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "e89543a75aef40d28744a681939ea81c",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "아, 이거 뉴스에서 봤어. 월세 20만 원 준다니까 좋긴 한데, 소득 기준이 너무 낮아서 나처럼 웬만큼 직장 다니는 사람들은 아예 해당도 안 될걸? 부모님 소득까지 다 본다는데 서류 떼기도 귀찮고... 진짜 어려운 친구들한테는 도움 되겠지만 나한테까지 차례가 올지는 모르겠네.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 50,
+    "intent": 50,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "혼자 자취하면서 매달 월세 나가는 게 부담이라 지원을 받고 싶지만, 소득 기준에 걸릴 것 같음.",
+    "benefit": "no_effect",
+    "intent": "unsure",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "f6d719eb00a642c9affdd76e851284a7",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "월 20만 원이면 작은 돈은 아닌데, 소득 기준이 너무 빡빡한 거 아니야? 부모님 소득까지 다 본다니까 나 같은 사람은 해당 안 될 수도 있을 것 같네. 그래도 되면 무조건 신청해야지.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 75,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "혼자 서울에서 자취하고 있는데 월세가 제일 부담이라 이 지원금이 절실함.",
+    "benefit": "some_help",
+    "intent": "probably",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "0eab51c0a392443599c2af8b8c7147f9",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "아, 이거 나도 해당되나? 월 20만 원이면 진짜 큰데. 근데 부모님 소득까지 다 따지면 안 될 수도 있겠다 싶네. 요즘 세상에 월세 20만 원이 어디야, 일단 무조건 신청은 해봐야지.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "혼자 자취하며 매달 나가는 월세가 큰 부담이라 지원을 꼭 받고 싶습니다.",
+    "benefit": "some_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "31398b9c870c48958b913fe31621f19c",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "아, 나도 이거 해당되나? 월 20만 원이면 적은 돈은 아닌데. 근데 부모님 소득까지 다 따지면 서울에서 자취하는 사람 중에 받을 수 있는 사람이 얼마나 될지 모르겠네. 일단 신청은 해보려고.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 75,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "혼자 나와 살면서 내는 월세가 부담스러운데, 이거라도 받으면 생활비에 보탬이 될 것 같다.",
+    "benefit": "some_help",
+    "intent": "probably",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "72197f63ec80468bb33f34165fe349d3",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "아, 이거 저번에 본 것 같은데. 한 달에 20만 원이면 자취생한테는 진짜 큰 돈이지. 근데 소득 기준이 생각보다 빡빡해서 내가 될지 모르겠다. 일단 조건부터 자세히 봐봐야 할 듯.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "혼자 나와서 월세 내며 살고 있는데, 지원받으면 생활비에 여유가 좀 생길 것 같습니다.",
+    "benefit": "some_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "825fe1ad2fb4429a900b27cbab6e16ae",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "아, 이거 예전부터 말 많았던 건데 드디어 하나 보네. 근데 조건이 너무 까다로운 거 아냐? 부모님 소득까지 다 본다니 나처럼 애매하게 걸리는 사람들은 신청이나 할 수 있을지 모르겠어. 그래도 월 20만 원이면 진짜 큰 건데.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "혼자 나와 살면서 매달 월세 나가는 게 제일 부담인데, 지원받으면 생활비에 여유가 좀 생길 것 같습니다.",
+    "benefit": "some_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "67e25537ca064a3fa889c21ad4c8fd2f",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "아, 이거 20만 원씩 준다는 그거네. 한 달 식비 정도는 되니까 받으면 무조건 좋지. 근데 부모님 소득까지 다 본다면서? 나는 혼자 나와 사는데 그것 때문에 안 될까 봐 좀 짜증 나긴 해.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 75,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "독립해서 월세 내고 있는 청년이라 해당은 되는데, 부모님 소득 기준에 걸릴지 확인이 필요함.",
+    "benefit": "some_help",
+    "intent": "probably",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "a930366678d642cd89794a2239c37301",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "아, 그거? 20만 원 준다길래 솔깃했는데 조건 보니까 좀 그렇더라. 부모님이랑 따로 사는데 왜 부모님 소득까지 다 떼오라는 건지 모르겠어. 그래도 밑져야 본전이니까 일단 서류는 준비해보려고.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 75,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "서울에서 혼자 자취하는데 월세 비중이 너무 높아서 이거라도 받으면 생활비에 보탬이 될 것 같음.",
+    "benefit": "some_help",
+    "intent": "probably",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "84127925a1414b3d953dc525ee2e47df",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "아, 이거 나도 받을 수 있나? 20만 원이면 진짜 큰데. 근데 우리 부모님 소득까지 다 본다고 하니까 좀 애매하네. 일단 서류부터 좀 챙겨봐야겠다.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "혼자 나와서 자취 중인데 매달 나가는 월세가 제일 큰 부담이라 지원받으면 생활비에 큰 보탬이 됨.",
+    "benefit": "some_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "d67dfc42d07c41189d3328b9dac3729e",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "나 이거 저번에 봤어. 안 그래도 자취방 월세 내고 나면 남는 게 없어서 힘들거든. 근데 소득 기준이 너무 낮은 거 아냐? 나 같은 직장인들은 조금만 벌어도 탈락일 텐데, 진짜 어려운 친구들한테는 확실히 도움 되겠지.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "서울에서 혼자 자취하면서 매달 월세로 50만 원 넘게 나가는데, 20만 원이라도 지원받으면 식비라도 보탤 수 있을 것 같아 간절함.",
+    "benefit": "some_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "6d8a8fdd04e34aefb96be1f2581d8dda",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "이거 조건이 너무 빡빡한 거 아냐? 중위소득 60%면 진짜 최저시급 간당간당한 수준인데... 나처럼 애매하게 버는 사람은 혜택도 못 보겠네. 그래도 뭐, 진짜 힘든 애들한테는 20만 원이 어디야. 없는 것보단 낫겠지.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 75,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "혼자 자취하고 있어서 월세가 매달 나가는데, 소득 기준에 걸릴 것 같아서 아슬아슬함.",
+    "benefit": "some_help",
+    "intent": "probably",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "a436b26fcb24455587621f6263f82dbc",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "나 같은 자취생한테는 진짜 가뭄에 단비 같은 소리긴 한데, 조건이 좀 빡빡해 보이네. 부모님 소득까지 다 합쳐서 본다니까 내가 대상이 될지 모르겠어. 그래도 되면 무조건 해야지.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "매달 나가는 월세 20만 원만 아껴도 숨통이 좀 트일 것 같음.",
+    "benefit": "some_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "86acfdcefc8744ec9fddefb57f4c148f",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "어, 이거 나 될 것 같은데? 한 달에 20만 원이면 진짜 큰데... 근데 부모님 소득까지 본다니까 좀 아슬아슬하네. 일단 서류 떼봐야겠다.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 30,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "mostly",
+    "household_note": "자취방 월세가 너무 비싸서 생활비가 빠듯한데 지원금 나오면 숨통이 좀 트일 것 같아요.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "not_much",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "fc200827d7524330970cef12b19c33cb",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "월 20만 원이면 나쁘지 않네. 근데 부모님 소득까지 보는 건 좀 빡세다. 나도 해당되는지 일단 봐야겠어.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 75,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "매달 나가는 월세가 부담스러운데 지원받으면 생활비에 보탬이 될 것 같다.",
+    "benefit": "some_help",
+    "intent": "probably",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "7c04c2c157694de19db4215bb1b31a35",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "어, 나도 봤어. 근데 이거 조건이 좀 까다롭더라. 부모님 소득까지 본다니까 나는 될지 모르겠네. 되면 무조건 좋지. 한 달에 20만 원이 어디야.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "혼자 나와 살면서 월세 내는 게 제일 큰 부담인데, 조금이라도 보태주면 고맙죠.",
+    "benefit": "some_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "40e61b7943ae413b95723d237dbeb28d",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "어차피 나가는 월세인데 20만 원이라도 보태주면 좋지. 근데 부모님 소득까지 다 본다고 하니까 좀 복잡할 거 같긴 한데, 밑져야 본전이니까 일단 알아봐야겠어.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 100,
+    "dissatisfaction": 30,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "자취하고 있어서 월세가 제일 큰 부담인데, 지원금 받으면 생활비에 여유가 생길 것 같아.",
+    "benefit": "some_help",
+    "intent": "surely",
+    "dissatisfaction": "not_much",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "a3f8d20cbd584c27b99e6250f15b16d8",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "와, 월 20만 원씩이나 준다고? 근데 내 소득 말고 부모님 소득까지 다 본다는 게 좀 걸리네. 우리 집이 그 정도인가... 일단 복지로 들어가서 계산기부터 좀 돌려봐야겠다.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 100,
+    "dissatisfaction": 30,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "혼자 나와 살면서 월세 내는 게 제일 큰 부담인데, 지원받으면 식비나 공과금이라도 보탬이 될 것 같습니다.",
+    "benefit": "some_help",
+    "intent": "surely",
+    "dissatisfaction": "not_much",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "aad81ac85ed94226832513545969a56f",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "아, 월 20만 원이면 진짜 큰데... 근데 부모님 소득까지 다 본다고? 나 독립해서 산 지가 언젠데 아직도 부모님 타령이야. 조건만 맞으면 무조건 신청해야지.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "혼자 자취하면서 월세 부담이 너무 커서 도움이 꼭 필요해요.",
+    "benefit": "some_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "41e0f809f6984ee6a40e18654ea984be",
+   "run": 0,
+   "stance": "support",
+   "lean": "support",
+   "text": "아, 이거 저번에 봤는데. 월세 20만 원이면 크긴 한데 나도 해당이 되나 모르겠네. 소득 기준이 생각보다 낮아서 부모님 소득까지 다 합치면 아슬아슬할 것 같기도 하고... 그래도 되면 무조건 신청해야지.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "혼자 자취하며 월세를 내고 있어서 지원을 받게 되면 식비나 공과금 부담이 훨씬 줄어들 것 같습니다.",
+    "benefit": "some_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "92628b222daa4ee383f49c6a774ddbac",
+   "run": 0,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "이거 20만 원 주는 거 말이지? 나이도 그렇고 소득 기준이 너무 빡빡해서 나한테까지 차례가 올까 싶네. 부모님 소득까지 다 본다니까 해당되는 사람 별로 없을 것 같은데.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 50,
+    "intent": 50,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "혼자 나와 살고 있긴 한데 부모님 소득 합치면 기준 넘을 것 같아서 대상이 될지 모르겠다.",
+    "benefit": "no_effect",
+    "intent": "unsure",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "3d49b5e5b9664958bca3dd8f5eebcc99",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "어, 이거 나 해당될 거 같은데? 월 20만 원이면 자취생한테 진짜 큰돈이지. 근데 부모님 소득까지 보는 건 좀 까다롭네. 일단 서류 뭐 필요한지부터 좀 봐야겠다.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 100,
+    "dissatisfaction": 30,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "mostly",
+    "household_note": "혼자 자취하면서 월세 내는 게 제일 부담인데, 이거 받으면 식비나 교통비에 보태 쓸 수 있을 것 같아.",
+    "benefit": "some_help",
+    "intent": "surely",
+    "dissatisfaction": "not_much",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "6ba9217998384a8f8b1fac54e907d9cd",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "아, 이거 나도 좀 봤어. 20만 원이면 생활비에 꽤 보탬은 될 텐데 부모님 소득까지 본다니까 내가 될지 모르겠다. 조건이 좀 까다로워 보이더라고. 일단 내가 해당되는지부터 제대로 알아봐야 할 것 같아.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "지금 내는 월세가 수입에 비해 비중이 커서, 지원만 된다면 식비나 생활비에 여유가 좀 생길 것 같습니다.",
+    "benefit": "some_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "72405b57dbd34325b141f50b432ab696",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "아, 이거 봤어. 한 달에 20만 원이면 자취생한테는 진짜 큰돈이지. 근데 부모님 소득까지 따진다는 게 좀 걸리네. 내가 해당될지 모르겠는데 일단 신청은 해보려고.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "지금 월세 내고 살고 있어서 지원받으면 생활비에 큰 보탬이 될 것 같아요.",
+    "benefit": "some_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "9eedde7feb8f4849a5c9fa13a2970a6e",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "어, 이거 나도 될 것 같은데? 월 20만 원이면 진짜 크지. 근데 부모님 소득까지 본다니까 그게 좀 걸리네. 일단 서류부터 좀 뽑아봐야겠다.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 30,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "mostly",
+    "household_note": "자취방 월세 부담이 큰데 20만 원이라도 지원받으면 식비라도 아낄 수 있을 것 같습니다.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "not_much",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "e89543a75aef40d28744a681939ea81c",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "20만 원? 요새 방값이 얼만데 좀 짜긴 하네. 그래도 안 주는 것보다야 낫지. 근데 부모님 소득까지 본다는 건 진짜 에바다. 나 혼자 사는데 왜 그걸 봐? 조건 맞으면 바로 신청해야겠다.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "mostly",
+    "household_note": "매달 나가는 월세가 제일 큰 부담인데, 20만 원이라도 보태면 훨씬 낫죠.",
+    "benefit": "some_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "f6d719eb00a642c9affdd76e851284a7",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "아, 이거 저번에 친구가 말해주던데. 월 20만 원이면 자취생한테는 진짜 큰 돈이지. 근데 부모님 소득까지 다 본다니까 내가 대상이 될지 모르겠네. 일단 서류부터 떼봐야 알 것 같아.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 100,
+    "dissatisfaction": 30,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "혼자 자취하면서 내는 월세가 부담인데, 지원받으면 식비나 공과금 내는 데 큰 보탬이 될 것 같습니다.",
+    "benefit": "some_help",
+    "intent": "surely",
+    "dissatisfaction": "not_much",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "0eab51c0a392443599c2af8b8c7147f9",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "아니 월세 20만 원 준다고 해서 봤는데, 내 소득에 부모님 소득까지 다 따지면 이거 받을 수 있는 사람이 얼마나 되려나 모르겠네. 기준이 너무 까다로운 것 같아. 그래도 나한테 해당만 되면 땡큐지.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 75,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "내 월급이랑 부모님 소득 합쳐서 기준 넘으면 못 받는 건데 아슬아슬할 것 같아서 걱정됨.",
+    "benefit": "some_help",
+    "intent": "probably",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "31398b9c870c48958b913fe31621f19c",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "아, 이거 예전에 본 것 같은데... 월 20만 원이면 그래도 숨통 좀 트이겠다. 근데 소득 기준이 우리 부모님 것까지 다 들어가는 거지? 그거 맞추기가 은근히 까다로울 텐데 일단 나도 되는지 확인은 해봐야겠어.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 100,
+    "dissatisfaction": 30,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "자취하면서 매달 월세 나가는 게 제일 부담인데, 지원받으면 생활비에 큰 보탬이 될 것 같습니다.",
+    "benefit": "some_help",
+    "intent": "surely",
+    "dissatisfaction": "not_much",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "72197f63ec80468bb33f34165fe349d3",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "아, 그거? 나도 봤어. 근데 기준이 좀 까다롭더라. 부모님 소득까지 본다며? 나처럼 따로 산 지 오래된 사람도 다 합쳐서 계산하는 건 좀 오바 아닌가 싶네. 그래도 공짜 돈인데 되면 좋지.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "월세 부담이 큰데 20만 원이라도 보태주면 생활비에 큰 도움이 될 것 같음.",
+    "benefit": "some_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "825fe1ad2fb4429a900b27cbab6e16ae",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "월 20만 원? 오... 나쁘지 않은데? 근데 부모님 소득까지 다 본다는 게 좀 걸린다. 나 나이가 몇인데 아직도 부모님 소득을 따지는지 모르겠네. 그래도 일단 자격 되는지부터 확인해봐야겠다. 되면 개이득이지.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "자취하면서 월세 나가는 게 제일 큰 부담인데, 지원받으면 생활비에 큰 보탬이 될 것 같음.",
+    "benefit": "some_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "67e25537ca064a3fa889c21ad4c8fd2f",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "어, 이거 나 되는 거 아냐? 월 20만 원이면 자취생한테는 진짜 큰돈이지. 근데 부모님 소득까지 다 본다니까 그게 좀 걸리네. 우리 집이 그렇게 잘 사는 건 아닌데 기준 넘을까 봐 걱정이다.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 100,
+    "dissatisfaction": 30,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "혼자 나와서 알바하며 자취하고 있는데 월세 부담이 커서 지원이 절실함.",
+    "benefit": "some_help",
+    "intent": "surely",
+    "dissatisfaction": "not_much",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "a930366678d642cd89794a2239c37301",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "아 이거... 조건 맞기가 진짜 힘들다던데. 나야 월세 사니까 당연히 받고 싶긴 한데 부모님 소득까지 다 합쳐서 본다고 하니까 좀 짜증 나네. 독립했으면 끝이지 뭘 자꾸 부모님까지 엮는지 원. 그래도 20만 원이 작은 돈은 아니니까 일단 알아는 보려고.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 75,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "서울에서 혼자 자취하며 월세 내고 있는데, 부모님 소득 조건이 걸려서 대상이 될지 확실하지 않음.",
+    "benefit": "some_help",
+    "intent": "probably",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "84127925a1414b3d953dc525ee2e47df",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "어, 이거 나한테 해당되나? 월 20만 원이면 진짜 큰데. 자취하는 애들한테는 월세가 제일 부담이니까... 근데 소득 기준이 생각보다 까다로울 것 같아서 일단 서류부터 확인해봐야겠네.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 30,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "mostly",
+    "household_note": "혼자 자취하면서 월세 내는 게 매달 큰 부담인데, 지원받으면 생활비에 큰 보탬이 될 것 같습니다.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "not_much",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "d67dfc42d07c41189d3328b9dac3729e",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "20만 원이면 월세 부담 꽤 줄겠는데? 근데 부모님 소득까지 다 본다고 하면 나 같은 사람은 아슬아슬할 것 같아. 조건이 좀 빡빡하네.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "mostly",
+    "household_note": "매달 월세 나가는 게 제일 아까운데 이거라도 받으면 알바 시간 좀 줄일 수 있을 듯.",
+    "benefit": "some_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "6d8a8fdd04e34aefb96be1f2581d8dda",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "요즘 월세 장난 아닌데 20만 원이라도 보태주면 고맙지. 근데 부모님 소득까지 다 따지면 서울에서 자취하는 애들 중에 받을 수 있는 애들이 얼마나 될까 모르겠네. 일단 나는 무조건 신청해볼 거야.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "매달 월세 나가는 게 생활비의 절반이라 지원금이 절실함.",
+    "benefit": "some_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "a436b26fcb24455587621f6263f82dbc",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "야 이거 봤어? 월 20만원 준대. 근데 기준이 좀 까다롭다. 부모님 소득까지 다 본다는데 나 해당되나 모르겠네. 되면 진짜 꿀인데.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "자취방 월세가 장난 아니라서 한 달에 20만 원만 보태줘도 생활비에 큰 도움이 될 것 같아요.",
+    "benefit": "some_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "86acfdcefc8744ec9fddefb57f4c148f",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "와, 진짜? 월 20만 원이면 자취생한테는 큰돈인데. 근데 이거 부모님 소득까지 다 본다고? 아... 나 될지 모르겠네. 기준이 너무 까다로운 거 아냐?",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "지금 혼자 자취하면서 월세 내는 게 제일 부담인데 지원받을 수 있으면 좋겠습니다.",
+    "benefit": "some_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "fc200827d7524330970cef12b19c33cb",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "이거 예전에도 본 것 같은데 기준이 너무 까다로워서 나 같은 사람은 될랑가 모르겠네. 20만 원이면 자취생한테 진짜 큰돈이긴 한데 부모님 소득까지 다 본다니까 좀 짜증도 나고. 일단은 조건 맞는지 좀 찾아봐야 할 듯.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 75,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "서울에서 혼자 월세 내고 살고 있어서 20만 원 지원받으면 생활비에 큰 보탬이 됨.",
+    "benefit": "some_help",
+    "intent": "probably",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "7c04c2c157694de19db4215bb1b31a35",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "아, 이거 나도 되는 건가? 20만 원이면 그래도 숨통 좀 트이겠네. 근데 조건이 너무 까다로운 거 아냐? 부모님 소득까지 다 본다니까 좀 그렇네.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "mostly",
+    "household_note": "혼자 나와 살면서 매달 월세 나가는 게 제일 부담인데, 조금이라도 지원받으면 좋죠.",
+    "benefit": "some_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "40e61b7943ae413b95723d237dbeb28d",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "아니, 20만 원이 작은 돈은 아닌데 부모님 소득까지 다 본다고? 나 혼자 나와서 고생하면서 사는데 부모님 도움 하나도 안 받거든. 기준이 너무 빡빡한 거 같아도 뭐, 주면 넙죽 받아야지.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "mostly",
+    "household_note": "월세 비중이 생활비에서 제일 커서 20만 원만 들어와도 숨통이 좀 트일 것 같아요.",
+    "benefit": "some_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "a3f8d20cbd584c27b99e6250f15b16d8",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "아, 이거 저번에 들었던 거 같은데... 근데 소득 기준이 너무 빡빡한 거 아니야? 부모님 소득까지 다 본다니까 나는 안 될 수도 있겠는데. 20만 원이면 적은 돈은 아니지만 자격 맞추기가 더 힘들 것 같아.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 75,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "현재 자취 중이라 월세 부담이 큰데, 제가 대상이 된다면 매달 나가는 고정 지출을 줄일 수 있을 것 같습니다.",
+    "benefit": "some_help",
+    "intent": "probably",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "aad81ac85ed94226832513545969a56f",
+   "run": 1,
+   "stance": "support",
+   "lean": "support",
+   "text": "월 20만 원이면 자취생한테는 엄청 크지. 근데 부모님 소득까지 다 본다니까 내가 될지 모르겠네. 일단 신청은 무조건 해봐야겠다.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 100,
+    "dissatisfaction": 30,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "혼자 서울 살면서 월세 내는 게 가장 큰 지출이라 20만 원이라도 지원받으면 숨통이 좀 트일 것 같습니다.",
+    "benefit": "some_help",
+    "intent": "surely",
+    "dissatisfaction": "not_much",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "41e0f809f6984ee6a40e18654ea984be",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "아니 20만 원 준다는 건 좋은데, 기준이 너무 까다로운 거 아냐? 부모님 소득까지 다 본다니까 내가 받을 수 있을지 모르겠네. 요새 서울 월세가 얼만데 20만 원 가지고 생색내는 느낌도 좀 있고. 그래도 뭐, 주는 게 어디야.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "혼자 자취하면서 매달 나가는 월세가 제일 부담인데, 지원 대상만 되면 생활비에 큰 보탬이 될 것 같습니다.",
+    "benefit": "some_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "92628b222daa4ee383f49c6a774ddbac",
+   "run": 1,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "20만 원이면 월세 비중 큰데 꽤 도움은 되겠네. 근데 나 혼자 사는데 왜 부모님 소득까지 다 따지는 건지 모르겠다. 조건이 좀 까다로워서 받을 수 있으려나 모르겠어.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 75,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "혼자 자취 중이라 월세가 제일 부담인데, 부모님 소득 조건 때문에 대상이 될지 애매함.",
+    "benefit": "some_help",
+    "intent": "probably",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "3d49b5e5b9664958bca3dd8f5eebcc99",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "아유, 20만 원이면 치킨이 몇 마리야. 근데 이거 나 같은 프리랜서는 소득 기준 맞추기가 은근 까다롭단 말이지. 부모님 소득까지 본다니까 더 복잡하고. 그래도 공짜 돈 준다는데 무조건 신청은 해봐야지.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "혼자 자취하면서 월세 내는 게 제일 큰 지출이라 어떻게든 받고 싶습니다.",
+    "benefit": "some_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "6ba9217998384a8f8b1fac54e907d9cd",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "아니 20만 원이 어디야, 요즘 물가 생각하면 한 푼이 아쉬운데. 근데 부모님 소득까지 다 본다는 건 좀 너무한 거 아닌가? 나 따로 산 지가 언젠데.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "mostly",
+    "household_note": "매달 나가는 월세가 제일 큰 지출인데 20만 원이라도 지원받으면 숨통이 좀 트일 것 같습니다.",
+    "benefit": "some_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "72405b57dbd34325b141f50b432ab696",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "아, 이거 나도 해당되나? 20만 원이면 치킨이 몇 마리야. 근데 소득 기준이 너무 빡센 거 아냐? 나처럼 애매하게 버는 사람은 항상 손해 보는 기분임. 부모님 소득까지 본다니까 더 까다로울 것 같네.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 50,
+    "intent": 75,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "혼자 자취하면서 월세 내는 게 생활비에서 제일 큰데 정작 지원은 못 받을까봐 걱정됨.",
+    "benefit": "no_effect",
+    "intent": "probably",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "9eedde7feb8f4849a5c9fa13a2970a6e",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "어, 이거 나 될 거 같은데? 근데 부모님 소득까지 본다는 게 좀 짜증 나네. 내가 번 돈으로 월세 내는 건데 왜 부모님 것까지 다 떼오래. 그래도 20만 원이면 치킨이 몇 마리야, 일단 신청해 봐야지.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "mostly",
+    "household_note": "혼자 자취하면서 매달 월세 나가는 게 제일 큰 부담인데, 20만 원 지원받으면 숨통이 좀 트일 것 같음.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "e89543a75aef40d28744a681939ea81c",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "오, 이거 나 되는 거 아닌가? 월 20만 원이면 진짜 큰데. 근데 부모님 소득까지 본다니까 좀 까다롭네. 일단 서류부터 확인해봐야겠어.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "혼자 나와서 월세 내고 살고 있어서 나한테 직접적으로 도움이 될 수 있는 정책임.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "f6d719eb00a642c9affdd76e851284a7",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "나도 이거 뉴스에서 봤는데, 생각보다 조건이 까다롭더라고. 부모님 소득까지 다 본다니까 나 같은 직장인은 신청해도 떨어질 것 같아. 주위에서 받는 애들 있으면 부럽긴 하겠네.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 50,
+    "intent": 25,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "not_target",
+    "understanding": "mostly",
+    "household_note": "혼자 나와서 월세 살고는 있는데, 내 월급이랑 부모님 소득 합치면 기준 넘어서 못 받을 것 같아.",
+    "benefit": "no_effect",
+    "intent": "probably_not",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "0eab51c0a392443599c2af8b8c7147f9",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "월 20만 원이면 자취방 월세 보태기에 쏠쏠하긴 하겠네. 근데 나랑 우리 부모님 소득 합쳐서 저 기준에 맞으려나 모르겠다. 은근히 까다로워 보이는데.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 75,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "혼자 나와 살면서 매달 나가는 월세가 제일 큰 부담이라 조금이라도 지원받으면 좋겠습니다.",
+    "benefit": "some_help",
+    "intent": "probably",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "31398b9c870c48958b913fe31621f19c",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "아, 이거 저번에 본 것 같기도 하고. 월 20만 원이면 적은 돈은 아닌데 조건이 좀 까다롭네. 부모님 소득까지 다 본다고 하면 나는 안 될 수도 있겠는데? 자취생들 월세 부담되는 건 사실이니까 해주면 좋긴 하겠지.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 75,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "혼자 나와 살면서 매달 월세 나가는 게 제일 큰 지출이라 지원받을 수만 있다면 무조건 좋죠.",
+    "benefit": "some_help",
+    "intent": "probably",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "72197f63ec80468bb33f34165fe349d3",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "아, 20만 원이면 숨통 좀 트이겠네. 근데 부모님 소득까지 다 본다고? 아르바이트하면서 겨우 사는데 집안 형편까지 따지면 나 같은 사람은 대상에서 빠질 수도 있겠네.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "매달 나가는 월세가 제일 큰 부담인데, 지원받을 수만 있다면 생활에 여유가 좀 생길 것 같다.",
+    "benefit": "some_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "825fe1ad2fb4429a900b27cbab6e16ae",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "아, 이거 나도 해당되나? 월 20만 원이면 자취생한테는 진짜 큰돈이지. 근데 부모님 소득까지 본다고 하니까 좀 복잡하네. 일단 서류 떼봐야 알 것 같아.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 100,
+    "dissatisfaction": 30,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "혼자 나와서 월세 살고 있는데, 지원받으면 한 달 식비 정도는 굳을 것 같아 관심이 갑니다.",
+    "benefit": "some_help",
+    "intent": "surely",
+    "dissatisfaction": "not_much",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "67e25537ca064a3fa889c21ad4c8fd2f",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "월 20만 원이면 자취생들한테는 큰돈이지. 근데 조건 보니까 소득 기준이 꽤 빡빡하네. 나도 해당되나 좀 봐야겠는데, 부모님 소득까지 따지는 건 좀 너무한 거 같기도 하고.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 75,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "혼자 자취하며 월세를 내고 있어서 지원 대상만 된다면 생활비에 꽤 보탬이 될 것 같습니다.",
+    "benefit": "some_help",
+    "intent": "probably",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "a930366678d642cd89794a2239c37301",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "20만 원이면 치킨 몇 번 안 시켜 먹으면 되는 돈 같기도 한데, 그래도 자취생한테는 크지. 근데 부모님 소득까지 다 본다고 하면 나 같은 사람은 아슬아슬하게 잘릴 것 같은데?",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 75,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "혼자 나와 살고 있어서 월세가 매달 나가는데, 내 소득이랑 부모님 소득 합산 기준에 맞을지 모르겠음.",
+    "benefit": "some_help",
+    "intent": "probably",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "84127925a1414b3d953dc525ee2e47df",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "아, 이거 저번에 본 거 같긴 한데... 20만 원이면 치킨 몇 번 안 먹는 수준이지만 그래도 자취생한테는 크긴 하죠. 근데 소득 기준이 너무 빡빡해서 내가 될지 모르겠네. 일단은 긍정적이에요.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "mostly",
+    "household_note": "지금 혼자 월세 살고 있어서 지원만 받으면 매달 나가는 고정비 줄이는 데 꽤 도움 될 것 같아요.",
+    "benefit": "some_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "d67dfc42d07c41189d3328b9dac3729e",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "아, 이거 나도 봤어. 20만 원 준다는 거? 근데 부모님 소득까지 다 본다니까 내가 대상이 될지 모르겠네. 요새 서울 월세가 장난 아니라서 20만 원이라도 주면 무조건 땡큐지.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "target",
+    "understanding": "mostly",
+    "household_note": "지금 혼자 자취하면서 월세를 내고 있어서 지원금 받으면 고정비 아끼는 데 큰 도움이 될 것 같아.",
+    "benefit": "some_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "6d8a8fdd04e34aefb96be1f2581d8dda",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "아, 이거 뉴스에서 봤어. 한 달에 20만 원이면 자취생들한테는 진짜 큰돈이지. 근데 기준이 좀 까다로워 보이더라. 부모님 소득까지 합쳐서 본다니까 나도 될지 모르겠네. 일단 신청이나 해볼까 싶어.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 75,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "매달 나가는 월세가 부담스러운데, 지원받을 수 있다면 생활비에 큰 보탬이 될 것 같습니다.",
+    "benefit": "some_help",
+    "intent": "probably",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "a436b26fcb24455587621f6263f82dbc",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "어, 이거 뉴스에서 봤어. 월 20만 원이면 자취생한테는 진짜 큰 돈이지. 근데 부모님 소득까지 다 본다고 하니까 내가 대상이 될지 모르겠네. 기준이 너무 빡빡한 거 아니야?",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 75,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "현재 월세를 내며 자취 중이라 지원을 받게 되면 생활비에 큰 보탬이 될 것 같습니다.",
+    "benefit": "some_help",
+    "intent": "probably",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "86acfdcefc8744ec9fddefb57f4c148f",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "월 20만 원이면 진짜 큰 건데... 근데 부모님 소득까지 따지는 건 좀 너무하다. 나 혼자 벌어 사는데 왜 부모님 것까지 보냐고. 일단 되는지 확인은 해봐야겠네.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "서울 자취방 월세가 너무 비싸서 생활비가 맨날 모자란데, 지원받으면 좋겠다.",
+    "benefit": "some_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "fc200827d7524330970cef12b19c33cb",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "아, 이거 예전부터 말 나오던 거네. 20만 원이면 크긴 한데 소득 기준이 너무 빡빡해서 나도 될지 모르겠다. 부모님 소득까지 다 본다니 좀 걸리네. 그래도 되면 무조건 신청해야지.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "혼자 나와 살면서 월세 내는 게 제일 큰 부담인데 20만 원이라도 보태주면 큰 힘이 됩니다.",
+    "benefit": "some_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "7c04c2c157694de19db4215bb1b31a35",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "아 이거 나도 해당되나? 근데 소득 기준이 너무 낮은 거 같은데... 60%면 진짜 일하는 사람들은 다 탈락 아니야? 그래도 20만 원이면 한 달 식비는 되니까 일단 확인은 해봐야겠네.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "나도 매달 월세 나가는 자취생인데 소득 기준이 아슬아슬해서 지원받을 수 있을지 모르겠음.",
+    "benefit": "some_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "40e61b7943ae413b95723d237dbeb28d",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "월 20만 원이면 자취생들한테는 꽤 큰 돈이지. 근데 중위소득 60% 면 진짜 박봉이어야 하는 거 아냐? 나 같은 일반 직장인은 해당 안 될 것 같기도 하고... 기준이 너무 빡빡한 거 같네.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 75,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "월세 비중이 생활비에서 제일 큰데, 내가 소득 기준에 아슬아슬하게 걸릴 것 같아 확인이 필요함.",
+    "benefit": "some_help",
+    "intent": "probably",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "a3f8d20cbd584c27b99e6250f15b16d8",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "한 달에 20만 원이면 자취생한테는 진짜 큰돈이긴 한데, 소득 기준이 너무 빡빡한 거 아냐? 나처럼 애매하게 버는 애들은 지원도 못 받고 세금만 내는 기분이라 좀 그렇네.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "서울에서 혼자 월세 내며 살고 있어서 지원 대상만 된다면 매달 나가는 고정 지출을 크게 줄일 수 있음.",
+    "benefit": "some_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "aad81ac85ed94226832513545969a56f",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "와, 한 달에 20만 원이면 진짜 큰데? 내 월세가 50인데 좀 숨통 트이겠네. 근데 우리 부모님 소득까지 본다고? 아, 그게 좀 걸리네. 일단 신청은 해봐야겠다.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "혼자 자취하면서 월세 비중이 너무 커서 생활비가 항상 모자란데 지원받으면 좋겠음.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "41e0f809f6984ee6a40e18654ea984be",
+   "run": 2,
+   "stance": "mixed",
+   "lean": "support",
+   "text": "아, 이거 20만 원 준다는 그거? 근데 소득 기준이 너무 빡빡해서 나도 될지 모르겠네. 부모님 소득까지 본다니까 좀 까다롭긴 하겠다.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 75,
+    "intent": 75,
+    "dissatisfaction": 30,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "혼자 자취하면서 매달 월세 나가는 게 제일 큰 부담이라 지원받을 수만 있으면 좋겠다.",
+    "benefit": "some_help",
+    "intent": "probably",
+    "dissatisfaction": "not_much",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  },
+  {
+   "part": "ablation",
+   "cond": "off",
+   "persona_id": "92628b222daa4ee383f49c6a774ddbac",
+   "run": 2,
+   "stance": "support",
+   "lean": "support",
+   "text": "와, 한 달에 20만 원이면 진짜 큰 건데? 자취하는 애들한테는 월세 비중이 워낙 높으니까 무조건 도움 되지. 근데 부모님 소득까지 본다니까 나는 좀 애매할 수도 있겠다.",
+   "scores": {
+    "understanding": 65,
+    "benefit": 100,
+    "intent": 100,
+    "dissatisfaction": 70,
+    "shareability": 65
+   },
+   "survey": {
+    "eligibility": "partial",
+    "understanding": "mostly",
+    "household_note": "혼자 나와 살면서 매달 나가는 월세가 부담인데, 지원 대상만 되면 생활비에 큰 보탬이 될 것 같습니다.",
+    "benefit": "big_help",
+    "intent": "surely",
+    "dissatisfaction": "somewhat",
+    "shareability": "sometimes"
+   },
+   "ok": true
+  }
+ ]
 }

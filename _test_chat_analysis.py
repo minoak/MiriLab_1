@@ -325,25 +325,22 @@ def test_llm_debate_loading_condition_requires_key_and_context():
         chat.has_real_key = original_key
 
 
-def test_chat_frame_uses_data_url_iframe_for_html_content():
+def test_chat_frame_renders_html_via_components_html():
     calls = []
-    original_iframe = chat.st.iframe
+    original_html = chat.components.html
 
-    def fake_iframe(src, height=None):
-        calls.append({"src": src, "height": height})
+    def fake_html(html, height=None, **kwargs):
+        calls.append({"html": html, "height": height})
 
-    chat.st.iframe = fake_iframe
+    chat.components.html = fake_html
     try:
         _render_chat_frame("<!doctype html><html><body>SNS</body></html>")
     finally:
-        chat.st.iframe = original_iframe
+        chat.components.html = original_html
 
     assert calls
     assert calls[0]["height"] == 730
-    assert calls[0]["src"].startswith("data:text/html;charset=utf-8;base64,")
-    payload = calls[0]["src"].split(",", 1)[1]
-    decoded = base64.b64decode(payload).decode("utf-8")
-    assert "SNS" in decoded
+    assert "SNS" in calls[0]["html"]
 
 
 if __name__ == "__main__":
@@ -356,5 +353,5 @@ if __name__ == "__main__":
     test_openai_analysis_uses_uploaded_policy_document_context()
     test_debate_loading_html_explains_openai_analysis_progress()
     test_llm_debate_loading_condition_requires_key_and_context()
-    test_chat_frame_uses_data_url_iframe_for_html_content()
+    test_chat_frame_renders_html_via_components_html()
     print("ALL PASS")

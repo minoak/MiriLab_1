@@ -1,0 +1,109 @@
+{
+ "model": "gemini-3-flash-preview",
+ "price_per_1m": {
+  "in": 0.5,
+  "out": 3.0
+ },
+ "input_tokens_by_cell": {
+  "ablation_on": {
+   "mean": 2661,
+   "n": 24,
+   "min": 2443,
+   "max": 2868
+  },
+  "ablation_off": {
+   "mean": 1453,
+   "n": 1,
+   "min": 1453,
+   "max": 1453
+  },
+  "ceiling": {
+   "mean": 2479,
+   "n": 24,
+   "min": 2261,
+   "max": 2686
+  },
+  "floor": {
+   "mean": 2476,
+   "n": 24,
+   "min": 2258,
+   "max": 2683
+  }
+ },
+ "input_correction": 1.0237,
+ "output_samples": {
+  "ablation_on": [
+   {
+    "prompt": 2688,
+    "completion": 277,
+    "reasoning": null,
+    "total": 5612
+   },
+   {
+    "prompt": 2793,
+    "completion": 311,
+    "reasoning": null,
+    "total": 3773
+   }
+  ],
+  "ablation_off": [
+   {
+    "prompt": 1454,
+    "completion": 218,
+    "reasoning": null,
+    "total": 3100
+   },
+   {
+    "prompt": 1454,
+    "completion": 348,
+    "reasoning": null,
+    "total": 2484
+   }
+  ],
+  "ceiling": [
+   {
+    "prompt": 2506,
+    "completion": 295,
+    "reasoning": null,
+    "total": 3550
+   },
+   {
+    "prompt": 2611,
+    "completion": 270,
+    "reasoning": null,
+    "total": 3572
+   }
+  ],
+  "floor": [
+   {
+    "prompt": 2503,
+    "completion": 301,
+    "reasoning": null,
+    "total": 3718
+   },
+   {
+    "prompt": 2608,
+    "completion": 374,
+    "reasoning": null,
+    "total": 4214
+   }
+  ]
+ },
+ "plan_calls": {
+  "ablation_on": 72,
+  "ablation_off": 72,
+  "ceiling": 72,
+  "floor": 72
+ },
+ "estimate": {
+  "total_input_tokens": 668434,
+  "total_output_tokens": [
+   86184,
+   410616
+  ],
+  "cost_usd": [
+   0.59,
+   1.57
+  ]
+ }
+}

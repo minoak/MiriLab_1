@@ -11,7 +11,7 @@
     낮은 값=손해 신호인데 색은 '옅은 파랑'으로만 보임 — 양극 색상은 추후 다듬기 거리.
   - **행 클릭 → 그 행 바로 아래에 '한마디'(반응문+행동)가 인라인 토글**(클라이언트 JS,
     rerun 없음). 헤더 클릭 정렬. → st.dataframe 으로는 행 사이 삽입이 불가해
-    `st.iframe` 커스텀 표로 구현(village_map 와 동일 방식).
+    `components.html` 커스텀 표로 구현(village_map 와 동일 방식).
   - stance 분포 바 + 입장 필터(전체/찬성/혼합/반대)는 Streamlit 네이티브 유지.
 
 정보·구조는 그대로 두고 '보여주는 방식'만 카드 그리드 → 스캔형 표로 바꾼 것.
@@ -21,6 +21,7 @@ from html import escape
 
 import pandas as pd
 import streamlit as st
+import streamlit.components.v1 as components
 
 import access_analysis as access
 from viz import gauge, STYLE
@@ -723,9 +724,10 @@ def render_dashboard_tab(view):
     # 히트맵 표 — 행 클릭 인라인 토글 + 헤더 정렬(클라이언트 JS)
     n = len(view_df)
     height = min(540, 64 + n * 46)
-    st.iframe(
+    components.html(
         _build_table_html(view_df, reactions_by_id, wrap_max=height - 12),
         height=height,
+        scrolling=False,
     )
 
     st.caption(

@@ -2,9 +2,12 @@
 """미리랩 발표자료(.pptx) 생성 스크립트.
 
 사용법:  python _make_pptx.py
-출력:    notebooks/미리랩_발표.pptx  (19슬라이드, 발표자 노트 포함)
+출력:    notebooks/미리랩_발표.pptx  (21슬라이드, 발표자 노트 포함)
 
-- 내용 출처: notebooks/발표_구현정리.md + eval/cluster_report.md + eval 시각화 2종
+- 내용 출처: notebooks/발표_구현정리.md + 검증 3축(eval/persona_eval·ablation·robustness)
+  + 행동 벤치마크 v1(eval/behavior_bench_*) — 2026-06-07 검증 세션 반영
+- 임베드 차트: persona_eval_viz / ablation_shift_viz / behavior_bench_viz
+  (뒤 2장은 _make_bench_viz.py 가 eval JSON 에서 생성 — 검증 재실행 시 같이 재실행)
 - 스크린샷 자리는 회색 점선 박스(📸)로 비워둠 — 캡처 후 교체
 - 다시 만들려면 이 스크립트만 재실행 (기존 pptx 덮어씀)
 """
@@ -286,14 +289,14 @@ def s01_title(prs, sprites):
 
 def s02_agenda(prs):
     slide = prs.slides.add_slide(prs.slide_layouts[6])
-    header(slide, 2, "발표 흐름", "오늘 이야기의 순서 — 약 12~15분")
+    header(slide, 2, "발표 흐름", "발표 순서 (약 12~15분)")
     rows = [
         ("01", "문제와 컨셉", "정책은 왜 시민에게 닿지 못하는가 → 미리랩의 답", "약 2분", NAVY),
         ("02", "시스템", "페르소나 파이프라인 + 두 축(시민 반응 / 정책 인생극장)", "약 3분", BLUE),
-        ("03", "시행착오", "왜 이 모양이 되었나 — 막다른 길 3가지", "약 3분", ORANGE),
-        ("04", "신뢰성 검증", "ablation + 집단화·견고성·설득력 (정량)", "약 2.5분", GREEN),
+        ("03", "시행착오", "스코프 조정과 시행착오 3가지", "약 3분", ORANGE),
+        ("04", "신뢰성 검증", "검증 3축(재료·작동·한계) + 사전등록 + 행동 벤치마크", "약 3분", GREEN),
         ("05", "확장 구현", "게시판 RAG + 미리마을 + 60초 라이브 재생 데모", "약 3분", RED),
-        ("06", "한계와 마무리", "팀 규율 → 정직한 한계 → 핵심 메시지 → Q&A", "약 2분", SUB),
+        ("06", "한계와 마무리", "팀 규율 · 한계 · 핵심 메시지 · Q&A", "약 2분", SUB),
     ]
     y = 1.75
     for no, sec, desc, time, color in rows:
@@ -357,7 +360,7 @@ def s03_problem(prs):
 
 def s04_concept(prs):
     slide = prs.slides.add_slide(prs.slide_layouts[6])
-    header(slide, 4, "01 컨셉", "미리랩 — 정책을 시민 입장에서 ‘미리’ 실험한다")
+    header(slide, 4, "01 컨셉", "미리랩 — 정책을 시민 입장에서 미리 실험한다")
     box(slide, 0.6, 1.75, 12.13, 1.05, fill=PALE_NAVY, line=NAVY, lw=1.0)
     tf = tb(slide, 0.95, 1.95, 11.5, 0.7, anchor=MSO_ANCHOR.MIDDLE)
     para(tf, [("“누가 이해 못 하고 · 누가 신청 못 하고 · 어디서 막히는지”",
@@ -396,9 +399,9 @@ def s05_system(prs):
     arrow_text(slide, 7.2, 2.72, 1.2, "↓")
     flow_box(slide, 0.6, 3.12, 6.0, 2.0, "축 A — 시민 반응 (집단의 온도)",
              ["react → interact → aggregate  (LangGraph 3노드)",
-              "시민 전원 5축 점수 (이해 · 수혜 · 의향 · 불만 · 공유)",
+              "시민 전원: 입장 + 익명 설문 (LLM은 선택지만, 숫자 변환은 코드)",
               "게이지 3종 + 시민 반응 히트맵 + 신청 여정 분석",
-              "집계 → 수정안 → 같은 시민으로 A/B 재검증 (개선 폐루프)"],
+              "집계 → 고정 양식 6절 종합 리포트 (두 축 종합 진단, .md)"],
              fill=PALE_GREEN, line_c=GREEN, tcolor=GREEN, tsize=14, bsize=11.5)
     flow_box(slide, 6.93, 3.12, 5.8, 2.0, "축 B — 정책 인생극장 (개인의 궤적)",
              ["전원 시간경과 시뮬 (1 · 3 · 6개월)",
@@ -409,21 +412,24 @@ def s05_system(prs):
     arrow_text(slide, 6.07, 5.14, 1.2, "↓")
     flow_box(slide, 0.6, 5.55, 12.13, 1.15, "Streamlit 7탭 앱  (app.py)",
              ["정책 입력 · 시민 반응 · 정책 인생극장 · SNS 채팅방 · 정책 개선 · 게시판(RAG) · 미리마을",
-              "mock 모드 = API 키 없이 전체 UI 데모 가능 (발표 안전망)"],
+              "데모 = 실제 Gemini 시뮬 녹화 재생 (키·네트워크 0콜) + 합성 mock 폴백 (2중 안전망)"],
              fill=CARD, line_c=NAVY, tsize=13, bsize=11.5)
     note(slide, "전체 구조입니다. 바닥에는 실제 한국 인구통계 기반 페르소나 파이프라인이 "
          "있고, 그 위에 두 축이 섭니다. 축 A '시민 반응'은 집단의 온도 — 시민 전원이 "
-         "정책에 점수와 입장으로 반응하고 게이지·히트맵으로 집계됩니다. 축 B '정책 "
+         "정책에 입장과 익명 설문으로 반응하고 게이지·히트맵으로 집계됩니다. 점수 숫자는 "
+         "LLM이 아니라 코드가 변환합니다('판단은 LLM, 단위는 코드'). 축 B '정책 "
          "인생극장'은 개인의 궤적 — 1·3·6개월 시간 경과 속에서 각자의 인생이 어떻게 "
-         "갈리는지 봅니다. 이 모든 게 Streamlit 7탭 앱으로 통합돼 있고, API 키가 없어도 "
-         "mock 모드로 전체 데모가 돌아갑니다. 발표 중 네트워크가 죽어도 데모는 안 죽습니다.")
+         "갈리는지 봅니다. 마지막엔 두 축을 종합한 고정 양식 리포트가 나옵니다. 이 모든 게 "
+         "Streamlit 7탭 앱으로 통합돼 있고, 데모 모드는 실제 Gemini 시뮬을 미리 녹화해 "
+         "재생하는 방식이라 — 발표 중 네트워크가 죽어도 '진짜 결과'로 시연이 돌아갑니다. "
+         "시민 모델은 사이드바에서 선택 가능(OpenAI/Gemini), 현재 기본은 gemini-3-flash.")
 
 
 def s06_persona(prs):
     slide = prs.slides.add_slide(prs.slide_layouts[6])
-    header(slide, 6, "02 시스템", "페르소나 — “손으로 만들지 않는다”")
+    header(slide, 6, "02 시스템", "페르소나 — 손으로 만들지 않고 통계에서 뽑는다")
     tf = tb(slide, 0.6, 1.75, 5.9, 4.6)
-    para(tf, "원칙: 그럴듯한 가짜 대신, 실제 통계", size=16, bold=True,
+    para(tf, "원칙: 그럴듯한 가짜 대신 실제 통계", size=16, bold=True,
          color=NAVY, first=True, after=8)
     bullets(tf, [
         ([("nvidia/Nemotron-Personas-Korea", {"bold": True, "color": BLUE}),
@@ -437,7 +443,7 @@ def s06_persona(prs):
     para(tf, "왜 중요한가", size=15, bold=True, color=NAVY, after=6)
     para(tf, "개요 초안은 “페르소나 20~30명 직접 설계”였다. 손으로 만들면 "
          "우리가 보고 싶은 반응을 심게 된다. 실제 분포에서 샘플링하면 "
-         "‘시드 안에 이미 사각지대 인물이 들어 있다.’",
+         "사각지대 인물이 처음부터 표본 안에 들어 있다.",
          size=13, color=INK, after=0, lh=1.3)
     # 우측: 결정론 신호 표
     bx, by, bw = 6.85, 1.75, 5.88
@@ -448,29 +454,34 @@ def s06_persona(prs):
     rows = [
         ("digital_literacy", "나이 기본점수 × 학력 배율 × 직업 가감 (65세↑ 급락)"),
         ("income_level", "직업 키워드 우선 (무직·학생→low, 전문직→high) + 학력 보정"),
-        ("government_trust", "uuid 해시 지터 0.5±0.1 — 같은 사람은 항상 같은 값"),
+        ("government_trust", "자리표시자(노이즈) — 프롬프트엔 미주입, 접근도 가중 한 곳만"),
         ("social_network", "가구·직업 기반 태그 (독거→복지관·경로당, 자녀→가족 단톡방)"),
     ]
     for name, desc in rows:
         para(tf2, [(name, {"bold": True, "color": BLUE, "size": 12.5})], after=1)
         para(tf2, desc, size=11.5, color=INK, after=7, lh=1.15)
-    para(tf2, "같은 입력 → 항상 같은 출력. “판단은 LLM, 사실은 코드” 철학의 시작.",
-         size=11.5, bold=True, color=SUB, after=0)
-    note(slide, "페르소나는 손으로 만들지 않았습니다. NVIDIA가 통계청 등 실제 통계로 "
-         "합성한 100만 행 데이터셋에서 seed 고정으로 샘플링합니다. 손으로 만들면 보고 "
-         "싶은 반응을 심게 되니까요. 실제 분포에서 뽑으면 사각지대 인물이 '이미 시드 안에' "
-         "들어 있습니다. 데이터셋에 없는 디지털 문해력·소득 같은 신호는 LLM이 아니라 "
-         "순수 파이썬 규칙으로 유도해서, 같은 입력이면 항상 같은 값이 나옵니다 — "
+    para(tf2, [("검증 ① 통과 — ", {"bold": True, "color": GREEN, "size": 11.5}),
+               ("표본 24명, 나이·성별·지역·학력 등 7개 변수 전부 무작위 추출 "
+                "기대범위 안 (부트스트랩 1만회)", {"size": 11.5, "color": INK})],
+         after=0, lh=1.2)
+    note(slide, "페르소나는 손으로 만들지 않았습니다. NVIDIA가 통계청·대법원·건보공단 등 "
+         "실제 통계로 합성한 100만 행 데이터셋에서 seed 고정으로 샘플링합니다. 손으로 "
+         "만들면 보고 싶은 반응을 심게 되니까요. 실제 분포에서 뽑으면 사각지대 인물이 "
+         "'이미 시드 안에' 들어 있습니다. 데이터셋 자체의 현실 정합은 제작사(NVIDIA)가 "
+         "카드에 검증·문서화했고(고령층 성비 1.52배, 최다 성씨 김 21.5% 등), 저희는 "
+         "'거기서 쏠림 없이 뽑았는가'를 부트스트랩 1만회로 검증해 7개 변수 전부 "
+         "통과했습니다(검증 ①, 뒤 04장). 데이터에 없는 신호는 순수 파이썬 규칙으로 "
+         "유도하고, 정부 신뢰처럼 정보가 없는 값은 자리표시자임을 정직하게 표기합니다. "
          "재현성이 발표 안정성이기도 합니다.")
 
 
 def s07_axis_a(prs):
     slide = prs.slides.add_slide(prs.slide_layouts[6])
-    header(slide, 7, "02 시스템", "축 A — 시민 반응: 집단의 온도를 잰다")
+    header(slide, 7, "02 시스템", "축 A — 시민 반응: 집단의 온도")
     # 좌측 플로우 + 설명
     fx, fw = 0.6, 5.6
     flow_box(slide, fx, 1.8, fw, 0.92, "① react — 1차 반응",
-             "시민 각자: 입장(찬/반/혼합) + 5축 점수 (이해·수혜·의향·불만·공유, 0~100)",
+             "시민 각자: 반응문 + 입장(찬/반/혼합) + 익명 설문 — LLM은 선택지 토큰만, 0~100 변환은 코드",
              fill=PALE_GREEN, line_c=GREEN, tcolor=GREEN, tsize=12.5, bsize=10.5)
     arrow_text(slide, fx + fw / 2 - 0.6, 2.74, 1.2, "↓", size=14)
     flow_box(slide, fx, 3.08, fw, 0.83, "② interact — 2차 상호작용",
@@ -478,7 +489,7 @@ def s07_axis_a(prs):
              fill=PALE_GREEN, line_c=GREEN, tcolor=GREEN, tsize=12.5, bsize=10.5)
     arrow_text(slide, fx + fw / 2 - 0.6, 3.93, 1.2, "↓", size=14)
     flow_box(slide, fx, 4.27, fw, 0.92, "③ aggregate — 집계·제안",
-             "갈등/합의 요약 + 수정안(개선 반영 정책) 생성",
+             "갈등/합의 요약 + 개선 제안 (실제 시민 반응에서만 — 종합 리포트 재료)",
              fill=PALE_GREEN, line_c=GREEN, tcolor=GREEN, tsize=12.5, bsize=10.5)
     tf = tb(slide, fx, 5.4, fw, 1.55)
     para(tf, "화면 산출", size=13, bold=True, color=NAVY, first=True, after=4)
@@ -486,18 +497,22 @@ def s07_axis_a(prs):
         ("게이지 3종 — 정책수용도 · 신청의향지수 · 사회혼란도(=불만 평균)", {}),
         ("시민 전원 × 점수 히트맵 (행 클릭 → 그 시민의 ‘한마디’)", {}),
         ("신청 여정 분석 — 퍼널 · 연령대 접근성 · 병목 TOP3", {}),
-        ("정책 개선 탭 — 수정안을 같은 시민 코호트로 A/B 재검증", {}),
+        ("정책 개선 탭 — 고정 양식 6절 종합 리포트 (.md 다운로드, LLM 1콜)", {}),
     ], size=11, after=2.5, first_done=True)
     # 우측 스크린샷
     shot(slide, 6.5, 1.8, 6.23, 5.0, "‘시민 반응’ 탭 캡처",
          "게이지 3종 + 히트맵이 같이 보이는 화면 추천")
     note(slide, "축 A는 LangGraph 3노드 파이프라인입니다. 시민 각자가 정책에 1차 "
          "반응하고(react), 다른 시민의 반응을 본 뒤 입장을 바꾸기도 하고(interact), "
-         "마지막에 분석가 노드가 집계해서 수정안까지 제안합니다(aggregate). 화면에는 "
-         "게이지 3종과 시민 전원의 히트맵이 뜨고, 행을 클릭하면 그 시민의 생생한 "
-         "한마디가 보입니다. 그리고 여기서 끝나지 않고 — 진단된 병목으로 수정안을 만들어 "
-         "'같은 시민'에게 다시 실험하는 A/B 폐루프까지 닫혀 있습니다. 진단→수정→재실험, "
-         "그래서 '실험실'입니다. (캡처는 데모 시뮬 돌린 직후 시민 반응 탭 화면을 권장) "
+         "마지막에 분석가 노드가 집계합니다(aggregate). 점수는 LLM이 0~100을 직접 "
+         "매기지 않습니다 — 익명 설문의 선택지만 고르고, 숫자 변환은 코드가 합니다. "
+         "(구버전 '마음을 숫자로 옮기기'는 기분이 전 점수에 번지는 정서 후광을 만들어 "
+         "폐기 — 비대상 노인이 청년 정책에 수혜 70을 주던 버그가 설문 전환으로 해소.) "
+         "화면에는 게이지 3종과 시민 전원의 히트맵이 뜨고, 행을 클릭하면 그 시민의 "
+         "생생한 한마디가 보입니다. 마지막 산출은 고정 양식 6절 종합 리포트 — 숫자와 "
+         "인용은 결정론 코드가 채우고 LLM은 산문 4칸만 씁니다. (초기엔 수정안을 같은 "
+         "시민으로 재실험하는 A/B 폐루프였으나, LLM 비결정성 탓에 델타가 노이즈와 구분 "
+         "안 돼 리포트로 교체 — 시행착오의 일부입니다.) "
          "[Q&A 대비 — 사회혼란도 정의: 3번의 재정의 끝에 '반발 강도 = 불만 점수 평균'으로 "
          "확정. v1 양극화는 '전쟁=전원 반대'에서 혼란도가 낮게 나와 폐기(이름≠측정), "
          "v2 사각지대(benefit−intent)는 데모에서 0이라 폐기. 찬반 갈림은 stance 분포 바가, "
@@ -506,7 +521,7 @@ def s07_axis_a(prs):
 
 def s08_axis_b(prs):
     slide = prs.slides.add_slide(prs.slide_layouts[6])
-    header(slide, 8, "02 시스템", "축 B — 정책 인생극장: 개인의 궤적을 따라간다")
+    header(slide, 8, "02 시스템", "축 B — 정책 인생극장: 개인의 궤적")
     fx, fw = 0.6, 5.6
     flow_box(slide, fx, 1.8, fw, 0.86, "① 전원 시간경과 시뮬 (1 · 3 · 6개월)",
              "시점마다: 장소 + 경로 + 행동 서사 + 상태 + 막힌 지점",
@@ -524,7 +539,7 @@ def s08_axis_b(prs):
                {"bold": True, "color": NAVY, "size": 13})], first=True, after=4)
     para(tf, "복지로(온라인) · 주민센터 · 복지관 · 직장/시장 · 집", size=12,
          color=INK, after=3)
-    para(tf, "청년은 복지로에서 5분 — 고령은 어디에도 못 닿아 ‘집’에 갇힌다.",
+    para(tf, "청년은 복지로에서 5분, 고령은 어느 채널에도 닿지 못한다.",
          size=12, bold=True, color=RED, after=0)
     shot(slide, 6.5, 1.8, 6.23, 5.0, "‘정책 인생극장’ 탭 캡처",
          "대조 3명 카드 + 여정 띠(알게됨→신청→막힘)가 보이는 화면 추천")
@@ -538,7 +553,7 @@ def s08_axis_b(prs):
 
 def s09_scope(prs):
     slide = prs.slides.add_slide(prs.slide_layouts[6])
-    header(slide, 9, "03 시행착오", "스코프의 진화 — 무엇을, 왜 덜어냈나",
+    header(slide, 9, "03 시행착오", "스코프 조정 — 무엇을 왜 덜어냈나",
            accent=ORANGE)
     flow_box(slide, 0.6, 1.75, 12.13, 0.78, "출발 — 8기능 비전",
              "RAG · 시민 Agent · SNS 채팅 · 감성 대시보드 · 전파 그래프 · 게시판 자동답변 · A/B 테스트 · 쉬운 글 변환",
@@ -546,13 +561,13 @@ def s09_scope(prs):
     arrow_text(slide, 6.07, 2.55, 1.2, "↓", size=14)
     steps = [
         ("① 전파 그래프 폐기", "통계에서 무작위 샘플링한 페르소나는 서로 모르는 독립 "
-         "개인 — 그 사이에 ‘전파 엣지’를 그리는 건 근거 없는 연출이다.",
+         "개인이라, 그 사이에 전파 엣지를 그릴 근거가 없다.",
          RED, PALE_RED),
         ("② 24명 마을 → 대조 3명", "24명 × 여러 시점은 해커톤에 무겁고 “24명이 "
-         "대표성 있냐”는 공격에 약하다. 수혜/경계/사각 3명이면 갈림이 한 화면에.",
+         "대표성 있냐”는 공격에 약하다. 수혜/경계/사각 3명이면 갈림이 한 화면에 들어온다.",
          ORANGE, PALE_ORANGE),
         ("③ “예측”이라 부르지 않는다", "맞히는 도구라고 주장하는 순간 검증 "
-         "공격을 받는다. ‘영향 시나리오’로 포지셔닝하고, 신뢰성은 ablation으로 "
+         "공격을 받는다. 영향 시나리오로 포지셔닝하고, 신뢰성은 별도 검증(04장)으로 "
          "방어한다.", BLUE, PALE_NAVY),
     ]
     x = 0.6
@@ -565,7 +580,7 @@ def s09_scope(prs):
     box(slide, 0.6, 5.7, 12.13, 0.95, fill=PALE_GREEN, line=GREEN, lw=1.0)
     tf = tb(slide, 0.95, 5.85, 11.5, 0.7, anchor=MSO_ANCHOR.MIDDLE)
     para(tf, [("좁힌 것은 버린 게 아니라 확장 경로 — ", {"bold": True, "color": GREEN}),
-              ("전파는 ‘미리마을’로, RAG는 ‘게시판’으로 결국 돌아왔다 (05장)",
+              ("전파는 미리마을로, RAG는 게시판으로 결국 돌아왔다 (05장)",
                {"color": INK})], size=14, first=True, after=0, align=PP_ALIGN.CENTER)
     note(slide, "여기부터가 저희 발표의 진짜 내용입니다. 미리랩은 한 번에 설계되지 "
          "않았고, 세 번 크게 방향을 틀었습니다. 전파 그래프는 '서로 모르는 통계 샘플에 "
@@ -577,7 +592,7 @@ def s09_scope(prs):
 
 def s10_two_judges(prs):
     slide = prs.slides.add_slide(prs.slide_layouts[6])
-    header(slide, 10, "03 시행착오", "시행착오 ① — ‘두 심판 문제’: 예측을 버리고 결과로",
+    header(slide, 10, "03 시행착오", "시행착오 ① — 두 심판 문제",
            accent=ORANGE)
     tf = tb(slide, 0.6, 1.8, 12.13, 1.5)
     para(tf, [("증상  ", {"bold": True, "color": RED, "size": 14}),
@@ -588,8 +603,8 @@ def s10_two_judges(prs):
               ("전", {"bold": True, "size": 14}),
               (" 점수 매트릭스가, 이야기는 시뮬 ", {"size": 14}),
               ("후", {"bold": True, "size": 14}),
-              (" LLM이 정한다. 두 심판은 당연히 어긋난다.", {"size": 14})], after=6)
-    para(tf, [("통찰  ", {"bold": True, "color": BLUE, "size": 14}),
+              (" LLM이 정한다. 두 심판은 서로 어긋난다.", {"size": 14})], after=6)
+    para(tf, [("결론  ", {"bold": True, "color": BLUE, "size": 14}),
               ("수혜/경계/사각은 점수가 아니라 ", {"size": 14}),
               ("결과(받음 / 막힘 / 못 닿음)", {"bold": True, "color": BLUE, "size": 14}),
               ("다.", {"size": 14})], after=0)
@@ -599,7 +614,7 @@ def s10_two_judges(prs):
     para(tf1, "Before — 수치 예측 선별", size=14.5, bold=True, color=RED,
          first=True, after=6)
     bullets(tf1, [
-        ("시뮬 전에 점수 매트릭스로 3명을 ‘점친다’", {"bullet_color": RED}),
+        ("시뮬 전에 점수 매트릭스로 3명을 미리 고른다", {"bullet_color": RED}),
         ("라벨 따로, 서사 따로 → 구조적으로 어긋남", {"bullet_color": RED}),
         ("반응 점수로 뽑아도 같은 함정 — 임수빈은 자기 수혜성을 18점으로 "
          "매기지만 실제론 요건에 막힌 사각지대", {"bullet_color": RED}),
@@ -609,10 +624,10 @@ def s10_two_judges(prs):
     para(tf2, "After — 결과 기반 선별", size=14.5, bold=True, color=GREEN,
          first=True, after=6)
     bullets(tf2, [
-        ([("전원을 먼저 ‘살게’ 한 뒤", {"bold": True}),
+        ([("전원을 먼저 살게 한 뒤", {"bold": True}),
           (", 실제 궤적의 결과에서 3명을 고른다", {})], {"bullet_color": GREEN}),
         ("라벨과 이야기가 같은 궤적에서 나옴 → 어긋날 수 없음", {"bullet_color": GREEN}),
-        ("심판은 하나. 전원 시뮬 비용도 확인 결과 OK", {"bullet_color": GREEN}),
+        ("심판이 하나로 통일됨. 전원 시뮬 비용도 확인 결과 문제없음", {"bullet_color": GREEN}),
     ], size=12, after=5, first_done=True)
     note(slide, "첫 번째 시행착오, 저희가 '두 심판 문제'라고 부르는 버그입니다. 처음엔 "
          "시뮬레이션 전에 점수로 세 명을 '예측'해서 뽑았는데, 경계로 뽑힌 사람의 "
@@ -643,19 +658,24 @@ def s11_billion(prs):
         y += 0.78
     box(slide, 0.6, 5.0, 12.13, 1.7, fill=PALE_ORANGE, line=ORANGE, lw=1.0)
     tf = tb(slide, 0.95, 5.2, 11.5, 1.35)
-    para(tf, [("정직한 노트 — 과교정", {"bold": True, "color": ORANGE, "size": 14.5})],
-         first=True, after=5)
-    para(tf, "현실성 원칙을 넣자 정상 정책(청년 월세)의 혼란도까지 다소 올랐다. "
-         "모든 정책에 기본 우려가 깔리는 ‘과교정’ 신호.", size=13, after=3, lh=1.25)
-    para(tf, [("→ ‘우려를 정책이 무리한 정도에 비례시키는’ 미세 튜닝은 ", {"size": 13}),
-              ("남은 과제로 기록", {"bold": True, "size": 13}),
-              (" — 시행착오를 숨기지 않는다.", {"size": 13, "color": SUB})], after=0)
-    note(slide, "두 번째 시행착오. 일부러 극단 정책 '전 국민 10억 지급'을 넣어봤더니 "
-         "전원 찬성이 나왔습니다. 시민들이 실현 가능성이나 부작용은 안 보고 '내가 "
-         "받느냐'만 따지는 계산기였던 거죠. 프롬프트 최상단에 '현실적으로 판단하라'는 "
-         "원칙을 넣었더니 10억 지급은 전원 반대로 바뀌었습니다. 다만 정직하게 — "
-         "정상 정책의 혼란도까지 살짝 올라가는 과교정이 생겼고, 이 미세 튜닝은 남은 "
-         "과제로 기록해 뒀습니다. 저희는 시행착오를 숨기지 않고 그대로 보여드립니다.")
+    para(tf, [("그 후 — 이 처방은 결국 철거됐다", {"bold": True, "color": ORANGE,
+                                                "size": 14.5})], first=True, after=5)
+    para(tf, "‘현실적으로 판단하라’를 넣자 정상 정책의 혼란도까지 오르는 과교정 발생 → "
+         "프롬프트 전면 재설계(판단 지시 0줄, 무대만 제공)로 지시 자체를 철거.",
+         size=13, after=3, lh=1.25)
+    para(tf, [("답은 지시가 아니라 측정(설문 전환·자가판정)과 모델 선택(Gemini)이었다. ",
+               {"size": 13}),
+              ("교훈: 프롬프트로 조향하지 마라.", {"bold": True, "size": 13}),
+              ("  분포는 데이터와 측정으로 푼다.", {"size": 13, "color": SUB})], after=0)
+    note(slide, "두 번째 시행착오 — 이건 두 막짜리입니다. 1막: 극단 정책 '전 국민 10억 "
+         "지급'에 전원 찬성이 나왔습니다. 시민들이 '내가 받느냐'만 따지는 계산기였던 "
+         "거죠. 프롬프트에 '현실적으로 판단하라'를 넣자 전원 반대로 바뀌어 해결된 듯 "
+         "보였습니다. 2막: 그 처방이 정상 정책의 혼란도까지 끌어올리는 과교정을 만들었고, "
+         "결국 프롬프트를 전면 재설계하면서 판단 지시를 전부 철거했습니다 — 프롬프트는 "
+         "무대만 제공하고, 판단은 페르소나 데이터에서 나오게. 진짜 답은 지시가 아니라 "
+         "측정 방식(점수를 익명 설문로)과 모델 선택(Gemini 전환)이었습니다. '프롬프트로 "
+         "조향하지 마라'가 이 시행착오의 최종 교훈이고, 이 원칙 위에서 다음 장의 검증이 "
+         "돌아갑니다.")
 
 
 def s12_guards(prs):
@@ -671,12 +691,12 @@ def s12_guards(prs):
         ("상태 비퇴행 가드", [
             "버그: ‘신청 → 모름’으로 궤적이 퇴행 (서류에 막혀 포기한 걸 LLM이 ‘몰랐다’로 오기)",
             "가드: 상태는 되돌아가지 않는다 — applied→unaware면 ‘막힘’으로 자동 교정",
-            "결과: 조유정이 “자격은 되는데 서류에 막힘” 최고의 사각 사례가 됨"],
+            "결과: 조유정이 ‘자격은 되는데 서류에 막힘’ 사각 사례로 바르게 남음"],
          GREEN, PALE_GREEN),
         ("태그 대상 게이트", [
             "버그: 46세 박성인이 ‘청년’ 정책의 사각지대로 오라벨",
             "가드: 대상 여부 = 태그(나이·소득·가구)로 판정하는 ‘사실’, 결과 = LLM 궤적 — 둘을 분리",
-            "결과: 비대상자는 ‘무관’으로 정직하게 분류"],
+            "결과: 비대상자는 ‘무관’으로 분류"],
          ORANGE, PALE_ORANGE),
         ("전파 게이트", [
             "무대: 잠시 후 소개할 ‘미리마을’ — 정책 소식이 사람을 타고 퍼지는 시뮬",
@@ -703,85 +723,134 @@ def s12_guards(prs):
          "관통합니다.")
 
 
-def s13_ablation(prs):
+def s13_validation(prs):
     slide = prs.slides.add_slide(prs.slide_layouts[6])
-    header(slide, 13, "04 검증", "신뢰성 ① — ablation: 반응은 페르소나에서 나오는가",
+    header(slide, 13, "04 검증", "검증 — 세 가지 질문: 재료 · 작동 · 한계",
            accent=GREEN)
-    tf = tb(slide, 0.6, 1.7, 6.3, 2.4)
-    para(tf, [("방법 (Park et al. 스타일 컴포넌트 ablation)",
-               {"bold": True, "color": NAVY, "size": 14})], first=True, after=5)
-    para(tf, [("grounding ON", {"bold": True, "color": GREEN, "size": 12.5}),
-              (" = 페르소나(나이·소득·디지털·신뢰) 주입   vs   ", {"size": 12.5}),
-              ("OFF", {"bold": True, "color": RED, "size": 12.5}),
-              (" = 익명 시민", {"size": 12.5})], after=8)
-    bullets(tf, [
-        ([("인물 간 점수 표준편차 21 → 9로 붕괴", {"bold": True}),
-          ("  (OFF면 시민들이 비슷하게 뭉개짐)", {"color": SUB})], {}),
-        ([("collapse score +0.25~0.29", {"bold": True}),
-          ("  — 반복 실행마다 일관되게 양수", {"color": SUB})], {}),
-        ([("수렴 타당도: digital_literacy ↔ 이해도  r = 0.6~0.8", {"bold": True}),
-          ("  (OFF면 r은 0 부근)", {"color": SUB})], {}),
-    ], size=12.5, after=6, first_done=True)
-    # 우측 정성 사례
-    box(slide, 7.1, 1.7, 5.63, 2.4, fill=CARD, line=LINE)
-    tf2 = tb(slide, 7.35, 1.88, 5.15, 2.1)
-    para(tf2, "숫자를 사람 말로 — 신선옥 (60세, 무직)", size=13, bold=True,
-         color=NAVY, first=True, after=6)
-    para(tf2, [("ON   ", {"bold": True, "color": GREEN, "size": 12.5}),
-               ("“나에게는 해당이 없다” — 반대 · 수혜 0", {"size": 12.5})], after=4)
-    para(tf2, [("OFF  ", {"bold": True, "color": RED, "size": 12.5}),
-               ("“좋은 정책이다” — 찬성 · 수혜 90", {"size": 12.5})], after=8)
-    para(tf2, "페르소나를 빼는 순간, 60세 무직 시민이 청년 정책의 수혜자가 "
-         "‘된다’. grounding이 차이를 만든다.", size=11.5, color=SUB,
-         after=0, lh=1.25)
-    img_fit(slide, ROOT / "eval" / "ablation_viz.png", 0.6, 4.25, 12.13, 2.7)
-    note(slide, "이제 '이걸 믿을 수 있나'에 답합니다. 미리랩은 예측 정확도를 주장하지 "
-         "않는 대신, Generative Agents 논문과 같은 방식의 컴포넌트 ablation으로 "
-         "방어합니다. 페르소나 주입을 켠 것과 끈 것을 비교하면 — 인물 간 점수 표준편차가 "
-         "21에서 9로 붕괴하고, 디지털 문해력과 이해도 점수의 상관이 0.6~0.8에서 0으로 떨어집니다. "
-         "오른쪽 사례가 직관적입니다: 같은 60세 무직 시민이 페르소나를 빼는 순간 청년 "
-         "정책에 '수혜 90점'을 줍니다. 반응이 페르소나에서 나온다는 증거입니다.")
-
-
-def s14_cluster(prs):
-    slide = prs.slides.add_slide(prs.slide_layouts[6])
-    header(slide, 14, "04 검증", "신뢰성 ② — 720회 반복: 집단화 · 견고성 · 설득력",
-           accent=GREEN)
-    tf = tb(slide, 0.6, 1.7, 5.7, 5.0)
-    para(tf, [("방법  ", {"bold": True, "color": NAVY, "size": 13.5}),
-              ("페르소나 24명 × 30회 반복 = 720회 반응 + LLM-judge 채점",
-               {"size": 13})], first=True, after=2)
-    para(tf, "비용 약 $0.3 — 검증을 ‘반복 가능한 일상’으로 만드는 가격",
-         size=11, color=SUB, after=9)
+    box(slide, 0.6, 1.7, 12.13, 0.8, fill=PALE_NAVY, line=NAVY, lw=1.0)
+    tf = tb(slide, 0.95, 1.84, 11.5, 0.55, anchor=MSO_ANCHOR.MIDDLE)
+    para(tf, [("‘미래를 맞혔나’는 검증하지 않는다 — ", {"size": 14}),
+              ("기준을 실행 전에 등록하고(사전등록), 결과가 나빠도 점수를 고치지 않는다",
+               {"bold": True, "color": NAVY, "size": 14})], first=True, after=0,
+         align=PP_ALIGN.CENTER)
     rows = [
-        ("집단화", "연령이 반응을 가른다 — eta² 수혜 0.81 · 의향 0.77 (이해도는 0.36 — "
-         "이해는 비슷해도 ‘내 혜택이냐’는 세대로 갈림)", BLUE),
-        ("완전 분리", "청년(대상)은 찬성 207·반대 0 — 노인은 찬성 0·반대 214", NAVY),
-        ("견고성", "같은 시민을 30회 돌려도 입장 안정성 82% (무작위면 약 33%) — "
-         "집단 구도는 우연이 아니다", GREEN),
-        ("설득력", "LLM-judge 평균 68점 — 각 집단이 자기 처지에 맞는 논리를 편다 "
-         "(“66세 간호사 입장에서 보자면…”)", ORANGE),
+        ("① 재료", "시민 24명이 한국 인구를 닮았나?", "분포 7/7 통과 — 무작위 추출 "
+         "기대범위 안 (부트스트랩 1만회, LLM 0콜)", GREEN, PALE_GREEN),
+        ("② 작동", "결과 차이를 만드는 게 페르소나인가?", "사전등록 점수 0/4 — 원자료 "
+         "분석에서 원인 확인 (다음 장)", ORANGE, PALE_ORANGE),
+        ("③ 한계", "이상한 정책에도 상식을 지키나?", "행동 벤치마크 7/7 통과 — 가상 정책 "
+         "5종에서 상식 방향으로 갈라짐 (다다음 장)", GREEN, PALE_GREEN),
     ]
-    for tag, body, c in rows:
-        para(tf, [(tag, {"bold": True, "color": c, "size": 13}),
-                  ("   " + body, {"size": 11.8})], after=9, lh=1.25)
-    para(tf, [("정직한 노트  ", {"bold": True, "color": SUB, "size": 12}),
-              ("LLM은 비결정적이라 절대값은 출렁인다(eta² 0.94→0.81 등). "
-               "그러나 방향은 항상 일관 — eta²>0.7, collapse>0.", {"size": 11.5, "color": SUB})],
-         after=0, lh=1.25)
-    img_fit(slide, ROOT / "eval" / "cluster_viz.png", 6.55, 1.65, 6.2, 5.1)
-    note(slide, "두 번째 검증은 '한 번의 우연이 아니냐'에 대한 답입니다. 24명을 30회씩, "
-         "총 720회 반응을 모았습니다. 연령이 수혜·의향 점수를 가르는 정도(eta 제곱)가 "
-         "0.8 수준 — 반응이 무작위 잡음이 아니라 인구통계 집단으로 구조화된다는 뜻입니다. "
-         "입장은 완전 분리됐고(청년 반대 0, 노인 찬성 0), 같은 시민을 반복해도 입장이 "
-         "82% 유지됩니다. 무작위면 33%죠. 그리고 정직하게: LLM이라 절대값은 매번 "
-         "출렁이지만, 방향은 항상 일관됩니다. 절대값이 아니라 구조를 믿어 달라는 게 "
-         "저희 주장입니다.")
+    x = 0.6
+    for tag, q, res, c, pale in rows:
+        box(slide, x, 2.7, 3.93, 1.5, fill=pale, line=c, lw=1.0)
+        tf = tb(slide, x + 0.2, 2.84, 3.55, 1.25)
+        para(tf, [(tag + "  ", {"bold": True, "color": c, "size": 13.5}),
+                  (q, {"size": 11.5, "color": INK})], first=True, after=4, lh=1.2)
+        para(tf, res, size=11, color=INK, after=0, lh=1.22)
+        x += 4.1
+    img_fit(slide, ROOT / "eval" / "persona_eval_viz.png", 0.6, 4.3, 12.13, 2.65)
+    note(slide, "이제 '이걸 믿을 수 있나'에 답합니다. 미리랩은 예측 정확도를 주장하지 "
+         "않는 대신 세 가지를 검증합니다 — 재료(시민이 인구를 닮았나), 작동(차이를 "
+         "만드는 게 페르소나인가), 한계(이상한 입력에 상식을 지키나). 방법론의 핵심은 "
+         "사전등록: 판정 기준을 실행 전에 문서로 박고, 결과가 나빠도 점수를 고치지 "
+         "않습니다. 아래 그림이 ① 재료 검증 — 전체 100만 명 분포(회색)와 우리 24명"
+         "(파랑)을 변수별로 비교해, '무작위로 24명을 뽑아도 생기는 어긋남'의 정상 범위 "
+         "안인지 부트스트랩 1만 번으로 판정했습니다. 7개 변수 전부 통과. 데이터셋 "
+         "자체의 현실 정합은 NVIDIA가 카드에 검증·문서화한 것을 인용합니다. "
+         "(참고: 구척도 시절 720회 반복 검증(집단화 eta² 0.8, 입장 안정성 82%)도 "
+         "있었으나 설문 전환 이전 자료라 본 검증 세트에서는 역사 기록으로만 남김.)")
+
+
+def s14_prereg(prs):
+    slide = prs.slides.add_slide(prs.slide_layouts[6])
+    header(slide, 14, "04 검증", "검증 ② — 사전등록 0/4, 원인은 채점 기준이었다",
+           accent=GREEN)
+    tf = tb(slide, 0.6, 1.7, 5.85, 2.55)
+    para(tf, [("실험  ", {"bold": True, "color": NAVY, "size": 13}),
+              ("같은 청년월세 정책을 인물 카드 ON / OFF(익명)로 — "
+               "카드가 있을 때만 답이 자기 처지를 따라가야 함", {"size": 12.5})],
+         first=True, after=6, lh=1.25)
+    para(tf, [("결과  ", {"bold": True, "color": RED, "size": 13}),
+              ("사전등록 점수 0/4 탈락 — 그대로 기록", {"size": 12.5, "bold": True})],
+         after=6)
+    para(tf, [("분석  ", {"bold": True, "color": BLUE, "size": 13}),
+              ("우리 채점 기준(나이·소득)이 ‘대상’이라 한 10명 전원이 자기를 비대상으로 "
+               "정확 판정 — 원문의 숨은 요건(별도거주·무주택·소득기준)까지 읽었다. "
+               "실제 청년월세도 신청자 2/3가 요건 탈락.", {"size": 12.5})],
+         after=0, lh=1.28)
+    # 우측 시민 인용
+    box(slide, 6.7, 1.7, 6.03, 2.55, fill=CARD, line=LINE)
+    tf2 = tb(slide, 6.95, 1.86, 5.55, 2.25)
+    para(tf2, "시민들이 직접 말한 탈락 사유", size=13, bold=True, color=NAVY,
+         first=True, after=6)
+    para(tf2, [("천명준(19)  ", {"bold": True, "color": BLUE, "size": 11.5}),
+               ("“부모님이랑 따로 살아야 주는 거잖아요. 저는 해당이 안 될 텐데…”",
+                {"size": 11.5})], after=5, lh=1.2)
+    para(tf2, [("심석현(26)  ", {"bold": True, "color": BLUE, "size": 11.5}),
+               ("“기사 끝에 보니까 주택 소유자는 제외라고 딱 적혀 있어요.”",
+                {"size": 11.5})], after=5, lh=1.2)
+    para(tf2, [("조유정(31)  ", {"bold": True, "color": BLUE, "size": 11.5}),
+               ("“중위소득 60%면 생각보다 낮거든요. 저는 기준에서 걸려요.”",
+                {"size": 11.5})], after=0, lh=1.2)
+    img_fit(slide, ROOT / "eval" / "ablation_shift_viz.png", 0.6, 4.35, 12.13, 2.6)
+    note(slide, "검증 ②의 이야기는 저희 발표에서 가장 정직한 대목입니다. 기준을 먼저 "
+         "등록하고 돌렸더니 0대 4로 떨어졌습니다 — 그리고 점수는 그대로 둔 채 원자료를 "
+         "부검했더니, 떨어진 이유가 반전이었습니다. 우리 채점 기준은 나이와 소득만 보고 "
+         "젊은 10명을 '대상자'라 표시했는데, 시뮬 속 시민들은 정책 원문의 별도거주·"
+         "무주택·소득 요건까지 읽고 전원이 '나는 해당 안 됨'을 정확히 판정한 겁니다. "
+         "실제 청년월세도 신청자 3명 중 2명이 요건에서 탈락했으니, 시뮬이 현실을 맞게 "
+         "재현했고 채점표가 그걸 몰랐던 거죠. 아래 그림이 진짜 증거입니다 — 익명이면 "
+         "'나도 도움되겠지'로 낙관하던 응답(회색)이, 인물 카드가 들어가는 순간 자기 "
+         "처지(영향 없음 99%)로 수렴합니다. 페르소나가 차이를 만든다는 건 분산이 아니라 "
+         "이 '평균 이동'으로 증명됐습니다. 사전등록 원칙대로 점수는 0/4 그대로 두고, "
+         "채점 도구 재설계는 다음 사이클로 남겼습니다 — 기준이 틀렸다고 기준을 몰래 "
+         "고치면 검증이 아니니까요.")
+
+
+def s14b_bench(prs):
+    slide = prs.slides.add_slide(prs.slide_layouts[6])
+    header(slide, 15, "04 검증", "검증 ③ — 행동 벤치마크: 가상 정책 5종, 7/7 통과",
+           accent=GREEN)
+    tf = tb(slide, 0.6, 1.66, 5.85, 2.6)
+    para(tf, [("가상 정책 5종 (일부러 부조리하게)  ", {"bold": True, "color": NAVY,
+                                                  "size": 13})], first=True, after=4)
+    bullets(tf, [
+        ("주 3.5일 근무제 — 직업 축 / 반려묘 전 국민 보급 — 순효용 축", {}),
+        ("경로 무임승차 폐지 — 세대 축 / 남 +10만·여 −10만 — 성별 축", {}),
+        ("고소득자 의무 기부 — 소득 축 (시민이 자기 형편을 자가판정)", {}),
+    ], size=11.8, after=4, first_done=True)
+    para(tf, [("사전등록 체크 7/7 통과", {"bold": True, "color": GREEN, "size": 14}),
+              ("  — 갈등이 매번 상식적인 집단 축으로 갈라짐", {"size": 12})],
+         after=6)
+    para(tf, [("사례 ①  ", {"bold": True, "color": ORANGE, "size": 12.5}),
+              ("반려묘 유일 찬성자 = 페르소나에 ‘펫푸드 창업 꿈’이 있는 신민재 — "
+               "입장이 인구통계가 아니라 서사와 정렬", {"size": 12})], after=4, lh=1.25)
+    para(tf, [("사례 ②  ", {"bold": True, "color": ORANGE, "size": 12.5}),
+              ("남성에게 돈을 주는 정책에 남성 23%가 반대 — “내가 받고 아내가 내면 "
+               "우리 집은 0원” (가구 단위 공정성)", {"size": 12})], after=0, lh=1.25)
+    img_fit(slide, ROOT / "eval" / "behavior_bench_viz.png", 6.6, 1.75, 6.13, 4.0)
+    box(slide, 6.6, 5.9, 6.13, 0.85, fill=PALE_GREEN, line=GREEN, lw=1.0)
+    tf3 = tb(slide, 6.8, 6.0, 5.75, 0.65, anchor=MSO_ANCHOR.MIDDLE)
+    para(tf3, "이 5종은 데모 녹화본 — 발표 자리에서 키·네트워크 없이 그대로 재생 시연 가능",
+         size=11.5, bold=True, color=GREEN, first=True, after=0,
+         align=PP_ALIGN.CENTER)
+    note(slide, "검증 ③은 행동 벤치마크 — 일부러 만든 가상 정책 5종(일부는 농담조)을 "
+         "넣고 사회가 상식 방향으로 갈라지는지 보는 고정 시험지입니다. 기대 방향은 "
+         "실행 전에 등록했고, 7개 체크 전부 통과했습니다. 무임승차 폐지엔 60세 이상이 "
+         "반대 57%로 갈라지고(미만은 6%), 여성에게서 걷어 남성에게 주는 부조리 정책엔 "
+         "여성 전원이 반대합니다. 백미 두 개 — 전 국민 반려묘 보급의 유일한 찬성자는 "
+         "페르소나 서사에 펫푸드 창업 꿈이 있는 시민이었고, 남성에게 돈을 주는 정책에 "
+         "남성의 23%가 '우리 집 전체로는 0원'이라며 반대했습니다. 입장이 인구통계를 "
+         "넘어 서사·가구 단위 사고와 정렬된다는 증거입니다. 그리고 이 벤치마크는 "
+         "일회용이 아니라 — 모델이나 프롬프트를 바꿀 때마다 다시 돌려 '여전히 사람답게 "
+         "구는가'를 확인하는 회귀 테스트로 씁니다. 5종 전부 데모 녹화본이라 지금 이 "
+         "자리에서 키 없이 재생 시연도 가능합니다.")
 
 
 def s15_board(prs):
     slide = prs.slides.add_slide(prs.slide_layouts[6])
-    header(slide, 15, "05 확장", "게시판 RAG — 좁힌 확장 경로가 팀의 손으로 돌아오다",
+    header(slide, 16, "05 확장", "게시판 RAG — 문서 근거로 답하는 정책 문의 게시판",
            accent=RED)
     tf = tb(slide, 0.6, 1.8, 5.7, 4.9)
     para(tf, "정책 문의 게시판 + 문서 근거 답변", size=15.5, bold=True,
@@ -796,11 +865,11 @@ def s15_board(prs):
     para(tf, "", size=4, after=2)
     box(slide, 0.6, 4.7, 5.7, 1.95, fill=PALE_GREEN, line=GREEN, lw=1.0)
     tf2 = tb(slide, 0.85, 4.88, 5.2, 1.6)
-    para(tf2, "협업 방식이 곧 설계였다", size=13.5, bold=True, color=GREEN,
+    para(tf2, "협업 방식 — 자리만 비워두고 끼워 넣기", size=13.5, bold=True, color=GREEN,
          first=True, after=5)
-    para(tf2, "본체에 ‘자리(시임)와 반환 계약’만 미리 설계해 두고, 팀원이 "
-         "독립 패키지로 RAG 엔진을 구현 → 마지막에 끼워 넣음. 모듈 경계를 지킨 "
-         "덕에 본체는 한 줄도 안 깨졌다.", size=11.8, color=INK, after=0, lh=1.3)
+    para(tf2, "본체에는 끼울 자리와 반환 계약만 미리 설계해 두고, 팀원이 "
+         "독립 패키지로 RAG 엔진을 구현해 마지막에 끼워 넣었다. 모듈 경계를 "
+         "지킨 덕에 본체는 한 줄도 깨지지 않았다.", size=11.8, color=INK, after=0, lh=1.3)
     shot(slide, 6.6, 1.8, 6.13, 4.85, "‘게시판’ 탭 캡처",
          "질문 → 답변 + 📎근거 + 품질지표 표가 보이는 화면 추천")
     note(slide, "확장 파트 첫 번째, 게시판 RAG입니다. 2일차에 'MVP에서 제외'로 좁혔던 "
@@ -813,7 +882,7 @@ def s15_board(prs):
 
 def s16_village1(prs, sprites):
     slide = prs.slides.add_slide(prs.slide_layouts[6])
-    header(slide, 16, "05 확장", "미리마을 — 시민이 ‘살아가는’ 마을 (Generative Agents)",
+    header(slide, 17, "05 확장", "미리마을 — 시민이 살아가는 마을 (Generative Agents)",
            accent=RED)
     tf = tb(slide, 0.6, 1.75, 6.1, 3.1)
     para(tf, [("Park et al. (2023) ", {"bold": True, "color": BLUE}),
@@ -824,14 +893,14 @@ def s16_village1(prs, sprites):
           (" — 무작위 통계 샘플엔 ‘관계’가 없다. 전파 무대엔 서로 아는 마을이 필요 "
            "(축 A·B와 목적이 다른 의도된 선택)", {})], {}),
         ("LLM이 각자의 하루 일과(시간 → 장소 → 행동)를 생성", {}),
-        ([("“녹화 후 재생” — 하루를 미리 생성, 브라우저는 LLM 0콜로 재생",
+        ([("녹화 후 재생 — 하루를 미리 생성, 브라우저는 LLM 0콜로 재생",
            {"bold": True}), ("  (즉시·반복·오프라인 = 발표 안전망)", {"color": SUB})], {}),
         ("도로 waypoint 652개 → 그래프 + BFS 길찾기로 실제 ‘도보’ 이동", {}),
         ("마주치면 — 그날 동선·관계가 묻어나는 맥락 대화", {}),
     ], size=12, after=5.5, first_done=True)
     box(slide, 0.6, 4.95, 6.1, 1.7, fill=PALE_ORANGE, line=ORANGE, lw=1.0)
     tf2 = tb(slide, 0.85, 5.1, 5.6, 1.45)
-    para(tf2, "시행착오 — “스케줄은 순간이동, 재생은 도보”", size=13,
+    para(tf2, "시행착오 — 스케줄은 순간이동, 재생은 도보", size=13,
          bold=True, color=ORANGE, first=True, after=4)
     para(tf2, "LLM이 짠 스케줄은 이동시간 0을 가정 → 막상 재생하니 만남 14개 중 "
          "7개가 ‘도착 전에 끝남’. 실제 걸어서 도착하는 시간을 시뮬해 만남을 "
@@ -859,7 +928,7 @@ def s16_village1(prs, sprites):
 
 def s17_village2(prs):
     slide = prs.slides.add_slide(prs.slide_layouts[6])
-    header(slide, 17, "05 확장", "미리마을 × 정책 — 소식은 누구에게, 어떤 경로로 닿는가",
+    header(slide, 18, "05 확장", "미리마을 × 정책 — 소식은 누구에게, 어떤 경로로 닿는가",
            accent=RED)
     box(slide, 0.6, 1.75, 12.13, 0.8, fill=PALE_NAVY, line=NAVY, lw=1.0)
     tf = tb(slide, 0.95, 1.88, 11.5, 0.58, anchor=MSO_ANCHOR.MIDDLE)
@@ -899,7 +968,7 @@ def s17_village2(prs):
     ], size=12, after=5, first_done=True)
     box(slide, 6.83, 4.55, 5.9, 2.1, fill=PALE_GREEN, line=GREEN, lw=1.0)
     tf3 = tb(slide, 7.08, 4.72, 5.4, 1.8)
-    para(tf3, "폐기했던 ‘전파’가 정당하게 부활", size=13.5, bold=True,
+    para(tf3, "폐기했던 전파 기능의 부활", size=13.5, bold=True,
          color=GREEN, first=True, after=6)
     para(tf3, "축 A의 전파 그래프는 ‘서로 모르는 통계 샘플’이라 버렸다(03장). "
          "미리마을은 서로 아는 고정 캐스트 — 여기서의 전파는 연출이 아니라 "
@@ -922,7 +991,7 @@ def s17_village2(prs):
 
 def s18_discipline(prs):
     slide = prs.slides.add_slide(prs.slide_layouts[6])
-    header(slide, 18, "06 마무리", "4일 · 4명 — 서로를 깨지 않기 위한 규율",
+    header(slide, 19, "06 마무리", "4일 · 4명 — 협업 규율 6가지",
            accent=SUB)
     cards = [
         ("state.py = 팀 계약", "공유 스키마는 기존 필드 변경 금지, 추가만(additive). "
@@ -957,19 +1026,19 @@ def s18_discipline(prs):
 
 def s19_limits(prs):
     slide = prs.slides.add_slide(prs.slide_layouts[6])
-    header(slide, 19, "06 마무리", "한계 — 검증 공격을 받기 전에, 우리가 먼저 말한다",
+    header(slide, 20, "06 마무리", "한계 — 먼저 말해두는 다섯 가지",
            accent=SUB)
     items = [
         ("미래를 맞히는 도구가 아니다", "일관되게 ‘영향 시나리오’로 포지셔닝. "
-         "신뢰성은 예측 정확도가 아니라 ablation·집단화·견고성으로 방어한다."),
-        ("소득 판정은 근사다", "직업→소득 버킷은 휴리스틱. 나이는 하드 체크지만 "
-         "소득은 그만큼 확실하지 않다."),
-        ("현실성 프롬프트의 과교정", "정상 정책의 혼란도도 다소 올라간다 — "
-         "미세 튜닝은 남은 과제."),
-        ("표본이 작다", "시민 8~24명. 통계적 일반화가 아니라 ‘구조가 나타나는지’의 "
-         "시연이다. 3명 대조는 의도된 좁힘 — 위에 전체 분포 헤드라인으로 보완."),
-        ("LLM-judge의 순환", "LLM이 LLM을 채점하는 한계 — 절대 점수보다 집단 간 "
-         "비교와 대표 예시로 해석한다."),
+         "신뢰성은 예측 정확도가 아니라 검증 3축(재료·작동·한계)과 사전등록으로 방어한다."),
+        ("소득 판정은 근사다", "직업→소득 버킷은 휴리스틱. 그래서 검증 ⑤(의무 기부)는 "
+         "시민의 자가판정을 썼다 — 코드보다 시민이 자기 형편을 더 잘 안다."),
+        ("‘실현 기대’ 측정축이 없다", "“안 믿지만 받으면 좋지”가 수혜·의향 점수에 "
+         "섞인다 — 설문에 실현 기대 문항 추가가 다음 후보."),
+        ("표본이 작다", "시민 24명 — 비율 최소 단위 4.2%p. 통계적 일반화가 아니라 "
+         "‘구조가 나타나는지’의 시연. 벤치마크는 1회 실행(폭 우선)."),
+        ("이념·가치 축이 없다", "과거 정책 갭 측정(시뮬 vs 당시 여론조사)에서 찬성률 "
+         "MAE 27.4%p — 주범은 반대 진영 소실. 처방은 프롬프트가 아니라 데이터 강화."),
     ]
     y = 1.8
     for title, body in items:
@@ -981,10 +1050,14 @@ def s19_limits(prs):
         y += 0.97
     note(slide, "마무리 전에 한계를 저희 입으로 먼저 말씀드립니다. 미리랩은 미래를 "
          "맞히는 도구가 아니고, 그렇게 주장하지도 않습니다. 소득 판정은 휴리스틱 "
-         "근사이고, 현실성 프롬프트엔 과교정이 남아 있고, 표본은 작습니다. LLM이 "
-         "LLM을 채점하는 순환 한계도 있고요. 저희가 보여드린 건 '정확한 예측'이 "
-         "아니라 — 페르소나에 근거하고, 반복해도 재현되고, 집단으로 구조화되는 "
-         "'영향 시나리오'입니다. 이 정직한 선 긋기가 저희 설계의 일부입니다.")
+         "근사이고, '안 믿지만 받으면 좋지'를 분리할 실현 기대 측정축이 아직 없고, "
+         "표본은 작습니다. 그리고 가장 큰 공백을 정직하게 — 과거 정책 4건을 당시 "
+         "여론조사와 직접 맞대본 갭 측정에서 찬성률 평균 오차가 27.4%p였고, 주범은 "
+         "이념·가치 축 부재로 인한 '반대 진영 소실'이었습니다. 이건 프롬프트 수정이 "
+         "아니라 페르소나 데이터 강화로 풀 문제로 진단해 뒀습니다. 저희가 보여드린 건 "
+         "'정확한 예측'이 아니라 — 페르소나에 근거하고, 상식 방향으로 구조화되고, "
+         "기준을 먼저 등록하고 재는 '영향 시나리오'입니다. 이 정직한 선 긋기가 저희 "
+         "설계의 일부입니다.")
 
 
 def s19_closing(prs, sprites):
@@ -1001,10 +1074,10 @@ def s19_closing(prs, sprites):
     # 다음 단계
     nx = 0.7
     nexts = [
-        ("실데이터 대조", "실제 신청률·인지율 통계와 방향 대조 — 1순위"),
-        ("페르소나 RAG", "정책 태그를 검색 키로 · 스키마 확보"),
-        ("미리마을 확장", "누적 기억(B단계) · 적응 스케줄"),
-        ("튜닝 고도화", "현실성 과교정 보정 · 게이지 정밀화"),
+        ("이념·가치 축", "갭 27.4%p의 주범 ‘반대 진영 소실’ — 데이터 강화로 해소"),
+        ("실현 기대 문항", "“안 믿지만 받으면 좋지”를 분리하는 설문 축 추가"),
+        ("갭 리베이스라인", "Gemini 기준 재측정 — 개선 폭을 같은 자로 추적"),
+        ("미리마을 확장", "누적 기억(B단계) · 적응 스케줄 · 페르소나 RAG"),
     ]
     for title, body in nexts:
         box(slide, nx, 3.75, 2.88, 1.35, fill=PALE_NAVY, line=NAVY, lw=0.75)
@@ -1026,18 +1099,21 @@ def s19_closing(prs, sprites):
     para(t2, "감사합니다 — Q&A", size=22, bold=True, color=NAVY,
          align=PP_ALIGN.CENTER, first=True, after=4)
     para(t2, "데이터 nvidia/Nemotron-Personas-Korea (CC BY 4.0) · LangGraph · "
-         "Streamlit · gpt-4o-mini · Generative Agents (Park et al., 2023)",
+         "Streamlit · gemini-3-flash / gpt-4o-mini · Generative Agents (Park et al., 2023)",
          size=10, color=SUB, align=PP_ALIGN.CENTER, after=0)
     note(slide, "정리하면 — 미리랩은 실제 인구통계 기반 가상 시민에게 정책을 먼저 "
          "물어봐서, '같은 정책, 다른 인생'의 갈림을 배포 전에 보여주는 실험실입니다. "
-         "다음 단계의 1순위는 실데이터 대조 — 실제 청년월세 신청률·인지율 통계와 "
-         "시뮬 방향을 맞대보는 외적 타당도 확보입니다. 이어서 페르소나 RAG, 미리마을 "
-         "누적 기억, 프롬프트 튜닝이 준비돼 있습니다. 들어주셔서 감사합니다. "
-         "(Q&A 예상 질문: ①'실제 사람 반응과 맞는지 확인했나' → 정직하게: 아직 내적 "
-         "검증(ablation·집단화·견고성)까지이고, 실통계와의 방향 대조가 다음 1순위라고 "
+         "다음 단계의 1순위는 이념·가치 축 — 과거 정책 갭 측정에서 확인된 '반대 진영 "
+         "소실'(찬성률 MAE 27.4%p)을 페르소나 데이터 강화로 푸는 일입니다. 이어서 "
+         "실현 기대 문항, Gemini 기준 갭 리베이스라인, 미리마을 확장이 준비돼 있습니다. "
+         "들어주셔서 감사합니다. "
+         "(Q&A 예상 질문: ①'실제 사람 반응과 맞는지 확인했나' → 정직하게: 과거 정책 "
+         "4건을 당시 여론조사와 직접 맞대봤고 평균 오차 27.4%p, 주범(이념축 부재)과 "
+         "처방(데이터 강화)까지 진단해 둔 상태라고 "
          "답변. Park et al.도 human eval과 비교했음을 인지하고 있다고 덧붙이면 강함 "
-         "②비용은 → 시뮬 1회 약 1.3센트, 720회 검증도 약 $0.3 ③실제 입안자가 어떻게 "
-         "쓰나 → 4장 컨셉의 사각지대 발견 + 7장 A/B 폐루프로 답변)")
+         "②비용은 → 시뮬 1회 1~2센트, 검증·벤치마크 전체 세트도 몇 달러 수준 "
+         "③실제 입안자가 어떻게 쓰나 → 4장 컨셉의 사각지대 발견 + 정책 개선 탭의 "
+         "종합 리포트(.md)로 답변)")
 
 
 # ---------------------------------------------------------------- 메인
@@ -1059,8 +1135,9 @@ def main():
     s10_two_judges(prs)
     s11_billion(prs)
     s12_guards(prs)
-    s13_ablation(prs)
-    s14_cluster(prs)
+    s13_validation(prs)
+    s14_prereg(prs)
+    s14b_bench(prs)
     s15_board(prs)
     s16_village1(prs, sprites)
     s17_village2(prs)

@@ -12,6 +12,12 @@ env/
 # Jupyter (outputs/checkpoints cause merge conflicts)
 .ipynb_checkpoints/
 notebooks/*.ipynb
+# 단, 검증·벤치 보고서 노트북은 팀 공유 산출물 — 추적한다
+!notebooks/검증보고서_3축.ipynb
+!notebooks/행동벤치_v1.ipynb
+
+# dev 스크래치 (스크린샷 도구·로그)
+_ui_shots/
 
 # Chroma vector DB (large, built locally per machine)
 db/

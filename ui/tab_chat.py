@@ -7,7 +7,6 @@ view['interactions']를 round별 대화 타임라인으로 바꾼 뒤, 참고용
 """
 from __future__ import annotations
 
-import base64
 import hashlib
 import html as html_lib
 import json
@@ -15,6 +14,7 @@ from typing import Literal
 
 from pydantic import BaseModel, Field
 import streamlit as st
+import streamlit.components.v1 as components
 
 from graph.llm import has_real_key, structured_call
 
@@ -3216,9 +3216,8 @@ def _render_chat_html(
 
 
 def _render_chat_frame(html: str) -> None:
-    """독립 HTML을 iframe srcdoc으로 렌더한다."""
-    payload = base64.b64encode(str(html or "").encode("utf-8")).decode("ascii")
-    st.iframe(f"data:text/html;charset=utf-8;base64,{payload}", height=730)
+    """독립 HTML을 iframe srcdoc으로 렌더한다 (components.html = srcdoc iframe)."""
+    components.html(str(html or ""), height=730)
 
 
 def _default_focus_id(view):

@@ -14,7 +14,7 @@
   +전파+일기) 를 importlib 로 로드해 호출한다.
 
 이 탭은 그 standalone `index.html` 을 **외부 의존 0 의 자기완결 HTML** 로 조립해
-`st.iframe` 단일 iframe 으로 임베드한다. 조립 = index.html 이 부르는 외부
+`components.html` 단일 iframe 으로 임베드한다. 조립 = index.html 이 부르는 외부
 자산을 전부 인라인:
   - `<script src="data/*.js">` 3개  → 파일 내용을 인라인 `<script>` 로 치환
   - `<img src="assets/map.png">`     → base64 data URI
@@ -23,7 +23,7 @@
 (index.html 폰트는 system-ui, 외부 CSS/CDN/폰트 링크 없음 — grep 확인.)
 
 [임베드]
-- standalone `index.html` 을 외부 의존 0 의 자기완결 HTML 로 조립 → `st.iframe`.
+- standalone `index.html` 을 외부 의존 0 의 자기완결 HTML 로 조립 → `components.html`.
   데이터 JS 3개 인라인 + map/스프라이트 base64. 인라인 데이터의 '<','>' 는 유니코드
   이스케이프해 인라인 <script> 가 조기 종료/주석 파싱으로 깨지지 않게 한다(중요:
   LLM 대사가 meetings.js 로 들어오므로).
@@ -39,6 +39,7 @@ import sys
 from pathlib import Path
 
 import streamlit as st
+import streamlit.components.v1 as components
 
 from ui.rerun_util import rerun_fragment
 
@@ -436,4 +437,4 @@ def render_minivillage_tab(view=None) -> None:
         return
     # height 는 1086px 지도 + 우측 패널을 넉넉히 담도록 잡되, 내부 영역이 자체
     # 스크롤되므로 화면에 맞춰 조절 가능(육안 확인 후 튜닝).
-    st.iframe(html, height=900)
+    components.html(html, height=900, scrolling=True)
