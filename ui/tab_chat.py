@@ -10,6 +10,7 @@ from __future__ import annotations
 import hashlib
 import html as html_lib
 import json
+import re
 from typing import Literal
 
 from pydantic import BaseModel, Field
@@ -130,6 +131,14 @@ _DOMAIN_TOPIC = {
         "deadline": ("모집 공고 기간", "모집 공고 일정과 다음 모집 알림 신청을 제공", "모집 기간을 놓치면 정책 효과가 있어도 참여할 수 없습니다."),
         "general": ("중도 중지 조건", "근로 중단·소득 초과 시 지원 중지 조건을 먼저 안내", "중도 중지 조건이 늦게 보이면 신청자가 위험을 과소평가할 수 있습니다."),
     },
+    "labor": {
+        "amount": ("임금·근로시간", "근로시간 단축 범위와 임금 보전 수준을 직군별 예시로 안내", "휴무 확대 효과는 보이지만 임금 감소와 실제 업무량 변화가 함께 보이지 않으면 체감 판단이 어렵습니다."),
+        "eligibility": ("적용 대상·예외 업종", "임금근로자, 자영업자, 프리랜서, 교대제, 필수 업종의 적용 여부를 표로 구분", "근무 형태와 업종별 예외가 흐리면 누가 실제로 주 3.5일을 적용받는지 판단하기 어렵습니다."),
+        "documents": ("근태·급여 처리", "근태 기록, 급여 산정, 교대표 변경에 필요한 처리 절차를 사업장용 체크리스트로 제공", "근태와 급여 처리 방식이 모호하면 현장 관리자와 노동자 모두 실행 부담을 크게 느낄 수 있습니다."),
+        "access": ("현장 적용 절차", "사업장 규모별 적용 절차와 노무 상담 창구를 함께 안내", "정책 취지는 보여도 회사가 무엇부터 바꿔야 하는지 보이지 않으면 실제 도입이 늦어질 수 있습니다."),
+        "deadline": ("시행 시점·단계 적용", "공포 후 1년, 사업장 규모별 단계 적용 일정을 달력형으로 공개", "전체 시행 방향은 보이지만 내 사업장이 언제 바뀌는지 모르면 불확실성이 남습니다."),
+        "general": ("근무제 설계", "휴무 확대, 임금 보전, 업무량 조정, 필수업종 예외를 한 화면에서 비교", "쉬는 날만 강조되고 임금·업무량·예외 업종이 뒤로 밀리면 기대와 불안이 동시에 커집니다."),
+    },
 }
 
 
@@ -204,6 +213,131 @@ def _policy_context_text(view) -> str:
     return _clip_chars("\n\n".join(parts), 14000)
 
 
+_POLICY_TOPIC_TERMS = {
+    "amount": (
+        "지원 내용",
+        "내용",
+        "금액",
+        "지원",
+        "지급",
+        "월",
+        "만 원",
+        "만원",
+        "바우처",
+        "적립",
+        "임금",
+        "근로일",
+        "근로시간",
+        "시간",
+        "사료비",
+        "기여금",
+        "기부",
+    ),
+    "eligibility": (
+        "신청 대상",
+        "적용 대상",
+        "대상",
+        "자격",
+        "요건",
+        "연령",
+        "소득",
+        "무주택",
+        "임금근로자",
+        "희망자",
+        "이상",
+        "이하",
+    ),
+    "documents": (
+        "서류",
+        "제출",
+        "증빙",
+        "확인서",
+        "동의",
+        "카드",
+        "교통카드",
+        "자료",
+    ),
+    "access": (
+        "신청 방법",
+        "신청",
+        "복지로",
+        "누리집",
+        "행정복지센터",
+        "주민센터",
+        "방문",
+        "전화",
+        "적용",
+        "국세청",
+    ),
+    "deadline": (
+        "신청 기간",
+        "기간",
+        "시행",
+        "공포",
+        "내년",
+        "상시",
+        "모집",
+        "마감",
+        "부터",
+    ),
+    "general": (
+        "유의 사항",
+        "제외",
+        "예외",
+        "별도",
+        "환수",
+        "금지",
+        "의무",
+        "이의신청",
+    ),
+}
+
+
+def _policy_fact_lines(view) -> list[str]:
+    """SNS 문장 생성에 쓸 정책 원문/첨부 문서의 실제 문장 조각."""
+    context = _policy_context_text(view)
+    lines: list[str] = []
+    for raw_line in re.split(r"[\n\r]+", context):
+        clean = re.sub(r"^[\s\-•*]+", "", str(raw_line or "").strip())
+        if not clean or clean.startswith("[미리랩") or clean.startswith("[첨부") or clean.startswith("[게시판"):
+            continue
+        parts = re.split(r"(?<=[.!?。])\s+|(?<=다\.)\s*", clean)
+        for part in parts:
+            part = part.strip()
+            if len(part) < 8:
+                continue
+            if part not in lines:
+                lines.append(part)
+    return lines[:40]
+
+
+def _policy_grounded_detail(view, topic: str) -> str:
+    """하드코딩 문장보다 현재 정책 원문 안의 문장을 우선 사용한다."""
+    lines = _policy_fact_lines(view)
+    if not lines:
+        return ""
+    terms = _POLICY_TOPIC_TERMS.get(topic) or _POLICY_TOPIC_TERMS["general"]
+    general_terms = _POLICY_TOPIC_TERMS["general"]
+    scored = []
+    for index, line in enumerate(lines):
+        score = sum(4 for term in terms if term and term in line)
+        if topic != "general":
+            score += sum(1 for term in general_terms if term and term in line)
+        if topic == "deadline" and any(term in line for term in ("시행", "기간", "상시", "공포")):
+            score += 3
+        if topic == "eligibility" and any(term in line for term in ("대상", "요건", "이상", "이하")):
+            score += 3
+        if topic == "amount" and any(term in line for term in ("내용", "지원", "임금", "지급")):
+            score += 3
+        if score:
+            scored.append((score, -index, line))
+    if not scored:
+        line = lines[0]
+    else:
+        line = max(scored, key=lambda item: item[:2])[2]
+    return f"원문 기준으로는 '{_clip_chars(line, 110)}' 이 부분을 먼저 봐야 해요"
+
+
 def _debate_context_text(view, messages: list[dict]) -> str:
     personas = _build_persona_index(view)
     lines = []
@@ -216,7 +350,14 @@ def _debate_context_text(view, messages: list[dict]) -> str:
         text = str(msg.get("text") or "").strip()
         if not text or _is_failed_interaction_text(text):
             continue
-        lines.append(f"{idx}. [{stage}] {name} / {_STANCE_LABEL.get(stance, stance)}: {text}")
+        before, after = _message_stance_change(view, msg)
+        shift_text = ""
+        if before and after:
+            shift_text = (
+                f" / 입장 변화: "
+                f"{_STANCE_LABEL.get(before, before)}→{_STANCE_LABEL.get(after, after)}"
+            )
+        lines.append(f"{idx}. [{stage}] {name} / {_STANCE_LABEL.get(stance, stance)}{shift_text}: {text}")
     return _clip_chars("\n".join(lines), 10000)
 
 
@@ -228,16 +369,73 @@ def _policy_domain(view_or_policy) -> str:
         text = f"{hint} {text}"
     else:
         text = str(view_or_policy or "")
-    if any(k in text for k in ("월세", "임대료", "무주택", "임차", "주택")):
-        return "housing"
-    if any(k in text for k in ("디지털", "스마트폰", "키오스크", "교육", "기기", "복지관")):
-        return "digital"
-    if any(k in text for k in ("출산", "출생", "아동", "보호자", "바우처", "국민행복카드", "행복출산")):
-        return "birth"
-    if any(k in text for k in ("긴급", "위기", "생계", "의료비", "휴폐업", "환수", "129")):
-        return "emergency"
-    if any(k in text for k in ("저축", "계좌", "자산", "근로", "적립", "만기")):
-        return "asset"
+    domain_terms = {
+        "housing": {
+            "월세": 5,
+            "임대료": 5,
+            "무주택": 5,
+            "임차": 4,
+            "임대차": 4,
+            "주거비": 3,
+            "주택": 1,
+        },
+        "digital": {
+            "디지털": 5,
+            "스마트폰": 4,
+            "키오스크": 4,
+            "디지털 기기": 5,
+            "기기 사용": 3,
+            "복지관": 2,
+            "교육": 1,
+        },
+        "birth": {
+            "출산": 5,
+            "출생": 5,
+            "첫만남": 5,
+            "국민행복카드": 5,
+            "행복출산": 5,
+            "아동": 4,
+            "보호자": 3,
+            "바우처": 1,
+        },
+        "emergency": {
+            "긴급": 5,
+            "위기": 5,
+            "생계비": 4,
+            "의료비": 4,
+            "휴폐업": 4,
+            "129": 3,
+            "환수": 1,
+        },
+        "labor": {
+            "근무제": 5,
+            "근로일": 5,
+            "근로시간": 4,
+            "주 28시간": 5,
+            "주 3.5일": 5,
+            "수요일 오후": 3,
+            "휴무": 3,
+            "임금": 2,
+            "사업장": 2,
+            "단축": 1,
+        },
+        "asset": {
+            "청년 자산형성": 6,
+            "내일저축": 6,
+            "저축": 5,
+            "계좌": 4,
+            "적립": 4,
+            "만기": 3,
+            "목돈": 3,
+        },
+    }
+    scores = {
+        domain: sum(weight for word, weight in terms.items() if word in text)
+        for domain, terms in domain_terms.items()
+    }
+    best_domain, best_score = max(scores.items(), key=lambda item: item[1])
+    if best_score >= 4:
+        return best_domain
     return "general"
 
 
@@ -275,6 +473,7 @@ def _preferred_topics_for_policy(view) -> list[str]:
         "birth": ["amount", "access", "deadline", "eligibility", "documents"],
         "emergency": ["eligibility", "documents", "access", "general", "deadline"],
         "asset": ["amount", "eligibility", "documents", "deadline", "access"],
+        "labor": ["amount", "eligibility", "deadline", "access", "documents"],
     }.get(domain, ["eligibility", "amount", "access", "documents", "deadline"])
 
 
@@ -369,6 +568,25 @@ def _parse_stance_shift(value):
     return None, _normalize_stance(raw)
 
 
+def _message_stance_change(view, msg: dict) -> tuple[str | None, str | None]:
+    """메시지의 입장 변화(before, after)를 복원한다.
+
+    신규 데이터는 "mixed→support" 형식이다. 기존 LLM 상호작용 데이터처럼
+    "support"만 저장된 경우에는 해당 시민의 1차 반응 입장을 before로 복원한다.
+    """
+    before, after = _parse_stance_shift((msg or {}).get("stance_shift"))
+    if after and not before:
+        base = _normalize_stance((msg or {}).get("base_stance"))
+        from_id = (msg or {}).get("from_id")
+        if base is None and from_id is not None:
+            reaction = _build_reaction_index(view).get(str(from_id)) or {}
+            base = _normalize_stance(reaction.get("stance"))
+        before = base
+    if before and after and before != after:
+        return before, after
+    return None, None
+
+
 def _stance_badge(stance) -> str:
     key = _normalize_stance(stance) or "mixed"
     cls = _STANCE_CLASS.get(key, "stance-neutral")
@@ -432,6 +650,7 @@ def _fallback_reaction_text(view, persona: dict, reaction: dict, offset: int = 0
         "birth": ["amount", "access", "deadline", "eligibility", "documents"],
         "emergency": ["eligibility", "documents", "access", "general", "deadline"],
         "asset": ["amount", "eligibility", "documents", "deadline", "access"],
+        "labor": ["amount", "eligibility", "deadline", "access", "documents"],
     }.get(domain, ["eligibility", "amount", "access", "documents", "deadline"])
     topic = topic_cycle[int(offset or 0) % len(topic_cycle)]
     label = _topic_label_for(view, topic)
@@ -491,14 +710,7 @@ def _build_chat_timeline(view, focus_id=None, source_messages=None) -> list[dict
     reactions = _build_reaction_index(view)
     timeline: list[dict] = []
 
-    if isinstance(interactions, (list, tuple)):
-        interactions = [
-            item for item in interactions
-            if isinstance(item, dict)
-            and not _is_failed_interaction_text(item.get("text"))
-        ]
-    else:
-        interactions = []
+    interactions = _valid_interaction_messages(interactions)
 
     if not interactions:
         reaction_messages = _build_reaction_messages(view, personas, focus_id)
@@ -531,7 +743,7 @@ def _build_chat_timeline(view, focus_id=None, source_messages=None) -> list[dict
                 or _normalize_stance((reaction or {}).get("stance"))
                 or "mixed"
             )
-            before, after = _parse_stance_shift(msg.get("stance_shift"))
+            before, after = _message_stance_change(view, msg)
             current_stance = after or _normalize_stance(msg.get("stance")) or before or base_stance
             target = personas.get(str(to_id)) if to_id is not None else None
             target_name = _speaker_name(target, to_id) if target else "전체 채팅방"
@@ -723,6 +935,10 @@ def _policy_lived_detail(view, persona: dict, topic: str) -> str:
     except (TypeError, ValueError):
         age_no = 0
 
+    grounded_detail = _policy_grounded_detail(view, topic)
+    if grounded_detail:
+        return grounded_detail
+
     if domain == "digital":
         if topic == "access":
             return "대상자가 어르신이면 온라인보다 전화나 방문 창구가 먼저 보여야 해요"
@@ -766,6 +982,19 @@ def _policy_lived_detail(view, persona: dict, topic: str) -> str:
         if topic == "deadline":
             return "모집 공고 기간을 놓치면 다음 기회가 언제인지 알 수 있어야 해요"
         return "계좌 개설과 복지 신청 절차가 따로 놀면 시작부터 막힐 수 있어요"
+
+    if domain == "labor":
+        if topic == "amount":
+            return "쉬는 시간이 늘어도 임금 90%와 실제 업무량 변화가 같이 설명돼야 해요"
+        if topic == "eligibility":
+            return "정규직, 계약직, 자영업자, 교대제 같은 적용 차이를 먼저 봐야 해요"
+        if topic == "documents":
+            return "근태 기록과 급여 계산을 누가 어떻게 바꾸는지 현장 절차가 필요해요"
+        if topic == "access":
+            return "회사와 노동자가 확인할 적용 절차와 상담 창구가 같이 보여야 해요"
+        if topic == "deadline":
+            return "우리 사업장에 언제부터 적용되는지 단계 일정이 분명해야 해요"
+        return "쉬는 날만 말하지 말고 임금, 업무량, 예외 업종을 같이 봐야 해요"
 
     if domain == "housing":
         return _persona_lived_detail(persona, topic)
@@ -844,7 +1073,7 @@ def _message_stance(view, msg: dict) -> str:
     stance = _normalize_stance((msg or {}).get("stance"))
     if stance:
         return stance
-    before, after = _parse_stance_shift((msg or {}).get("stance_shift"))
+    before, after = _message_stance_change(view, msg)
     if after or before:
         return after or before
     from_id = (msg or {}).get("from_id")
@@ -961,6 +1190,14 @@ def _message_topic_for_policy(text: str, view=None) -> str:
             "deadline": ("모집", "공고", "기간", "다음 모집"),
             "general": ("중지", "중단", "초과"),
         },
+        "labor": {
+            "amount": ("임금", "90%", "근로시간", "주 28시간", "단축", "급여", "업무량"),
+            "eligibility": ("임금근로자", "자영업자", "프리랜서", "필수 업종", "교대제", "의료", "소방"),
+            "documents": ("근태", "급여", "보험", "교대표", "노무"),
+            "access": ("사업장", "회사", "노무", "시행규칙", "적용 절차"),
+            "deadline": ("공포", "1년", "단계 적용", "시행", "규모별"),
+            "general": ("휴무", "수요일 오후", "근무제", "주 3.5일"),
+        },
     }
     scores = {}
     for topic, words in (domain_words.get(domain) or {}).items():
@@ -1040,7 +1277,11 @@ def _join_names(names: list[str], limit: int = 2) -> str:
 
 
 def _group_influence_context(view, persona: dict, reaction: dict, history: list[dict]) -> dict:
-    """초기 입장과 최근 집단 대화를 비교해 현재 입장을 정한다."""
+    """최근 집단 대화의 압력만 계산한다.
+
+    이 경로는 화면 보충용 결정론 대화라서 입장 자체를 바꾸지 않는다. 실제 입장
+    변화는 LLM 상호작용 결과의 new_stance가 있을 때만 graph.nodes에서 기록한다.
+    """
     pid = str(persona.get("id"))
     base_stance = _normalize_stance((reaction or {}).get("stance")) or "mixed"
     pressure = _recent_group_pressure(view, history, pid)
@@ -1050,18 +1291,14 @@ def _group_influence_context(view, persona: dict, reaction: dict, history: list[
 
     if base_stance == "mixed":
         if counts["support"] >= counts["oppose"] and counts["support"] >= 1:
-            current_stance = "support"
             influence_stance = "support"
         elif counts["oppose"] > counts["support"] and counts["oppose"] >= 1:
-            current_stance = "oppose"
             influence_stance = "oppose"
     elif base_stance == "support":
         if counts["oppose"] >= counts["support"] and counts["oppose"] >= 2:
-            current_stance = "mixed"
             influence_stance = "oppose"
     elif base_stance == "oppose":
         if counts["support"] >= counts["oppose"] and counts["support"] >= 2:
-            current_stance = "mixed"
             influence_stance = "support"
 
     influence_from = ""
@@ -1629,7 +1866,7 @@ def _make_debate_message(view, history: list[dict]) -> dict | None:
         stance = base_stance
     previous = history[-1] if history else None
     round_no = stage["round"]
-    stance_shift = f"{base_stance}→{stance}" if base_stance != stance else None
+    stance_shift = None
     if stage["key"] == "initial":
         text = _compose_initial_text(
             view,
@@ -1720,6 +1957,16 @@ def _build_debate_messages(
     return history[:target_count]
 
 
+def _valid_interaction_messages(messages) -> list[dict]:
+    """채팅/분석에 쓸 수 있는 상호작용 메시지만 남긴다."""
+    return [
+        item for item in list(messages or [])
+        if isinstance(item, dict)
+        and item.get("from_id") is not None
+        and not _is_failed_interaction_text(item.get("text"))
+    ]
+
+
 def _ensure_unique_debate_text(msg: dict, history: list[dict], view=None) -> None:
     """긴 라이브 토론에서 같은 문장이 반복 표시되지 않도록 보정한다."""
     used = {str(item.get("text") or "") for item in history if isinstance(item, dict)}
@@ -1781,17 +2028,16 @@ def _prepare_debate_source_messages(
     target_count: int,
 ) -> list[dict] | None:
     """라이브/정지 상태에서 사용할 토론 소스를 결정한다."""
-    stored = [
-        item for item in list(stored_messages or [])
-        if isinstance(item, dict) and item.get("from_id") is not None
-    ]
+    stored = _valid_interaction_messages(stored_messages)
+    simulated = _valid_interaction_messages((view or {}).get("interactions"))
+    seed = stored if stored else simulated
     if live_mode:
         return _build_debate_messages(
             view,
             target_count,
-            seed_history=stored,
+            seed_history=seed,
         )
-    return stored if stored else None
+    return seed if seed else None
 
 
 def _fallback_debate_insights(view, messages: list[dict] | None) -> dict:
@@ -1820,7 +2066,7 @@ def _fallback_debate_insights(view, messages: list[dict] | None) -> dict:
         if sample and len(stats["samples"]) < 2:
             stats["samples"].append(sample)
 
-        before, after = _parse_stance_shift(msg.get("stance_shift"))
+        before, after = _message_stance_change(view, msg)
         if before and after and before != after:
             from_id = msg.get("from_id")
             persona = personas.get(str(from_id)) if from_id is not None else None
@@ -1873,24 +2119,24 @@ def _fallback_debate_insights(view, messages: list[dict] | None) -> dict:
 
 def _normalise_llm_issue(issue: _LLMIssue, idx: int) -> dict:
     return {
-        "issue": _clip_text(issue.issue, 36) or f"쟁점 {idx}",
+        "issue": _summary_text(issue.issue) or f"쟁점 {idx}",
         "topic": f"llm_{idx}",
         "count": max(1, int(issue.count or 1)),
         "pressure": issue.pressure or "논쟁",
-        "problem": _clip_text(issue.problem, 180),
-        "suggestion": _clip_text(issue.suggestion, 180),
-        "sample": _clip_text(issue.sample, 160),
+        "problem": _summary_text(issue.problem),
+        "suggestion": _summary_text(issue.suggestion),
+        "sample": _summary_text(issue.sample),
     }
 
 
 def _normalise_llm_change(change: _LLMStanceChange) -> dict:
     return {
-        "name": _clip_text(change.name, 28),
+        "name": _summary_text(change.name),
         "before": _normalize_stance(change.before) or "mixed",
         "after": _normalize_stance(change.after) or "mixed",
-        "reason": _clip_text(change.reason, 120),
-        "influenced_by": _clip_text(change.influenced_by, 40) or "집단 대화",
-        "message": _clip_text(change.message, 160),
+        "reason": _summary_text(change.reason),
+        "influenced_by": _summary_text(change.influenced_by) or "집단 대화",
+        "message": _summary_text(change.message),
     }
 
 
@@ -1914,7 +2160,8 @@ def _cached_llm_debate_insights(policy_context: str, debate_context: str, cache_
         "1) 정책 원문/첨부 문서 기준으로 핵심 쟁점 3~5개를 뽑으세요.\n"
         "2) 각 쟁점은 일반적인 '대상/서류/신청' 표현보다 원문에 나온 실제 조건과 명칭을 쓰세요.\n"
         "3) 문제 원인, 실행안, 대표 발언을 각각 작성하세요.\n"
-        "4) 시민 입장 변화가 있으면 0~5건만 작성하세요."
+        "4) 시민 입장 변화가 있으면 0~5건만 작성하세요.\n"
+        "5) 말줄임표(... 또는 …)를 쓰지 말고, 필요한 내용을 완결된 문장으로 작성하세요."
     )
     out: _LLMDebateInsights = structured_call(
         [{"role": "system", "content": system}, {"role": "user", "content": user}],
@@ -1933,7 +2180,7 @@ def _cached_llm_debate_insights(policy_context: str, debate_context: str, cache_
     ]
     return {
         "analysis_mode": "openai",
-        "verdict": _clip_text(out.verdict, 120),
+        "verdict": _summary_text(out.verdict),
         "stance_changes": changes,
         "key_issues": issues,
         "problem_points": issues[:4],
@@ -2037,11 +2284,9 @@ def _render_insight_panel(insights: dict | None) -> str:
     """
 
 
-def _clip_text(value, limit: int = 92) -> str:
-    text = " ".join(str(value or "").split())
-    if len(text) <= limit:
-        return text
-    return text[: max(0, limit - 1)].rstrip() + "…"
+def _summary_text(value) -> str:
+    """토론 요약용 문장을 보존하되 줄바꿈과 중복 공백만 정리한다."""
+    return " ".join(str(value or "").split())
 
 
 def _render_debate_summary_html(insights: dict | None) -> str:
@@ -2096,7 +2341,7 @@ def _render_debate_summary_html(insights: dict | None) -> str:
     def issue_items(items: list[dict]) -> str:
         html = []
         for item in items[:4]:
-            sample = _clip_text(item.get("sample"), 74)
+            sample = _summary_text(item.get("sample"))
             sample_html = f'<p>{_esc(sample)}</p>' if sample else ""
             html.append(
                 "<li>"
@@ -2147,7 +2392,7 @@ def _render_debate_summary_html(insights: dict | None) -> str:
     def detailed_issue_items(items: list[dict]) -> str:
         html = []
         for idx, item in enumerate(items[:4], start=1):
-            sample = _clip_text(item.get("sample"), 130) or "해당 쟁점의 대표 발언이 아직 충분하지 않습니다."
+            sample = _summary_text(item.get("sample")) or "해당 쟁점의 대표 발언이 아직 충분하지 않습니다."
             html.append(
                 '<div class="issue-report-row">'
                 '<div class="issue-report-head">'
@@ -2254,6 +2499,8 @@ def _render_debate_summary_html(insights: dict | None) -> str:
     color: #202938;
     font-size: 0.98rem;
     line-height: 1.42;
+    overflow-wrap: anywhere;
+    word-break: keep-all;
   }}
   .summary-kpi p {{
     color: #5c6575;
@@ -2298,6 +2545,8 @@ def _render_debate_summary_html(insights: dict | None) -> str:
     color: #1f2937;
     font-size: 0.88rem;
     margin-bottom: 3px;
+    overflow-wrap: anywhere;
+    word-break: keep-all;
   }}
   .debate-summary-card span,
   .debate-summary-card p {{
@@ -2306,6 +2555,8 @@ def _render_debate_summary_html(insights: dict | None) -> str:
     font-size: 0.81rem;
     line-height: 1.5;
     margin: 0;
+    overflow-wrap: anywhere;
+    word-break: keep-all;
   }}
   .issue-report {{
     margin-top: 14px;
@@ -2339,6 +2590,8 @@ def _render_debate_summary_html(insights: dict | None) -> str:
   .issue-report-head strong {{
     color: #1f2937;
     font-size: 0.92rem;
+    overflow-wrap: anywhere;
+    word-break: keep-all;
   }}
   .issue-report-head span {{
     color: #687386;
@@ -2366,6 +2619,8 @@ def _render_debate_summary_html(insights: dict | None) -> str:
     color: #5c6575;
     font-size: 0.81rem;
     line-height: 1.55;
+    overflow-wrap: anywhere;
+    word-break: keep-all;
   }}
   .next-actions {{
     margin-top: 14px;
@@ -2395,6 +2650,8 @@ def _render_debate_summary_html(insights: dict | None) -> str:
   }}
   .next-actions li span {{
     color: #526070;
+    overflow-wrap: anywhere;
+    word-break: keep-all;
   }}
   @media (max-width: 1100px) {{
     .debate-summary-kpis,
@@ -2982,7 +3239,7 @@ def _render_chat_html(
       display: grid;
       grid-template-columns: auto minmax(0, 1fr) auto;
       gap: 8px;
-      align-items: center;
+      align-items: start;
       color: #c9d1d9;
       font-size: 0.76rem;
       line-height: 1.35;
@@ -2992,14 +3249,16 @@ def _render_chat_html(
       white-space: nowrap;
     }}
     .insight-panel li span {{
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      word-break: keep-all;
     }}
     .insight-panel li em {{
       color: #8b949e;
       font-style: normal;
-      white-space: nowrap;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      word-break: keep-all;
     }}
     .thread-shell[data-live="1"] .thread-turn,
     .thread-shell[data-live="1"] .msg-box {{

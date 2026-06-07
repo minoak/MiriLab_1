@@ -589,13 +589,14 @@ def interact_node(state: SimState) -> dict:
             changed = shift in ("support", "oppose", "mixed") and shift != prev
             if changed:
                 stance_now[pid] = shift
+            stance_shift = f"{prev}→{shift}" if changed else None
             interactions.append(
                 {
                     "round": rnd,
                     "from_id": pid,
                     "to_id": target,           # None = 게시판 전체(원글)에 댓글
                     "text": res["reply"],
-                    "stance_shift": shift if changed else None,
+                    "stance_shift": stance_shift,
                 }
             )
             # 엣지는 참조 대상이 있을 때만(broadcast 는 그래프 노이즈라 제외).

@@ -4,9 +4,12 @@ from ui.tab_chat import (
     _analyze_debate_insights,
     _build_debate_messages,
     _can_use_llm_debate_insights,
+    _debate_context_text,
     _default_debate_count,
+    _fallback_debate_insights,
     _message_topic,
     _policy_domain,
+    _prepare_debate_source_messages,
     _render_chat_frame,
     _render_debate_loading_html,
     _render_debate_summary_html,
@@ -138,6 +141,54 @@ def test_next_actions_are_not_single_item_when_only_one_issue_is_detected():
     assert "게시판 반영" in next_actions
 
 
+def test_debate_summary_preserves_full_text_without_server_clipping():
+    long_issue = "대상 판단의 모호성 및 안내 체계 필요 - 소득 구간별 산정 예시와 원가구 소득 해석 차이까지 모두 설명해야 하는 쟁점"
+    long_problem = (
+        "정책 원문은 대상 기준을 제시하지만 신청자가 실제로 본인 소득, 원가구 소득, "
+        "무주택 여부, 예외 조건을 어떤 순서로 확인해야 하는지 알기 어렵다는 문제가 반복적으로 드러났다. "
+        "이 문장은 잘리면 안 되는 고유 확인 문장입니다."
+    )
+    long_suggestion = (
+        "대상 판단 표준표와 온라인 또는 방문 신청 절차를 한 화면에서 제공하고, "
+        "예외 조건별 FAQ와 서류 체크리스트를 함께 붙여 신청자가 다음 행동을 바로 결정하게 한다. "
+        "이 실행안도 끝까지 보여야 합니다."
+    )
+    long_sample = (
+        "소득 기준을 쉬운 예시로 보여주면 대상 여부를 제가 바로 확인할 수 있을 것 같아요. "
+        "방문 창구 안내와 온라인 신청 안내가 같이 있어야 한다는 대표 발언 전체입니다."
+    )
+    issue = chat._LLMIssue(
+        issue=long_issue,
+        count=9,
+        pressure="불만/우려",
+        problem=long_problem,
+        suggestion=long_suggestion,
+        sample=long_sample,
+    )
+
+    normalised = chat._normalise_llm_issue(issue, 1)
+    html = _render_debate_summary_html(
+        {
+            "analysis_mode": "openai",
+            "verdict": "종합 판정도 중간에서 잘리면 안 되며 마지막 확인 문장까지 보여야 합니다.",
+            "key_issues": [normalised],
+            "problem_points": [normalised],
+            "improvement_points": [normalised],
+            "stance_changes": [],
+        }
+    )
+
+    assert "모두 설명해야 하는 쟁점" in normalised["issue"]
+    assert "고유 확인 문장입니다" in normalised["problem"]
+    assert "끝까지 보여야 합니다" in normalised["suggestion"]
+    assert "대표 발언 전체입니다" in normalised["sample"]
+    assert "모두 설명해야 하는 쟁점" in html
+    assert "고유 확인 문장입니다" in html
+    assert "끝까지 보여야 합니다" in html
+    assert "대표 발언 전체입니다" in html
+    assert "…" not in html
+
+
 def test_failed_reactions_do_not_surface_as_sns_response_failure():
     view = _domain_view(
         "어르신 디지털 금융 교육 및 기기 지원",
@@ -196,6 +247,154 @@ def test_policy_domains_produce_different_improvement_reports():
     assert "위기 사유·소득 기준" in labels_by_domain["emergency"] or "환수 위험" in labels_by_domain["emergency"]
     assert labels_by_domain["digital"] != labels_by_domain["birth"]
     assert labels_by_domain["birth"] != labels_by_domain["emergency"]
+
+
+def test_worktime_policy_does_not_use_asset_policy_language():
+    view = _domain_view(
+        "주 3.5일 근무제",
+        [
+            "수요일 오후부터 쉬면 삶의 균형에는 도움이 될 것 같아요.",
+            "임금이 90%로 줄면 생활비가 걱정돼요.",
+            "교대제와 의료, 소방 같은 필수 업종 예외가 분명해야 해요.",
+            "우리 회사가 언제부터 적용되는지 사업장 규모별 일정이 궁금해요.",
+        ] * 2,
+    )
+    messages = _build_debate_messages(view, _default_debate_count(view))
+    joined = "\n".join(str(msg.get("text") or "") for msg in messages)
+    insights = _analyze_debate_insights(view, messages)
+    issues = {item["issue"] for item in insights["key_issues"]}
+
+    assert _policy_domain(view) == "labor"
+    assert "자산" not in joined
+    assert "계좌" not in joined
+    assert "근로 소득과 가구 소득" not in joined
+    assert any(term in joined for term in ("임금", "근로시간", "사업장", "휴무", "교대제"))
+    assert any(term in joined for term in ("주 28시간", "임금은 기존의 90%", "사업장 규모별 단계 적용"))
+    assert issues & {"임금·근로시간", "적용 대상·예외 업종", "시행 시점·단계 적용"}
+
+
+def test_benchmark_policies_do_not_inherit_unrelated_domains():
+    assert _policy_domain(SAMPLES["전 국민 반려묘 보급"]) == "general"
+    assert _policy_domain(SAMPLES["경로 무임승차 폐지"]) == "general"
+
+
+def test_llm_interaction_stance_shift_is_preserved_for_summary():
+    import graph.nodes as nodes
+
+    persona = _persona("p1", "테스터")
+    state = {
+        "policy": "시민 의견을 듣고 입장이 바뀔 수 있는 테스트 정책입니다.",
+        "personas": [persona],
+        "reactions": [
+            {
+                "persona_id": "p1",
+                "stance": "mixed",
+                "text": "처음에는 판단이 애매합니다.",
+                "actions": [],
+                "scores": {"shareability": 50},
+            }
+        ],
+        "rounds": 1,
+    }
+    original = nodes.structured_call
+
+    def changed_call(*_args, **_kwargs):
+        return nodes.InteractOut(
+            reply="다른 시민들 의견을 보고 찬성 쪽으로 바뀌었습니다.",
+            new_stance="support",
+            references=[],
+        )
+
+    nodes.structured_call = changed_call
+    try:
+        result = nodes.interact_node(state)
+    finally:
+        nodes.structured_call = original
+
+    messages = result["interactions"]
+    view = {
+        "policy": state["policy"],
+        "personas": state["personas"],
+        "reactions": state["reactions"],
+    }
+    insights = _fallback_debate_insights(view, messages)
+    context = _debate_context_text(view, messages)
+
+    assert messages[0]["stance_shift"] == "mixed→support"
+    assert insights["stance_changes"]
+    assert insights["stance_changes"][0]["before"] == "mixed"
+    assert insights["stance_changes"][0]["after"] == "support"
+    assert "혼합→찬성" in context
+
+    legacy_messages = [
+        {
+            "round": 1,
+            "from_id": "p1",
+            "text": "다른 시민들 의견을 보고 찬성 쪽으로 바뀌었습니다.",
+            "stance_shift": "support",
+        }
+    ]
+    legacy_insights = _fallback_debate_insights(view, legacy_messages)
+    assert legacy_insights["stance_changes"][0]["before"] == "mixed"
+    assert legacy_insights["stance_changes"][0]["after"] == "support"
+
+    def unchanged_call(*_args, **_kwargs):
+        return nodes.InteractOut(
+            reply="다른 의견을 봐도 아직 판단이 애매합니다.",
+            new_stance=None,
+            references=[],
+        )
+
+    nodes.structured_call = unchanged_call
+    try:
+        unchanged = nodes.interact_node(state)
+    finally:
+        nodes.structured_call = original
+
+    assert unchanged["interactions"][0]["stance_shift"] is None
+
+
+def test_existing_llm_interactions_drive_chat_analysis_and_live_seed():
+    view = _view()
+    interaction = {
+        "round": 1,
+        "from_id": "p2",
+        "to_id": "p1",
+        "text": "다른 시민 의견을 보고 찬성 쪽으로 판단이 바뀌었습니다.",
+        "stance_shift": "mixed→support",
+    }
+    view["interactions"] = [interaction]
+
+    source = _prepare_debate_source_messages(
+        view,
+        [],
+        live_mode=False,
+        target_count=_default_debate_count(view),
+    )
+    insights = _fallback_debate_insights(view, source)
+
+    assert source == [interaction]
+    assert insights["stance_changes"][0]["before"] == "mixed"
+    assert insights["stance_changes"][0]["after"] == "support"
+
+    live_source = _prepare_debate_source_messages(
+        view,
+        [],
+        live_mode=True,
+        target_count=3,
+    )
+    assert live_source[0]["text"] == interaction["text"]
+    assert live_source[0]["stance_shift"] == "mixed→support"
+
+
+def test_generated_debate_messages_do_not_force_stance_changes():
+    view = _view()
+    messages = _build_debate_messages(view, _default_debate_count(view))
+    insights = _fallback_debate_insights(view, messages)
+
+    assert messages
+    assert all(not msg.get("stance_shift") for msg in messages)
+    assert insights["stance_changes"] == []
 
 
 def test_react_node_failure_uses_natural_policy_fallback():
@@ -347,8 +546,14 @@ if __name__ == "__main__":
     test_message_topic_prefers_specific_signal_over_generic_condition_words()
     test_debate_summary_keeps_multiple_issues_and_actions()
     test_next_actions_are_not_single_item_when_only_one_issue_is_detected()
+    test_debate_summary_preserves_full_text_without_server_clipping()
     test_failed_reactions_do_not_surface_as_sns_response_failure()
     test_policy_domains_produce_different_improvement_reports()
+    test_worktime_policy_does_not_use_asset_policy_language()
+    test_benchmark_policies_do_not_inherit_unrelated_domains()
+    test_llm_interaction_stance_shift_is_preserved_for_summary()
+    test_existing_llm_interactions_drive_chat_analysis_and_live_seed()
+    test_generated_debate_messages_do_not_force_stance_changes()
     test_react_node_failure_uses_natural_policy_fallback()
     test_openai_analysis_uses_uploaded_policy_document_context()
     test_debate_loading_html_explains_openai_analysis_progress()
