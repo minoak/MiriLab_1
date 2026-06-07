@@ -191,15 +191,22 @@ def render_abtest_section(view) -> None:
         if not (policy_b or "").strip():
             st.warning("수정안 정책 내용을 입력하세요.")
         else:
-            from ui.state_helpers import run_simulation
+            from ui.state_helpers import run_simulation, PIPELINE_CKPT_KEY
             from ui.model import build_view
 
-            # 같은 시민 코호트로 비교(원문 시뮬과 같은 n → seed 고정이라 동일 페르소나).
-            n = len(view.get("personas") or []) if isinstance(view, dict) else 0
-            n = n or 24
+            # 같은 시민 코호트로 비교 — 원문 시뮬의 축1 서명(n·시드·시민 구성)을
+            # 그대로 재사용한다(사이드바에서 시드·구성을 바꿔 돌렸어도 동일 시민).
+            sig = (((st.session_state.get(PIPELINE_CKPT_KEY) or {})
+                    .get("axis1") or {}).get("sig") or {})
+            n_view = len(view.get("personas") or []) if isinstance(view, dict) else 0
+            n = int(sig.get("n") or n_view or 24)
+            seed = sig.get("seed")            # 시드 0 도 유효값이라 or 폴백 금지
+            seed = 42 if seed is None else int(seed)
+            filters = sig.get("filters") or None
             with st.spinner("개선안으로 시뮬레이션 중..."):
                 try:
-                    sim_b = run_simulation(policy_b, mock=use_mock, n=int(n))
+                    sim_b = run_simulation(policy_b, mock=use_mock, n=n,
+                                           seed=seed, filters=filters)
                     st.session_state["view_b"] = build_view(sim_b)
                     st.success("수정안 시뮬이 완료되었습니다. 아래에서 비교하세요.")
                 except Exception as e:  # 데모 안정성: 실패해도 탭이 죽지 않게
