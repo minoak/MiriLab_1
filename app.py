@@ -322,13 +322,13 @@ def _render_sidebar() -> None:
             st.warning("정책 원문이 비어 있습니다. 샘플을 선택하거나 직접 입력해 주세요.")
             return
 
-        # 데모 + 샘플 원문 그대로 + 녹화본 있음 + 녹화본의 원문도 현재 원문과 같음
-        # → 실 LLM 녹화 스냅샷 재생(호출 0). 스냅샷 원문이 오래됐으면 SNS 채팅이
-        # 과거 정책으로 만들어지므로 아래 합성 mock 경로로 흘려 현재 문안을 쓴다.
+        # 데모 + 샘플 원문 그대로 + 녹화본 있음 → 실 LLM 녹화 스냅샷 재생(호출 0).
+        # 원문을 고쳤거나 직접 입력이면 녹화본이 그 정책이 아니므로 아래 합성 mock
+        # 경로로 흘러간다(녹화본 = _record_demo.py 가 만든 data/demo_snapshots/).
         if (demo and choice != "직접 입력"
                 and policy == SAMPLES.get(choice, "").strip()
                 and has_demo_snapshot(choice)):
-            loaded = load_demo_snapshot(choice, expected_policy=policy)
+            loaded = load_demo_snapshot(choice)
             if loaded:
                 _sim, _view = loaded
                 # 새 정책으로 갈아탔으니 이전 A/B·리포트 무효화(아래 본 경로와 동일).

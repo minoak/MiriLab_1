@@ -7,9 +7,10 @@
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;background:#1e2c1d;color:#fff;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-.app{display:grid;grid-template-columns:minmax(760px,1fr) 390px;min-height:100vh}
+.app{display:grid;grid-template-columns:minmax(0,1fr) 350px;height:100vh} /* 패널 390->350: 지도 가용폭 확보 */
 .map-area{padding:18px;overflow:auto;background:#243824}
-.map-wrap{position:relative;width:1448px;height:1086px;overflow:hidden;border-radius:16px;border:4px solid rgba(255,255,255,.18);box-shadow:0 18px 42px rgba(0,0,0,.35);background:#4d7b47}
+.map-scale{position:relative;margin:0 auto} /* scale-to-fit 래퍼: JS(fitMap)가 축소 후 실점유 크기를 지정 */
+.map-wrap{position:relative;width:1448px;height:1086px;overflow:hidden;border-radius:16px;border:4px solid rgba(255,255,255,.18);box-shadow:0 18px 42px rgba(0,0,0,.35);background:#4d7b47;transform-origin:top left}
 .map-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;user-select:none;pointer-events:none}
 .path-line{position:absolute;height:4px;background:rgba(255,236,92,.45);transform-origin:left center;border-radius:999px;z-index:7;pointer-events:none;display:none}
 .path-dot{position:absolute;width:7px;height:7px;margin-left:-3.5px;margin-top:-3.5px;border-radius:50%;background:rgba(255,236,92,.95);box-shadow:0 0 0 3px rgba(0,0,0,.23);z-index:8;pointer-events:none;display:none}
@@ -82,10 +83,12 @@ h1,h3{margin:0 0 10px}
 <body>
 <div class="app">
   <main class="map-area">
-    <div class="map-wrap" id="mapWrap">
-      <img class="map-bg" src="assets/map.png" alt="정책 마을 지도">
-      <div class="bubble" id="bubble"></div>
-      <div class="meet-bubble" id="meetBubble"></div>
+    <div class="map-scale" id="mapScale">
+      <div class="map-wrap" id="mapWrap">
+        <img class="map-bg" src="assets/map.png" alt="정책 마을 지도">
+        <div class="bubble" id="bubble"></div>
+        <div class="meet-bubble" id="meetBubble"></div>
+      </div>
     </div>
   </main>
   <aside class="panel">
@@ -159,6 +162,24 @@ const talkText = document.getElementById('talkText');
 const workText = document.getElementById('workText');
 const timeText = document.getElementById('timeText');
 let agents = [], running = false, lastTime = null, animationId = null, totalDist = 0, talkCount = 0, workCount = 0, clockMin = 8 * 60, speedMul = 4, lastPanel = 0, talkEnabled = true;
+// ===================== 화면 맞춤 축소 (scale-to-fit) =====================
+// 지도 원본은 1448x1086 고정 — 가용 영역(폭·높이)에 맞춰 map-wrap 전체를 transform: scale 로
+// 축소한다. 좌표계는 원본 px 그대로(에이전트·말풍선·앵커 전부 자식이라 함께 비례 축소),
+// 클릭 좌표만 MAP_SCALE 로 역보정하면 된다. JS 실패 시 폴백 = 원본 크기 + overflow 스크롤.
+const MAP_W = 1448, MAP_H = 1086;
+const mapScaleEl = document.getElementById('mapScale');
+let MAP_SCALE = 1;
+function fitMap(){
+  const area = mapScaleEl.parentElement; // .map-area (padding 18px*2)
+  const availW = area.clientWidth - 36, availH = area.clientHeight - 36;
+  if (availW <= 0 || availH <= 0) return; // 숨김/미배치 상태면 보류
+  MAP_SCALE = Math.max(0.2, Math.min(1, availW / MAP_W, availH / MAP_H));
+  document.getElementById('mapWrap').style.transform = 'scale(' + MAP_SCALE + ')';
+  mapScaleEl.style.width = (MAP_W * MAP_SCALE) + 'px';
+  mapScaleEl.style.height = (MAP_H * MAP_SCALE) + 'px';
+}
+window.addEventListener('resize', fitMap);
+fitMap();
 // --- 미리마을 생성 데이터(village_data.js) 파생 ---
 const HAS_DATA = (typeof VILLAGERS !== 'undefined' && typeof LOCATIONS !== 'undefined' && typeof SCHEDULES !== 'undefined');
 const LOC_BY_KEY = {};
@@ -415,20 +436,22 @@ function updateAgent(agent,dt){
   else setFrame(agent,agent.lastDir||'down',0);
 }
 function scheduledLoc(a){const b=activeBlock(a,clockMin);return b?b.location_key:null;}
-function checkMeetings(){ // 예정된 만남: 두 캐릭터가 그 장소에 함께 도달하면 발화(시각이 좀 늦어도 도착을 기다림)
+function checkMeetings(){ // 예정된 만남: 참가자 전원이 그 장소에 함께 도달하면 발화(도착을 기다림)
   if(meeting)return;
   for(const mt of MEET){
     if(mt._fired)continue;
     if(clockMin<mt.start)continue;                 // 만남 예정 시각 전엔 대기
-    const a=agentById[mt.a],b=agentById[mt.b];
-    if(!a||!b||!mt.turns||!mt.turns.length){mt._fired=true;continue;}
-    if(!a.routing&&!b.routing&&a.currentLocKey===mt.place&&b.currentLocKey===mt.place){
-      mt._fired=true;startMeeting(a,b,mt.turns);return; // 둘 다 도착해 함께 있음 -> 발화
+    const parts=mt.parts||[mt.a,mt.b];             // 그룹 만남(2명+) — parts 우선, 옛 포맷은 a/b
+    const ags=parts.map(id=>agentById[id]);
+    if(ags.some(a=>!a)||!mt.turns||!mt.turns.length){mt._fired=true;continue;}
+    if(ags.every(a=>!a.routing&&a.currentLocKey===mt.place)){
+      mt._fired=true;startMeeting(parts,mt.turns);return; // 전원 도착해 함께 있음 -> 발화
     }
-    // end 가 지났는데 둘 다 더는 그 장소에 머물 예정도 아니면(이동 지연으로 못 만남) 진짜 놓침 -> 로그로 가시화
-    if(clockMin>mt.end&&scheduledLoc(a)!==mt.place&&scheduledLoc(b)!==mt.place){
+    // end 가 지났는데 전원 더는 그 장소에 머물 예정도 아니면(이동 지연으로 못 만남) 진짜 놓침
+    if(clockMin>mt.end&&ags.every(a=>scheduledLoc(a)!==mt.place)){
       mt._fired=true;
-      log(`⏭️ <b>${esc(nameOf(mt.a))}</b>·<b>${esc(nameOf(mt.b))}</b> · ${esc((LOC_BY_KEY[mt.place]||{}).label||mt.place)} 만남 놓침(이동 지연)`);
+      const who=parts.map(id=>`<b>${esc(nameOf(id))}</b>`).join('·');
+      log(`⏭️ ${who} · ${esc((LOC_BY_KEY[mt.place]||{}).label||mt.place)} 만남 놓침(이동 지연)`);
     }
   }
 }
@@ -571,8 +594,8 @@ function exitEdit(){
 editBtn.addEventListener('click',()=>{editing?exitEdit():enterEdit();});
 map.addEventListener('click',e=>{
   if(!editing||!editTarget)return;
-  const rect=map.getBoundingClientRect();
-  const x=Math.round(e.clientX-rect.left-4),y=Math.round(e.clientY-rect.top-4); // -4 = map-wrap border
+  const rect=map.getBoundingClientRect(); // 축소 표시 중이면 rect 도 축소돼 있음 -> MAP_SCALE 역보정 후 -4(border)
+  const x=Math.round((e.clientX-rect.left)/MAP_SCALE-4),y=Math.round((e.clientY-rect.top)/MAP_SCALE-4);
   if(x<0||y<0||x>1448||y>1086)return;
   setTargetPos(x,y);
 });
@@ -603,23 +626,29 @@ function restoreAgent(a){ // 만남 종료 후 원래 일정 행동으로 복귀
   const label=b?(b.action.length>10?b.action.slice(0,10)+'…':b.action):'대기';
   setState(a,st,9999,label);
 }
-function startMeeting(a,b,turns){
-  meeting={aId:a.id,bId:b.id,aName:a.name,bName:b.name,turns,idx:0,opened:false,agentA:a,agentB:b,replay:false};
-  const dx=b.x-a.x,dy=b.y-a.y;
-  setFrame(a,directionFor(dx,dy,a.lastDir),0);setFrame(b,directionFor(-dx,-dy,b.lastDir),0);
-  setState(a,'talk',9999,'대화');setState(b,'talk',9999,'대화');
+function startMeeting(parts,turns){
+  const ags=parts.map(id=>agentById[id]).filter(Boolean);
+  if(ags.length<2)return;
+  meeting={parts:parts.slice(),agentsList:ags,names:ags.map(a=>a.name),turns,idx:0,opened:false,replay:false};
+  if(ags.length===2){ // 둘이면 서로 마주보게(셋+이면 기본 방향 유지)
+    const [a,b]=ags;const dx=b.x-a.x,dy=b.y-a.y;
+    setFrame(a,directionFor(dx,dy,a.lastDir),0);setFrame(b,directionFor(-dx,-dy,b.lastDir),0);
+  }
+  ags.forEach(a=>setState(a,'talk',9999,'대화'));
   running=false;cancelAnimationFrame(animationId);stateText.textContent='대화 발생';
   talkCount++;talkText.textContent=talkCount;
   const first=turns[0];
   meetBubble.innerHTML=`<div>💬 ${esc(nameOf(first.s))}: ${esc(first.t.length>18?first.t.slice(0,18)+'…':first.t)}</div><div class="mb-hint">눌러서 대화 보기 · 다른 곳=계속</div>`;
-  const HALF=118,cx=Math.max(HALF,Math.min(1448-HALF,(a.x+b.x)/2)); // 우측 끝(마을공원 등) 만남서 말풍선 잘림 방지
-  meetBubble.style.left=cx+'px';meetBubble.style.top=(Math.min(a.y,b.y)-46)+'px';meetBubble.classList.add('show');
-  log(`💬 <b>${esc(a.name)}</b> · <b>${esc(b.name)}</b> 만남 — 시계 정지`);
+  const xs=ags.map(a=>a.x),ys=ags.map(a=>a.y);
+  const HALF=118,cx=Math.max(HALF,Math.min(1448-HALF,(Math.min(...xs)+Math.max(...xs))/2)); // 그룹 중심(잘림 방지)
+  meetBubble.style.left=cx+'px';meetBubble.style.top=(Math.min(...ys)-46)+'px';meetBubble.classList.add('show');
+  const who=ags.map(a=>`<b>${esc(a.name)}</b>`).join(' · ');
+  log(`💬 ${who} 만남 — 시계 정지`);
 }
 function hideMeetBubble(){meetBubble.classList.remove('show');}
 function clearMeeting(){ // 만남/대화 상태 + DOM 정리(시계 재개는 호출측 책임)
   hideMeetBubble();dialogOverlay.style.display='none';
-  if(meeting){restoreAgent(meeting.agentA);restoreAgent(meeting.agentB);}
+  if(meeting&&meeting.agentsList)meeting.agentsList.forEach(restoreAgent);
   meeting=null;
 }
 function dismissMeeting(){ // 말풍선 밖 클릭 -> 흘려보내고 시계 재개
@@ -636,7 +665,7 @@ function renderDialog(){
   const def=SPRITE_DEFS[cur.s];
   dlgPortrait.style.backgroundImage=def?`url('${def.sheet}')`:'none';
   dlgWho.textContent=nameOf(cur.s);
-  dlgMeta.textContent=`${m.aName} ↔ ${m.bName}`;
+  dlgMeta.textContent=(m.names||[]).join(' · ');
   dlgText.textContent=cur.t;
   dlgProg.textContent=`${m.idx+1} / ${m.turns.length}`;
   dlgNext.textContent=(m.idx>=m.turns.length-1)?'닫기':'다음 ▶';
@@ -655,20 +684,21 @@ function closeDialog(){
   else resumeSim();
 }
 function logTalk(m){
-  const loc=LOC_BY_KEY[m.agentA?m.agentA.currentLocKey:null];
-  talkHistory.unshift({aId:m.aId,bId:m.bId,aName:m.aName,bName:m.bName,turns:m.turns,time:fmtClock(clockMin),place:loc?loc.label:''});
+  const a0=m.agentsList&&m.agentsList[0];
+  const loc=LOC_BY_KEY[a0?a0.currentLocKey:null];
+  talkHistory.unshift({parts:m.parts,names:m.names,turns:m.turns,time:fmtClock(clockMin),place:loc?loc.label:''});
   if(talkHistory.length>40)talkHistory.pop();
   renderTalkLog();
 }
 function renderTalkLog(){
   if(!talkHistory.length){talkLog.innerHTML='<div class="sub" style="grid-column:1/3">아직 대화 기록이 없어요.</div>';return;}
-  talkLog.innerHTML=talkHistory.map((h,i)=>`<div class="mini titem" data-i="${i}"><b>💬 ${esc(h.aName)}↔${esc(h.bName)}</b> <span class="now">${esc(h.time)}</span><br>${esc(h.place)}</div>`).join('');
+  talkLog.innerHTML=talkHistory.map((h,i)=>`<div class="mini titem" data-i="${i}"><b>💬 ${esc((h.names||[]).join('·'))}</b> <span class="now">${esc(h.time)}</span><br>${esc(h.place)}</div>`).join('');
   talkLog.querySelectorAll('.titem').forEach(el=>el.addEventListener('click',()=>replayTalk(+el.dataset.i)));
 }
 function replayTalk(i){ // 기록 클릭 -> 그 대화 다시 펼쳐보기
   const h=talkHistory[i];if(!h||meeting)return;
   wasRunningBeforeView=running;running=false;cancelAnimationFrame(animationId);
-  meeting={aId:h.aId,bId:h.bId,aName:h.aName,bName:h.bName,turns:h.turns,idx:0,opened:true,replay:true};
+  meeting={parts:h.parts,names:h.names,agentsList:[],turns:h.turns,idx:0,opened:true,replay:true};
   dialogOverlay.style.display='block';renderDialog();
 }
 meetBubble.addEventListener('click',e=>{e.stopPropagation();if(meeting&&!meeting.opened)openDialog();});

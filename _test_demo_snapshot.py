@@ -108,34 +108,7 @@ def main():
         check("세션 view selection 채워짐",
               bool(((v or {}).get("selection") or {}).get("outcomes")))
 
-        # ── 3.5) 오래된 스냅샷 가드: 파일은 있어도 원문이 다르면 재생 금지 ─
-        old_policy = policy.replace("월세를 최대 12개월간", "월세를 과거 문안 기준으로")
-        stale_snap = json.loads(json.dumps(make_fake_snapshot(name, old_policy), ensure_ascii=False))
-        (tmp / f"{name}.json").write_text(
-            json.dumps(stale_snap, ensure_ascii=False), encoding="utf-8")
-        check("오래된 스냅샷 직접 로드 차단",
-              sh.load_demo_snapshot(name, expected_policy=policy) is None)
-
-        at_stale = AppTest.from_file("app.py", default_timeout=120)
-        at_stale.run()
-        at_stale.sidebar.checkbox[0].set_value(True)
-        at_stale.sidebar.button[0].click()
-        at_stale.run()
-        check("오래된 스냅샷 실행 예외 0", not at_stale.exception)
-        stale_success = "\n".join(s.value or "" for s in at_stale.success)
-        check("오래된 스냅샷이면 녹화 재생 아님", "녹화" not in stale_success,
-              stale_success[:120])
-        stale_view = at_stale.session_state["view"] if "view" in at_stale.session_state else {}
-        check("오래된 스냅샷이면 현재 정책 문안 유지",
-              (stale_view or {}).get("policy") == policy,
-              ((stale_view or {}).get("policy") or "")[:80])
-        check("오래된 스냅샷이면 합성 경로(mock 도장)",
-              ((stale_view or {}).get("llm_model") or "") == "mock",
-              (stale_view or {}).get("llm_model", ""))
-
         # ── 4) 원문 수정 가드: 텍스트 고치면 합성 경로로 ────────────────
-        (tmp / f"{name}.json").write_text(
-            json.dumps(snap, ensure_ascii=False), encoding="utf-8")
         at2 = AppTest.from_file("app.py", default_timeout=120)
         at2.run()
         ta_key = next((t.key for t in at2.sidebar.text_area

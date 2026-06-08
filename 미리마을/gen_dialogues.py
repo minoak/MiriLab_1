@@ -62,8 +62,9 @@ MODEL = PROVIDER_MODELS[PROVIDER]
 
 # 만남 추출 파라미터
 MIN_OVERLAP = 12      # 최소 공존(분) — 짧아도 짧은 대화는 가능(전파 통로 확보 위해 20→12 완화)
-MERGE_GAP = 40        # 같은 쌍·장소가 이 간격(분) 이내로 다시 겹치면 한 만남으로 병합
-MAX_PER_PAIR = 1      # 한 쌍은 하루 1회만(가장 긴 겹침). 카페 등에서 같은 쌍 대화 반복 제거.
+MERGE_GAP = 40        # 같은 장소·같은 인원 구성이 이 간격(분) 이내로 이어지면 한 장면으로 병합
+MAX_PER_PAIR = 1      # (레거시) 옛 쌍 추출용 — 그룹 스윕에선 미사용. 하위호환 상수로만 남김.
+PAST_DIARY_DAYS = 5   # 만남·일기 프롬프트에 실어줄 '지난 일기' 최근 일수(2~4문장 × N → 토큰 적정)
 ROUTE_FACTOR = 0.8    # 직선거리 -> 도로 우회 근사 계수. 이동시간을 덜 흐르게(1.5→0.8):
 #   맵이 커서 도보 ~1시간이 걸려 같은 장소(특히 어르신↔카페)서도 엇갈려 만남이 끊겼다.
 #   0.8 이면 어르신이 이웃과 연결되고, 전파가 며칠에 걸쳐 점진적으로 퍼진다(관측 목적).
@@ -180,9 +181,46 @@ def _arrival_times(vid, schedule, home, parr, spd):
     return out
 
 
+def _stable_scenes(intervals):
+    """한 장소의 체류구간들 → '같은 인원이 함께 있는' 안정 구간(장면)으로 분해.
+
+    intervals = [(start, end, vid), ...] (같은 장소). 시간 경계마다 그때 함께 있는
+    사람 집합이 일정한 구간을 잘라, 2명 이상이 MIN_OVERLAP 이상 함께한 장면만 남긴다.
+    사람이 들고 나면 집합이 바뀌어 새 장면이 된다(카페에 한 명 합류 → 다음 장면).
+    인접한 동일 인원 구간은 한 장면으로 병합.
+    반환 = [(s, e, (vid, ...)), ...] (시간순).
+    """
+    if not intervals:
+        return []
+    bounds = sorted({s for s, _, _ in intervals} | {e for _, e, _ in intervals})
+    raw = []  # [s, e, (vids...)]
+    for s, e in zip(bounds, bounds[1:]):
+        if e <= s:
+            continue
+        present = tuple(sorted(vid for (a, b, vid) in intervals if a <= s and b >= e))
+        if len(present) >= 2:
+            raw.append([s, e, present])
+    merged = []
+    for s, e, ppl in raw:
+        if merged and merged[-1][2] == ppl and s - merged[-1][1] <= MERGE_GAP:
+            merged[-1][1] = e   # 같은 인원 연속 → 한 장면으로 늘림
+        else:
+            merged.append([s, e, ppl])
+    return [(s, e, ppl) for s, e, ppl in merged if e - s >= MIN_OVERLAP]
+
+
 def extract_meetings(schedules, villagers, locations, anchors):
+    """장소·시간 스윕으로 '같은 자리에 함께 있는 사람들'을 한 장면(만남)으로 묶는다.
+
+    예전엔 쌍(2명)으로만 쪼갰지만, 한 장소에 3명+이 모이면 그 자리에서 함께 대화한다
+    (카페에 셋이면 셋이서). parts = 그 장면의 참가자 전원. a/b 는 parts[0]/parts[1] 로
+    하위호환(레거시 2인 경로·테스트). **이동시간은 무시** — iframe 이 도착을 기다리며
+    시간을 멈추므로 '스케줄상 같은 장소·시간'이면 만남으로 충분하다.
+    """
     public = {l["key"] for l in locations if l["key"] != "houses"}
     by_id = {v["id"]: v for v in villagers}
+    ids = [v["id"] for v in villagers]
+    idx = {vid: i for i, vid in enumerate(ids)}
     # 관계(아는 사이) — 만남 게이트가 아니라 대화 친밀도 플래그로만 쓴다.
     rels = set()
     for v in villagers:
@@ -190,78 +228,48 @@ def extract_meetings(schedules, villagers, locations, anchors):
             if r in by_id:
                 rels.add(tuple(sorted([v["id"], r])))
 
-    # 각 캐릭터의 '스케줄 블록' = (장소, 시작분, 끝분). **이동시간은 무시**한다 — iframe 이
-    # 도착을 기다리며 시간을 멈추므로(ⓐ), '스케줄상 같은 장소·시간'이면 만남으로 충분하다.
-    # (도착시뮬 ROUTE_FACTOR 근사는 폐기: 스케줄은 겹치는데 도보로 엇갈려 끊기던 만남
-    #  — 특히 어르신↔카페 — 이 살아나고, gen 의 만남이 재생과 정확히 일치한다.)
-    sched = {}
+    # 공용장소별 체류 구간 수집(집 제외)
+    by_place = defaultdict(list)   # place_key -> [(s, e, vid)]
     for vid in by_id:
-        blocks = []
         for b in schedules.get(vid, []):
             s, e = parse_hm(b["start_time"]), parse_hm(b["end_time"])
-            if s is not None and e is not None and e > s:
-                blocks.append((b["location_key"], s, e))
-        sched[vid] = blocks
+            if s is None or e is None or e <= s:
+                continue
+            if b["location_key"] in public:
+                by_place[b["location_key"]].append((s, e, vid))
 
-    ids = [v["id"] for v in villagers]
-    idx = {vid: i for i, vid in enumerate(ids)}
-    raw = defaultdict(list)  # (a,b,place) -> [(겹침시작, 겹침끝), ...]
-
-    # 1) 공용장소 스케줄 겹침(모든 쌍 — 같은 장소·시간이면 대화)
-    for a, b in combinations(ids, 2):
-        for ka, sa, ea in sched[a]:
-            for kb, sb, eb in sched[b]:
-                if ka == kb and ka in public:
-                    s, e = max(sa, sb), min(ea, eb)
-                    if e - s >= MIN_OVERLAP:
-                        raw[(a, b, ka)].append((s, e))
-
-    # 1.5) 집 만남 — 같은 집 식구만(anchors residents). 저녁 등 집에 함께 있을 때 가족 대화.
-    #      독거(grandma)·1인 가구는 식구가 없어 집 만남이 없다(밖 만남에만 의존 — 현실 일관).
-    housemates = set()
+    # 집(가족) 장면 — 같은 집 식구만, 집별로 따로 스윕(독거·1인 가구는 식구가 없어 제외).
+    house_intervals = defaultdict(list)  # house_id -> [(s, e, vid)]
     for h in anchors.get("houses", []):
         res = [r for r in h.get("residents", []) if r in by_id]
-        for ha, hb in combinations(res, 2):
-            housemates.add(tuple(sorted([ha, hb], key=lambda x: idx[x])))  # ids 순서 유지
-    for a, b in housemates:
-        for ka, sa, ea in sched[a]:
-            if ka != "houses":
-                continue
-            for kb, sb, eb in sched[b]:
-                if kb != "houses":
+        if len(res) < 2:
+            continue
+        for vid in res:
+            for b in schedules.get(vid, []):
+                s, e = parse_hm(b["start_time"]), parse_hm(b["end_time"])
+                if s is None or e is None or e <= s:
                     continue
-                s, e = max(sa, sb), min(ea, eb)
-                if e - s >= MIN_OVERLAP:
-                    raw[(a, b, "houses")].append((s, e))
+                if b["location_key"] == "houses":
+                    house_intervals[h["id"]].append((s, e, vid))
 
-    # 2) 같은 (쌍, 장소) 연속/근접 공존 병합
-    merged = []  # (a,b,place,s,e)
-    for (a, b, place), ivs in raw.items():
-        ivs.sort()
-        cs, ce = ivs[0]
-        for s, e in ivs[1:]:
-            if s - ce <= MERGE_GAP:
-                ce = max(ce, e)
-            else:
-                merged.append((a, b, place, cs, ce))
-                cs, ce = s, e
-        merged.append((a, b, place, cs, ce))
+    scenes = []  # (place, s, e, [parts])
+    for place, ivs in by_place.items():
+        for s, e, ppl in _stable_scenes(ivs):
+            scenes.append((place, s, e, list(ppl)))
+    for _hid, ivs in house_intervals.items():
+        for s, e, ppl in _stable_scenes(ivs):
+            scenes.append(("houses", s, e, list(ppl)))
 
-    # 3) 쌍당 최대 횟수 제한(긴 공존 우선)
-    by_pair = defaultdict(list)
-    for a, b, place, s, e in merged:
-        by_pair[(a, b)].append((a, b, place, s, e))
-    kept = []
-    for pair, lst in by_pair.items():
-        lst.sort(key=lambda m: (m[4] - m[3]), reverse=True)
-        kept.extend(lst[:MAX_PER_PAIR])
-
-    kept.sort(key=lambda m: m[3])  # 시간순
+    scenes.sort(key=lambda sc: (sc[1], sc[2]))  # 시간순
     meetings = []
-    for i, (a, b, place, s, e) in enumerate(kept):
-        meetings.append({"id": f"m{i:02d}", "a": a, "b": b, "place": place,
+    for i, (place, s, e, parts) in enumerate(scenes):
+        parts = sorted(parts, key=lambda x: idx[x])  # ids 순서 고정(재현성)
+        # close = 그룹 전원이 서로 아는 사이인가(대화 톤용). 한 쌍이라도 모르면 False.
+        close = all(tuple(sorted([x, y])) in rels for x, y in combinations(parts, 2))
+        meetings.append({"id": f"m{i:02d}", "place": place,
                          "start": int(round(s)), "end": int(round(e)),
-                         "close": tuple(sorted([a, b])) in rels})  # 친밀도(대화 톤용)
+                         "parts": parts, "a": parts[0], "b": parts[1],  # 하위호환
+                         "close": close})
     return meetings
 
 
@@ -408,17 +416,17 @@ AWARE_SET = {"aware", "interested", "acting"}  # '안다'로 치는 상태
 
 
 class CharDelta(BaseModel):
-    villager_id: str       # 두 참가자 id 중 하나(위치 매칭 보조)
+    villager_id: str       # 참가자 id 중 하나(매칭 보조)
     learned_policy: bool   # 이 대화로 정책을 '처음' 알게 됐나
     awareness: str         # 대화 뒤 상태: unaware|aware|interested|acting
     stance: str            # unknown|support|oppose|mixed|anxious
+    learned_from: str = ""  # 정책을 누구에게 들었나(그룹 전파 출처 id). 없으면 빈 문자열.
     note: str              # 그 인물의 한 줄 메모(오늘 일에 추가됨)
 
 
 class MeetingResult(BaseModel):
     turns: List[DialogueTurn]   # 대화 (위 DialogueTurn 재사용)
-    a_delta: CharDelta          # 첫 번째 참가자([A])의 변화
-    b_delta: CharDelta          # 두 번째 참가자([B])의 변화
+    deltas: List[CharDelta]     # 참가자별 변화(참가자 수만큼 — 그룹 대화 일반화)
 
 
 class DiaryOut(BaseModel):
@@ -459,11 +467,29 @@ def _policy_tokens(policy):
     return toks
 
 
-def _bind_deltas(da, db, a_id, b_id):
-    """a_delta/b_delta 를 villager_id 로 올바른 참가자에 매칭(어긋나면 위치 기준)."""
-    if getattr(da, "villager_id", None) == b_id and getattr(db, "villager_id", None) == a_id:
-        return db, da
-    return da, db
+def _bind_group_deltas(deltas, parts):
+    """LLM 이 보고한 deltas(참가자별)를 villager_id 로 매칭 → {vid: delta}.
+    id 가 어긋나거나 누락되면 남은 델타를 위치 순으로 채운다(빠진 참가자는 None 처리)."""
+    out = {}
+    pset = set(parts)
+    for d in deltas or []:
+        vid = getattr(d, "villager_id", None)
+        if vid in pset and vid not in out:
+            out[vid] = d
+    leftover = [d for d in (deltas or []) if getattr(d, "villager_id", None) not in pset]
+    for p in parts:
+        if p not in out and leftover:
+            out[p] = leftover.pop(0)
+    return out
+
+
+def _past_diary_block(past):
+    """past = [(day, text), ...] 오름차순 → '지난 일기:' 블록(최근 PAST_DIARY_DAYS 일).
+    빈 입력이면 빈 문자열(1일차·테스트는 과거가 없어 기존 동작과 동일)."""
+    if not past:
+        return ""
+    lines = [f"  {day}일차: {text}" for day, text in past[-PAST_DIARY_DAYS:] if text]
+    return ("지난 일기:\n" + "\n".join(lines) + "\n") if lines else ""
 
 
 # --- 정책 주입 프롬프트 (system = 캐싱 prefix, 전원/전 만남 공유) ---------
@@ -472,81 +498,90 @@ def build_meeting_system(villagers, locations, policy):
         f"- {v['name']}({v['id']}): {v['age']}세 {v['occupation']}, {v['personality']}"
         for v in villagers
     )
-    # 2026-06-06 재설계: 같은 억제문("여러 화제 중 하나")을 4회 반복하던
-    # 패치타워 철거 — 세계 사실은 한 번씩만, 중립으로. 대화에 정책이 나올지는
-    # 두 사람의 사이·상황·관심이 정한다. 전파 게이트는 코드(_apply_delta)가 보증.
+    # 2026-06-06 재설계: 같은 억제문("여러 화제 중 하나")을 반복하던 패치타워 철거 —
+    # 세계 사실은 한 번씩만, 중립으로. 대화에 정책이 나올지는 그 자리 사람들의 사이·상황·
+    # 관심이 정한다. 전파 게이트(누가 알게 되나)는 코드(_apply_delta_group)가 보증한다.
     if (policy or "").strip():
         situation = (
             "[동네 사정]\n"
             "최근 이런 정책이 발표됐고, 아는 사람들 사이에서 가끔 화제에 오릅니다 — "
             "일·가족·날씨·건강·동네 소식 같은 여느 화제들 중 하나로.\n"
             f'"""\n{policy.strip()}\n"""\n'
-            "- 정책 얘기가 나올지는 두 사람의 사이·상황·관심에 달렸습니다. 안 나와도 됩니다.\n"
-            "- 한쪽만 알 때 정책 얘기가 나오면, 모르던 쪽이 그 자리에서 알게 될 수 있습니다.\n"
-            "- 둘 다 모르면 정책 이야기는 나오지 않습니다.\n"
+            "- 정책 얘기가 나올지는 그 자리 사람들의 사이·상황·관심에 달렸습니다. 안 나와도 됩니다.\n"
+            "- 아는 사람이 꺼내면, 모르던 사람이 그 자리에서 알게 될 수 있습니다(들은 만큼만).\n"
+            "- 아무도 모르면 정책 이야기는 나오지 않습니다.\n"
         )
     else:
         situation = "[동네 사정] 특별한 정책 없이 평범한 일상입니다.\n"
     return (
-        "당신은 미리마을의 기록자입니다. 두 주민이 같은 장소에서 마주친 순간 "
+        "당신은 미리마을의 기록자입니다. 같은 장소에 함께 있는 주민들이 그 순간 "
         "실제로 나눌 법한 대화를 쓰고, 대화 뒤 각자의 변화를 보고합니다.\n\n"
         + situation +
         "\n규칙:\n"
-        "- 각자의 말은 그 사람이 평소 하는 말 그대로. 짧은 구어체, 한 사람당 한두 문장, 전체 3~5턴.\n"
-        "- speaker_id 는 반드시 주어진 두 참가자 id 중 하나.\n"
-        "- 변화 보고(a_delta=[A], b_delta=[B]): villager_id, "
+        "- 각자의 말은 그 사람이 평소 하는 말 그대로. 짧은 구어체, 한 사람당 한두 문장.\n"
+        "- 참가자가 셋 이상이면 두세 명만 주고받아도 되고, 곁의 사람이 끼어들어도 자연스럽습니다.\n"
+        "- speaker_id 는 반드시 주어진 참가자 id 중 하나.\n"
+        "- 변화 보고(deltas): 참가자마다 한 항목씩 — villager_id, "
         "learned_policy(이 대화로 정책을 '처음' 알게 됐으면 true), "
         "awareness(unaware|aware|interested|acting), stance(unknown|support|oppose|mixed|anxious), "
+        "learned_from(정책을 들려준 사람 id, 해당 없으면 빈 문자열), "
         "note(그 인물의 오늘 한 줄 메모).\n\n"
         f"[미리마을 주민]\n{cast}"
     )
 
 
-def build_meeting_user(m, by_id, loc_label, schedules, today, close):
-    a, b = by_id[m["a"]], by_id[m["b"]]
-    ca = context_before(schedules, m["a"], m["start"], loc_label)
-    cb = context_before(schedules, m["b"], m["start"], loc_label)
+def build_meeting_user(m, by_id, loc_label, schedules, today, past_diaries=None):
+    parts = m.get("parts") or [m["a"], m["b"]]
     place = loc_label.get(m["place"], m["place"])
-    rel = "친한 사이" if close else "잘 모르는/평소 왕래 적은 사이"
-    ta, tb = today[m["a"]], today[m["b"]]
-    a_aw, b_aw = ta["awareness"] in AWARE_SET, tb["awareness"] in AWARE_SET
-    if not a_aw and not b_aw:
-        rule = ("두 사람 다 이 정책을 전혀 모릅니다 → 정책 이야기는 나오지 않습니다. "
-                "둘 다 learned_policy=false, awareness=unaware.")
-    elif a_aw != b_aw:
-        knower = a["name"] if a_aw else b["name"]
-        rule = (f"한 사람({knower})만 정책을 압니다. 꺼낼지는 {knower}에게 달렸습니다 — "
-                "꺼내서 모르던 쪽이 들으면 그쪽만 learned_policy=true, "
-                "안 나오면 둘 다 false(awareness 그대로).")
+    rel = "서로 잘 아는 사이" if m.get("close") else "일부는 평소 왕래가 적은 사이"
+    past_diaries = past_diaries or {}
+
+    aware_parts = [p for p in parts if today[p]["awareness"] in AWARE_SET]
+    unaware_parts = [p for p in parts if p not in aware_parts]
+    if not aware_parts:
+        rule = ("이 자리의 누구도 정책을 모릅니다 → 정책 이야기는 나오지 않습니다. "
+                "전원 learned_policy=false, awareness=unaware.")
+    elif not unaware_parts:
+        rule = "모두 정책을 압니다. 얘기할 수도, 안 할 수도 있습니다."
     else:
-        rule = "두 사람 다 정책을 압니다. 얘기할 수도, 안 할 수도 있습니다."
+        knowers = ", ".join(by_id[p]["name"] for p in aware_parts)
+        rule = (f"{knowers} 은(는) 정책을 압니다. 꺼낼지는 그들에게 달렸습니다 — "
+                "꺼내서 모르던 사람이 들으면 그 사람만 learned_policy=true(+learned_from=들려준 사람 id), "
+                "안 나오면 그대로(awareness 유지).")
+
+    blocks = []
+    for p in parts:
+        t = today[p]
+        ctx = context_before(schedules, p, m["start"], loc_label)
+        blocks.append(
+            f"[{by_id[p]['name']}({p})] {by_id[p]['age']}세 {by_id[p]['occupation']}. {by_id[p]['personality']}\n"
+            f"  {_past_diary_block(past_diaries.get(p))}"
+            f"  오늘 지금까지: " + " / ".join(ctx) + "\n"
+            f"  오늘 겪은 일: " + (" / ".join(t["log"]) or "(아직 없음)") + "\n"
+            f"  현재 정책 인지={t['awareness']}, 입장={t['stance']}"
+        )
+    names = "·".join(by_id[p]["name"] for p in parts)
     return (
-        f"[만남] {fmt_hm(m['start'])}, {place}에서 {a['name']}과(와) {b['name']}이 마주쳤습니다. ({rel})\n\n"
-        f"[A] {a['name']}({a['id']}) {a['age']}세 {a['occupation']}. {a['personality']}\n"
-        f"  어제 일기: {ta['diary'] or '(없음)'}\n"
-        f"  오늘 지금까지: " + " / ".join(ca) + "\n"
-        f"  현재 정책 인지={ta['awareness']}, 입장={ta['stance']}\n\n"
-        f"[B] {b['name']}({b['id']}) {b['age']}세 {b['occupation']}. {b['personality']}\n"
-        f"  어제 일기: {tb['diary'] or '(없음)'}\n"
-        f"  오늘 지금까지: " + " / ".join(cb) + "\n"
-        f"  현재 정책 인지={tb['awareness']}, 입장={tb['stance']}\n\n"
-        f"[이 만남의 정책 규칙] {rule}\n\n"
-        f"이 둘이 {place}에서 지금 나눌 대화를 만들고, 대화 뒤 각자의 변화를 보고하세요. "
-        f"speaker_id 와 villager_id 는 '{m['a']}'(A) 또는 '{m['b']}'(B)만 사용."
+        f"[만남] {fmt_hm(m['start'])}, {place}에서 {names} 가 함께 있습니다. ({rel})\n\n"
+        + "\n\n".join(blocks) + "\n\n"
+        f"[이 자리의 정책 규칙] {rule}\n\n"
+        f"이 사람들이 {place}에서 지금 나눌 대화를 만들고, 대화 뒤 각자의 변화를 deltas 로 보고하세요. "
+        f"speaker_id 와 villager_id 는 참가자 id({', '.join(parts)})만 사용."
     )
 
 
-def build_diary_messages(v, today, schedule, loc_label, policy):
+def build_diary_messages(v, today, schedule, loc_label, past=None):
+    """하루를 마친 1인칭 일기.
+
+    ★ 2026-06-08 변경: 정책 전문을 '아는 사람'에게 재주입하던 트리거(pol)와
+    '모르는 사람' guard 를 제거. 사람은 정책 원문을 외우지 않는다 — 그날 자기가
+    겪고 들은 일(today['log'])만 떠올려 쓴다. 모르는 사람의 log 엔 정책 사건이
+    애초에 없으므로(만남 게이트·메모 스크럽), 자연히 정책 얘기를 쓰지 않는다.
+    과거 일기(past)를 함께 줘 며칠에 걸친 연속 서사가 이어지게 한다.
+    """
     acts = [f"{b['start_time']} {loc_label.get(b['location_key'], b['location_key'])}에서 {b['action']}"
             for b in schedule] or ["집에서 하루를 보냄"]
     convo = today["log"] or ["오늘은 특별히 깊은 대화는 없었음"]
-    aware = today["awareness"] in AWARE_SET
-    # 모르는 사람에겐 정책을 아예 보여주지 않는다(일기 텍스트가 정책을 흘리지 않게).
-    pol = (f"(오늘 마을엔 다음 정책이 퍼지는 중: {policy.strip()})\n"
-           if (policy or "").strip() and aware else "")
-    guard = ("" if aware else
-             "※ 당신은 아직 이 정책을 전혀 모릅니다 — 일기에 정책 이야기를 쓰지 말고, "
-             "정책 인지는 반드시 unaware 로 보고하세요.\n")
     return [
         {"role": "system", "content": (
             "당신은 미리마을 주민이 하루를 마치고 집에서 쓰는 1인칭 일기를 대신 써 줍니다. "
@@ -554,35 +589,37 @@ def build_diary_messages(v, today, schedule, loc_label, policy):
             "그 사람의 하루가 정합니다.")},
         {"role": "user", "content": (
             f"[{v['name']}({v['id']})] {v['age']}세 {v['occupation']}. {v['personality']}\n"
-            f"어제 일기: {today['diary'] or '(없음)'}\n"
-            f"{pol}{guard}"
+            f"{_past_diary_block(past)}"
             "오늘 한 일: " + " / ".join(acts) + "\n"
-            "오늘 나눈 대화/들은 것: " + " / ".join(convo) + "\n"
+            "오늘 겪고 들은 일: " + " / ".join(convo) + "\n"
             f"하루를 마친 지금 정책 인지={today['awareness']}, 입장={today['stance']}.\n\n"
+            "오늘 실제로 겪거나 들은 일만 적고, 듣지 않은 정책 내용은 지어내지 마세요. "
             "이 사람의 1인칭 일기(2~4문장, 구어체)를 쓰고, 하루를 마친 시점의 "
-            "정책 인지(unaware|aware|interested|acting)와 입장(unknown|support|oppose|mixed|anxious)을 보고하세요.")},
+            "정책 인지(unaware|aware|interested|acting)와 입장(unknown|support|oppose|mixed|anxious)을 "
+            "보고하세요.")},
     ]
 
 
 # --- 폴백(키 없음/실패) — 결정론 전달 + 간단 일기 -------------------------
 def _fallback_meeting(m, by_id, loc_label, today):
-    a, b = m["a"], m["b"]
+    """그룹 폴백: 아는 사람(있으면 첫 번째)이 모르던 사람들에게 전달. {vid: delta} 반환."""
+    parts = m.get("parts") or [m["a"], m["b"]]
     place = loc_label.get(m["place"], m["place"])
-    a_aware = today[a]["awareness"] in AWARE_SET
-    b_aware = today[b]["awareness"] in AWARE_SET
-    turns = [
-        {"s": a, "t": f"{by_id[b]['name']}님, {place}에서 만나네요."},
-        {"s": b, "t": "그러게요. 잘 지내시죠?"},
-    ]
-    da = _delta(a, today[a]["awareness"], today[a]["stance"])
-    db = _delta(b, today[b]["awareness"], today[b]["stance"])
-    if a_aware and not b_aware:
-        turns.append({"s": a, "t": "참, 그 새 정책 소식 들으셨어요? 한번 알아보세요."})
-        db = _delta(b, "aware", "unknown", learned=True, note=f"{by_id[a]['name']}에게 새 정책 얘기를 들음")
-    elif b_aware and not a_aware:
-        turns.append({"s": b, "t": "참, 그 새 정책 소식 들으셨어요? 한번 알아보세요."})
-        da = _delta(a, "aware", "unknown", learned=True, note=f"{by_id[b]['name']}에게 새 정책 얘기를 들음")
-    return turns, da, db
+    aware = [p for p in parts if today[p]["awareness"] in AWARE_SET]
+    teller = aware[0] if aware else None
+    turns = [{"s": parts[0], "t": f"{place}에서 다들 만나네요."}]
+    if len(parts) > 1:
+        turns.append({"s": parts[1], "t": "그러게요. 잘 지내시죠?"})
+    deltas = {}
+    for p in parts:
+        if teller and p != teller and today[p]["awareness"] not in AWARE_SET:
+            deltas[p] = _delta(p, "aware", "unknown", learned=True,
+                               note=f"{by_id[teller]['name']}에게 새 정책 얘기를 들음")
+            if len(turns) < 5:
+                turns.append({"s": teller, "t": f"참, {by_id[p]['name']}님, 그 새 정책 소식 들으셨어요?"})
+        else:
+            deltas[p] = _delta(p, today[p]["awareness"], today[p]["stance"])
+    return turns, deltas
 
 
 def _fallback_diary(v, today):
@@ -593,37 +630,49 @@ def _fallback_diary(v, today):
     return {"diary": diary, "awareness": today["awareness"], "stance": today["stance"]}
 
 
-def _apply_delta(today, vid, delta, vid_was, other_id, other_was, m, day, propagation):
-    """LLM/폴백 델타를 상태에 반영하고, '새로 알게 됨'이면 전파 엣지를 기록.
+def _apply_delta_group(today, vid, delta, prev_aware, aware_before, m, day, propagation, ptokens):
+    """그룹 델타를 상태에 반영하고, '새로 알게 됨'이면 전파 엣지를 기록.
 
-    전파 게이트(중요): 모르던 사람은 '상대가 이미 아는 경우'에만 새로 알 수 있다.
-    LLM 이 근거 없이(상대도 모르는데) 정책을 아는 것으로 만들면 시드·관계망을 무시하는
-    누수가 된다 → 아는 사람과의 만남에서만 전파되도록 코드가 보증한다.
-    (판단·대사·감정은 LLM, 전파 경로는 결정론 가드 — 이 프로젝트의 일관된 분리.)
+    전파 게이트(중요): 모르던 사람은 '그 자리에 이미 아는 사람이 있을 때'에만 새로 알 수 있다.
+    LLM 이 근거 없이(아무도 모르는데) 정책을 아는 것으로 만들면 시드·관계망을 무시하는
+    누수가 된다 → 아는 사람이 함께 있는 자리에서만 전파되도록 코드가 보증한다.
+    출처(from)는 LLM 의 learned_from 을 쓰되, 그 자리 '아는 사람' 중 하나여야 인정한다
+    (아니면 첫 번째 아는 사람으로 보정). 판단·대사는 LLM, 전파 경로는 결정론 가드.
+
+    prev_aware   = 이 만남 직전 vid 의 awareness
+    aware_before = 이 만남 직전 '아는 사람' 참가자 id 목록(전파 출처 후보)
     """
-    aw = _norm(getattr(delta, "awareness", ""), AWARE_LEVELS, today[vid]["awareness"])
-    if vid_was == "unaware" and aw in AWARE_SET and other_was not in AWARE_SET:
+    aw = _norm(getattr(delta, "awareness", "") if delta else "", AWARE_LEVELS, prev_aware)
+    other_knowers = [p for p in aware_before if p != vid]
+    if prev_aware == "unaware" and aw in AWARE_SET and not other_knowers:
         aw = "unaware"   # 출처 없음 → 인지 무효(자생적 누수 차단)
     today[vid]["awareness"] = aw
     # 입장은 '아는' 상태에서만 의미가 있다(모르면 unknown 유지).
     if aw in AWARE_SET:
-        today[vid]["stance"] = _norm(getattr(delta, "stance", ""), STANCE_LEVELS, today[vid]["stance"])
-    note = (getattr(delta, "note", "") or "").strip()
-    if note and aw in AWARE_SET:   # 모르는 사람의 메모는 일기로 정책을 흘릴 수 있어 제외
+        today[vid]["stance"] = _norm(getattr(delta, "stance", "") if delta else "",
+                                     STANCE_LEVELS, today[vid]["stance"])
+    note = ((getattr(delta, "note", "") if delta else "") or "").strip()
+    # 메모=본인의 대화 기록(낮의 후속 만남 + 밤 일기에 주입). 모르는 사람 메모도 보존하되,
+    # 정책 토큰이 새어 있으면 그 메모만 버린다(일기·후속 만남으로 흘러가는 누수 차단).
+    if note and (aw in AWARE_SET or not any(t in note for t in ptokens)):
         today[vid]["log"].append(f"{fmt_hm(m['start'])} {m['place']}: {note}")
-    if vid_was == "unaware" and aw in AWARE_SET:   # 이 만남에서 아는 상대로부터 새로 알게 됨
-        propagation.append({"from": other_id, "to": vid, "place": m["place"],
+    if prev_aware == "unaware" and aw in AWARE_SET and other_knowers:  # 새로 알게 됨
+        lf = (getattr(delta, "learned_from", "") if delta else "") or ""
+        src = lf if lf in other_knowers else other_knowers[0]
+        propagation.append({"from": src, "to": vid, "place": m["place"],
                             "time": int(m["start"]), "day": day})
 
 
 # --- 하루 시뮬 (한 클릭 = 하루) ------------------------------------------
-def run_day(policy, states, day_num, force_fallback=False, write_meetings=True):
+def run_day(policy, states, day_num, force_fallback=False, write_meetings=True, past_diaries=None):
     """하루를 시간순 만남으로 굴리고 밤에 일기로 압축한다.
 
     policy         : 최상위 정책 시나리오(빈 문자열이면 평범한 하루)
     states         : {vid: {awareness, stance, diary}} — 어제 끝 상태(=오늘 시작)
     day_num        : 며칠째
     write_meetings : True 면 meetings.js/json 갱신(iframe 재생용). 테스트는 False.
+    past_diaries   : {vid: [(day, diary_text), ...]} — 지난 며칠 일기(만남·일기 프롬프트에 주입).
+                     None 이면 과거 없이(1일차·테스트 기존 동작과 동일).
     반환           : (new_states, day_record)
     """
     villagers = _load("villagers.json")["villagers"]
@@ -632,7 +681,8 @@ def run_day(policy, states, day_num, force_fallback=False, write_meetings=True):
     by_id = {v["id"]: v for v in villagers}
     loc_label = {l["key"]: l["label"] for l in locations}
     anchors = _load_anchors()
-    meetings = extract_meetings(schedules, villagers, locations, anchors)  # 시간순·완화
+    meetings = extract_meetings(schedules, villagers, locations, anchors)  # 시간순·그룹
+    past_diaries = past_diaries or {}
 
     today = {
         vid: {"awareness": states[vid]["awareness"], "stance": states[vid]["stance"],
@@ -642,31 +692,34 @@ def run_day(policy, states, day_num, force_fallback=False, write_meetings=True):
     propagation = []
     use_llm = has_real_key() and not force_fallback
     system = build_meeting_system(villagers, locations, policy) if use_llm else None
+    ptokens = _policy_tokens(policy)   # 모르는 사람 메모·일기의 정책 누수 차단용
 
     # 1) 만남을 '시간순으로' 순차 처리(앞 대화가 뒤 대화의 인지에 영향 → 전파)
     for m in meetings:
-        a, b = m["a"], m["b"]
-        a_was, b_was = today[a]["awareness"], today[b]["awareness"]
+        parts = m["parts"]
+        was = {p: today[p]["awareness"] for p in parts}            # 만남 직전 상태
+        aware_before = [p for p in parts if was[p] in AWARE_SET]   # 전파 출처 후보
         if use_llm:
             try:
                 msgs = [{"role": "system", "content": system},
                         {"role": "user", "content":
-                            build_meeting_user(m, by_id, loc_label, schedules, today, m.get("close"))}]
+                            build_meeting_user(m, by_id, loc_label, schedules, today, past_diaries)}]
                 res = structured_call(msgs, MeetingResult)
-                valid = {a, b}
-                turns = [{"s": (t.speaker_id if t.speaker_id in valid else a), "t": t.text.strip()}
+                valid = set(parts)
+                turns = [{"s": (t.speaker_id if t.speaker_id in valid else parts[0]), "t": t.text.strip()}
                          for t in res.turns if t.text.strip()]
-                da, db = _bind_deltas(res.a_delta, res.b_delta, a, b)
+                deltas = _bind_group_deltas(res.deltas, parts)
                 if not turns:
-                    turns, da, db = _fallback_meeting(m, by_id, loc_label, today)
+                    turns, deltas = _fallback_meeting(m, by_id, loc_label, today)
             except Exception as ex:
                 print(f"[run_day] {m['id']} 실패 -> 폴백: {ex}")
-                turns, da, db = _fallback_meeting(m, by_id, loc_label, today)
+                turns, deltas = _fallback_meeting(m, by_id, loc_label, today)
         else:
-            turns, da, db = _fallback_meeting(m, by_id, loc_label, today)
+            turns, deltas = _fallback_meeting(m, by_id, loc_label, today)
         m["turns"] = turns
-        _apply_delta(today, a, da, a_was, b, b_was, m, day_num, propagation)
-        _apply_delta(today, b, db, b_was, a, a_was, m, day_num, propagation)
+        for p in parts:
+            _apply_delta_group(today, p, deltas.get(p), was[p], aware_before,
+                               m, day_num, propagation, ptokens)
 
     # 2) 밤: 각자 '오늘'을 일기로 압축(서로 독립 → 병렬)
     def diary_one(v):
@@ -674,7 +727,8 @@ def run_day(policy, states, day_num, force_fallback=False, write_meetings=True):
         if use_llm:
             try:
                 res = structured_call(
-                    build_diary_messages(v, today[vid], schedules.get(vid, []), loc_label, policy),
+                    build_diary_messages(v, today[vid], schedules.get(vid, []), loc_label,
+                                         past_diaries.get(vid)),
                     DiaryOut)
                 return vid, {"diary": (res.diary or "").strip(),
                              "awareness": _norm(res.awareness, AWARE_LEVELS, today[vid]["awareness"]),
@@ -688,7 +742,6 @@ def run_day(policy, states, day_num, force_fallback=False, write_meetings=True):
     # 인지(사실)는 만남 게이트(today)가 정한다 — 일기 LLM 이 못 만난 사람을 '알게 됨'으로
     # 부풀리지 못하게(전파 누수 차단). 일기는 '이미 아는 사람'의 심화(aware→interested→acting)
     # 와 입장·서사만 반영한다. unaware 면 입장은 unknown.
-    ptokens = _policy_tokens(policy)   # 모르는 사람 일기의 정책 누수 차단용
     new_states = {}
     for vid in by_id:
         gated = today[vid]["awareness"]
@@ -706,8 +759,9 @@ def run_day(policy, states, day_num, force_fallback=False, write_meetings=True):
         d["awareness"], d["stance"], d["diary"] = aw, stc, diary_text  # 표시(리포트) 일치
 
     # 3) iframe 재생용 meetings.js 갱신(이번 날) + 일자 기록 반환
-    m_iframe = [{"id": m["id"], "a": m["a"], "b": m["b"], "place": m["place"],
-                 "start": m["start"], "end": m["end"], "turns": m.get("turns", [])}
+    m_iframe = [{"id": m["id"], "parts": m["parts"], "a": m["a"], "b": m["b"],
+                 "place": m["place"], "start": m["start"], "end": m["end"],
+                 "turns": m.get("turns", [])}
                 for m in meetings]
     generated_with = "llm" if use_llm else "fallback"
     if write_meetings:

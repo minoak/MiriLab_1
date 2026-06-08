@@ -7,7 +7,7 @@
 '일기'로 하루를 압축해 다음 날의 기억으로 넘긴다(reflection). 재생(playback)은 0콜.
 
 [step2 = 정책 전파]
-- 정책을 최상위 시나리오로 주입 → 프로토타입 시드(복지관 어르신 grandma·oldman)에서
+- 정책을 최상위 시나리오로 주입 → 시드(정책 담당 공무원 staff·영희, 직무상 첫 인지)에서
   출발해 만남(대화)을 타고 퍼진다. '다음 날' 버튼으로 일기를 이어가며 며칠이든.
 - 생성 = 실 LLM(키 필요). 키 없으면 폴백(정책 미반영 단조). 재생은 키 없이도.
 - 엔진은 `미리마을/gen_schedules.py`(스케줄)·`gen_dialogues.py`(run_day: 순차 만남
@@ -47,9 +47,11 @@ from ui.rerun_util import rerun_fragment
 MINIVILLAGE_ROOT = Path(__file__).resolve().parent.parent / "미리마을"
 SIM_STATE_PATH = MINIVILLAGE_ROOT / "data" / "sim_state.json"
 
-# 프로토타입 정책 진입 시드: 복지관에서 먼저 접하는 어르신들(사용자 지정).
-# (진입구는 추후 프롬프트로 직접 제어 — 지금은 시나리오 상수.)
-SEED_IDS = ("grandma", "oldman")
+# 정책 진입 시드: 주민센터 정책 담당 공무원 영희(staff) — 직무상 첫 인지자.
+# 적극 홍보가 아니라 '꺼낼지는 만남·관계가 정한다'(build_meeting_user 규칙 그대로).
+# (구 프로토타입 시드 grandma·oldman 은 동선이 겹쳐 서로끼리만 만나는 날이 있었음
+#  — _test_simday [6] 관측. 공무원은 민원·순회·사랑방 동선 자체가 전파 허브.)
+SEED_IDS = ("staff",)
 
 # index.html 의 <head> 가 로드하는 외부 데이터 JS (등장 순서대로).
 _DATA_SCRIPTS = ("data/village_data.js", "data/anchors.js", "data/meetings.js")
@@ -224,7 +226,12 @@ def _generate_day(policy: str, fresh: bool) -> None:
         day_num = int(sd.get("current_day", 0)) + 1
         history = sd.get("history") or []
         pol = sd.get("policy", policy)  # 진행 중인 시뮬은 같은 정책 유지
-    new_states, rec = gd.run_day(pol, states, day_num)  # 순차 만남+전파+일기, meetings.js 갱신
+    # 지난 며칠 일기를 시민별로 모아 프롬프트에 실어준다(연속 서사 — 어제뿐 아니라 그제까지).
+    past_diaries: dict = {}
+    for rec_h in history:
+        for vid, d in (rec_h.get("diaries") or {}).items():
+            past_diaries.setdefault(vid, []).append((rec_h.get("day"), (d or {}).get("diary", "")))
+    new_states, rec = gd.run_day(pol, states, day_num, past_diaries=past_diaries)  # 만남+전파+일기
     history.append({"day": rec["day"], "generated_with": rec["generated_with"],
                     "propagation": rec["propagation"], "diaries": rec["diaries"]})
     _save_sim_state({"policy": pol, "current_day": day_num, "states": new_states,
@@ -329,13 +336,20 @@ def _render_control_panel(view) -> None:
                        "무시). 다른 정책을 실험하려면 [↺ 리셋] 후 [▶ 1일차 시작]을 누르세요.")
 
 
+def _short_role(occupation: str) -> str:
+    """직업 문자열의 앞 토막만 — '청년 구직자 / 카페 아르바이트' → '청년 구직자'."""
+    return (occupation or "").split("/")[0].split(" (")[0].strip()
+
+
 def _name_map():
     try:
         _gs, gd = _load_gen()
-        return {v["id"]: v["name"] for v in gd._load("villagers.json")["villagers"]}, \
-               {l["key"]: l["label"] for l in gd._load("locations.json")["locations"]}
+        villagers = gd._load("villagers.json")["villagers"]
+        return ({v["id"]: v["name"] for v in villagers},
+                {l["key"]: l["label"] for l in gd._load("locations.json")["locations"]},
+                {v["id"]: _short_role(v.get("occupation", "")) for v in villagers})
     except Exception:
-        return {}, {}
+        return {}, {}, {}
 
 
 def _render_report() -> None:
@@ -346,9 +360,10 @@ def _render_report() -> None:
                 "어떻게 퍼지는지(누가 언제 알게 됐나)가 여기에 나타납니다.")
         return
 
-    names, labels = _name_map()
+    names, labels, roles = _name_map()
     nm = lambda i: names.get(i, i)
     lb = lambda k: labels.get(k, k)
+    rl = lambda i: f" <span style='opacity:.6;font-size:0.85em;'>({roles[i]})</span>" if roles.get(i) else ""
     states = sd.get("states") or {}
     history = sd.get("history") or []
     day = sd.get("current_day", len(history))
@@ -388,8 +403,9 @@ def _render_report() -> None:
             for e in edges:
                 t = e.get("time", 0)
                 hhmm = f"{t // 60:02d}:{t % 60:02d}"
-                st.markdown(f"- {nm(e.get('from'))} → **{nm(e.get('to'))}**  "
-                            f"<span style='color:#888;font-size:0.85em;'>"
+                st.markdown(f"- {nm(e.get('from'))}{rl(e.get('from'))} → "
+                            f"**{nm(e.get('to'))}**{rl(e.get('to'))}  "
+                            f"<span style='opacity:.65;font-size:0.85em;'>"
                             f"{hhmm} · {lb(e.get('place'))}</span>", unsafe_allow_html=True)
         if not any_edge:
             st.caption("아직 전파가 일어나지 않았습니다(시드만 알고 있음). '다음 날'로 이어가 보세요.")
@@ -402,9 +418,11 @@ def _render_report() -> None:
             for vid, d in (rec.get("diaries") or {}).items():
                 aw = _AW_LABEL.get(d.get("awareness"), d.get("awareness", ""))
                 stc = _STANCE_LABEL.get(d.get("stance"), "")
-                badge = f"<span style='font-size:0.8em;color:#666;'>{aw} · {stc}</span>"
+                # 색 하드코딩 금지: 테마 글자색 상속 + opacity 로만 위계 표현
+                # (#444/#666 은 다크 테마에서 배경에 묻혀 안 보였음)
+                badge = f"<span style='font-size:0.8em;opacity:.7;'>{aw} · {stc}</span>"
                 st.markdown(f"**{nm(vid)}** {badge}", unsafe_allow_html=True)
-                st.markdown(f"<div style='color:#444;margin:-4px 0 8px 0;font-size:0.92em;'>"
+                st.markdown(f"<div style='margin:-4px 0 10px 0;font-size:0.95em;line-height:1.6;'>"
                             f"{(d.get('diary') or '').strip()}</div>", unsafe_allow_html=True)
 
 
@@ -415,7 +433,8 @@ def render_minivillage_tab(view=None) -> None:
     st.caption(
         "정책을 최상위에 주입하면, 시민 10명이 스케줄대로 생활·대화하며 그 소식이 "
         "사람·만남을 타고 퍼집니다. 밤마다 각자 일기로 하루를 정리해 다음 날로 이어가요. "
-        "복지관 어르신 두 분이 먼저 접한 상태에서 출발합니다(프로토타입 시드)."
+        "주민센터 정책 담당 공무원 영희만 직무로 아는 상태에서 출발합니다 — "
+        "들이밀지 않고, 만남 속에서 자연스럽게 흘러나올 때만 퍼집니다."
     )
 
     # 제어판 + 전파 리포트
@@ -435,6 +454,6 @@ def render_minivillage_tab(view=None) -> None:
         st.error("미리마을 화면을 조립하는 중 오류가 발생했습니다.")
         st.exception(e)
         return
-    # height 는 1086px 지도 + 우측 패널을 넉넉히 담도록 잡되, 내부 영역이 자체
-    # 스크롤되므로 화면에 맞춰 조절 가능(육안 확인 후 튜닝).
-    components.html(html, height=900, scrolling=True)
+    # index.html 이 scale-to-fit(지도를 가용 폭·높이에 맞춰 transform: scale 축소)이라
+    # height 가 곧 표시 크기다. 패널이 더 길면 iframe 내부 스크롤(scrolling=True 폴백).
+    components.html(html, height=730, scrolling=True)

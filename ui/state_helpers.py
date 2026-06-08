@@ -408,13 +408,10 @@ def restore_snapshot(snap: dict) -> tuple:
     return sim, view, ckpt
 
 
-def load_demo_snapshot(name: str, expected_policy: str | None = None) -> tuple | None:
+def load_demo_snapshot(name: str) -> tuple | None:
     """녹화 스냅샷을 불러와 세션에 반영(run_full_pipeline 과 같은 저장 모양).
 
     파일이 없거나 깨졌으면 None — 호출측은 기존 합성 mock 경로로 폴백한다.
-    expected_policy 가 주어지면, 스냅샷 내부 정책 원문이 현재 입력 원문과
-    같을 때만 재생한다. 샘플 원문이 수정된 뒤 오래된 녹화본을 그대로 쓰면
-    SNS 채팅/분석이 사용자가 보는 정책 문안이 아니라 과거 문안으로 생성된다.
     """
     try:
         snap = json.loads(demo_snapshot_path(name).read_text(encoding="utf-8"))
@@ -422,10 +419,6 @@ def load_demo_snapshot(name: str, expected_policy: str | None = None) -> tuple |
         return None
     if not isinstance(snap, dict) or not snap.get("sim"):
         return None
-    if expected_policy is not None:
-        snap_policy = str((snap.get("sim") or {}).get("policy") or "").strip()
-        if snap_policy != str(expected_policy or "").strip():
-            return None
     sim, view, ckpt = restore_snapshot(snap)
     st.session_state[PIPELINE_CKPT_KEY] = ckpt
     st.session_state["sim"] = sim
